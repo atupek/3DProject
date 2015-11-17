@@ -21,7 +21,15 @@
 //and the distances between subsequent points  -- DONE
 //and get the number of items printed in each layer -- DONE
 //TODO: REFACTOR
-//GET ON GIT
+// and REWRITE REGEXES (need 3 now? 5?)
+//GET ON GIT -- DONE
+//TODO: Put perimeter lines in one container 'move to first perimeter point (no extrusion), perimeter (extrusion)' --DONE
+//and put infill lines in another container 'move to first infill point (no extrusion), infill (extrusion)' --DONE
+//and ignore all other motions --DONE(?)
+//multiply x, y by ten & insert into 2D array 1 for filled w point, 0 for not filled, line between points
+//slope = m = (y2-y1)/(x2-x1)
+//line (y-y1) = m * (x - x1)
+// so need a function to 'draw' that line in the sparse array
 
 #include <iostream>
 using std::cin;
@@ -54,52 +62,69 @@ typedef vector<this_layer> all_layers;
 
 char gcodeFile[256];
 all_layers model_layers;
+all_layers model_perimeter_layers;
+all_layers model_infill_layers;
 int layer_index = 0;
 
+//this does what it's supposed to do
+//can delete the debug, since print_distance exists elsewhere
 float compute_distance(float x1, float x2, float y1, float y2)
 {
 	float x_squared = pow(x2 - x1, 2);
 	//cout << "x_squared: " << x_squared << endl;
 	float y_squared = pow(y2 - y1, 2);
 	//cout << "y_squared: " << y_squared << endl;
-	float distance =  sqrt(x_squared + y_squared);
-	cout << "distance: " << distance << endl;
+	//float distance =  sqrt(x_squared + y_squared);
+	//cout << "distance: " << distance << endl;
 	return sqrt(x_squared + y_squared);
 }
 
+//gets the file name
+//this does what it's supposed to do
 void get_file_name()
 {
 	cout << "Enter the name of the gcode file: ";
 	cin.getline(gcodeFile, 256);
 }
 
-//this does two things:
 //prints x, y
-//and computes distance between two points
-//this needs to be refactored!
+//this does what it's supposed to do
 void print_x_y(this_layer layer)
 {
 	for(auto i = layer.begin(); i!= layer.end(); i++)
 	{
 		cout << i->first.first << ", " << i->first.second << ", " << i->second << endl;
 	}
-	for(int i = 1; i<layer.size(); i++)
-	{
-		compute_distance(layer[i].first.first, layer[i-1].first.first, layer[i].first.second, layer[i-1].first.second);
-	}
-
 }
 
+//prints distance
+//this does what it's supposed to do
+void print_distance(this_layer layer)
+{
+	float this_distance = 0.0;
+	for(int i = 1; i<layer.size(); i++)
+	{
+		this_distance = compute_distance(layer[i].first.first, layer[i-1].first.first, layer[i].first.second, layer[i-1].first.second);
+		cout << "distance: " << this_distance << endl;
+	}
+}
+
+//this prints out all the points, too because it calls the print_x_y function
+//should just print out the i->size()
+//maybe I just need a function to iterate through the model_layers?
 void print_num_pts_in_layer()
 {
-	for(auto i = model_layers.begin(); i != model_layers.end(); i++)
+	for(auto i = model_perimeter_layers.begin(); i != model_perimeter_layers.end(); i++)
 	{
 		cout << i->size() << endl;
 		print_x_y(*i);
+		print_distance(*i);
 		cout << "*********************END LAYER*****************************" << endl;
 	}
 }
 
+//rename to get points
+//new function to convert string to float?
 void get_points_from_line(string line, this_layer &layer)
 {
 	//cout << "getting points from line" << endl;
@@ -151,20 +176,27 @@ void make_new_layer(string line)
     	cout << *i << endl;
     }*/
 	this_layer new_layer;
-	model_layers.push_back(new_layer);
+	//model_layers.push_back(new_layer);
+	model_perimeter_layers.push_back(new_layer);
+	model_infill_layers.push_back(new_layer);
 	layer_index++;
    	cout << "************** NEW LAYER *******************" << endl;
 }
 
+//rename function to match regex because that's what it does
 void get_points()
 {
 	ifstream inFile(gcodeFile);
 	string line;
 	//int layer_index = 0;
-	this_layer current_layer; //NOPE, ALL OF THEM GET PUT INTO THIS
-	model_layers.push_back(current_layer);
+	this_layer current_layer;
+	//model_layers.push_back(current_layer);
+	model_perimeter_layers.push_back(current_layer);
+	model_infill_layers.push_back(current_layer);
 	regex expr1("G1 X"); //TODO FIX THIS TO INCLUDE ENTIRE LINE
 	regex expr2("G1 Z"); //TODO FIX THIS TO INCLUDE ENTIRE LINE
+	regex expr3("perimeter");
+	regex expr4("infill");
 	smatch match;
 	//int num_lines = 0;
 	//while(!inFile.eof()) //bad practice to use this
@@ -192,7 +224,17 @@ void get_points()
 			{
 				//cout << "line: " << line << endl;
 				//this_layer layer;
-				get_points_from_line(line, model_layers[layer_index]);
+				string new_line = match.suffix();
+				if(regex_search(new_line, match, expr3))
+				{
+					//cout << "perimeter!" << endl;
+					get_points_from_line(line, model_perimeter_layers[layer_index]);
+				}
+				if(regex_search(new_line, match, expr4))
+				{
+					//cout << "infill!" << endl;
+					get_points_from_line(line, model_infill_layers[layer_index]);
+				}
 			}
 			//if we match the second regex
 			else if(regex_search (line,match,expr2))
