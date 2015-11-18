@@ -10,7 +10,6 @@ Point::Point()
     perimeter = false;
 }
 
-//constructor for user entered width & height
 Point::Point(double _x, double _y)
 {
     x = _x;
@@ -18,11 +17,19 @@ Point::Point(double _x, double _y)
     perimeter = false;
 }
 
-//constructor for user entered width & height & type of box
-Point::Point(double _x, double _y, bool _perim)
+Point::Point(double _x, double _y, double _extrude_amt)
 {
     x = _x;
     y = _y;
+    extrude_amt = _extrude_amt;
+    perimeter = false;
+}
+
+Point::Point(double _x, double _y, double _extrude_amt, bool _perim)
+{
+    x = _x;
+    y = _y;
+    extrude_amt = _extrude_amt;
     perimeter = _perim;
 }
 
@@ -34,16 +41,21 @@ Point::Point(const Point &p)
     perimeter=p.perimeter;
 }
 
-//set function for user to set width
+
 void Point::set_x(double _x)
 {
     x = _x;
 }
 
-//set function for user to set height
+
 void Point::set_y(double _y)
 {
     y = _y;
+}
+
+void Point::set_extrude(double _extrude_amt)
+{
+	extrude_amt = _extrude_amt;
 }
 
 void Point::set_perim(bool _perim)
@@ -51,16 +63,21 @@ void Point::set_perim(bool _perim)
 	perimeter = _perim;
 }
 
-//get function to return width
-double Point::get_x() const //return value of width
+
+double Point::get_x() const 
 {
     return x;
 }
 
-//get function to return height
+
 double Point::get_y() const
 {
     return y;
+}
+
+double Point::get_extrude() const
+{
+	return extrude_amt;
 }
 
 bool Point::get_perim() const
@@ -85,7 +102,7 @@ void Point::print_coords(ostream &) const
 //print function to print all point info
 void Point::print_all(ostream &) const
 {
-	cout  << x << ", " << y;
+	cout  << x << ", " << y << ": " << extrude_amt;
 	if(perimeter == true)
 	{
 		cout << ", perimeter" << endl;
