@@ -45,7 +45,7 @@ using std::vector;
 #include <sstream>
 using std::istringstream;
 using std::istream_iterator;
-#include <math.h> //for sqrt
+#include <math.h> //for sqrt & lrint (round & cast to long int)
 
 typedef vector<Point> this_layer;
 typedef vector<this_layer> all_layers; //vector<vector<Point>>
@@ -55,7 +55,10 @@ char gcodeFile[256];
 all_layers model_layers;
 int layer_index = 0;
 
-//all_layers converted_model = model_layers;
+//typedef double pixel_layer[200][200]; //create 3 pixel_layers using: pixel_layer p1, p2, p3;
+typedef vector<vector<double>> pixel_layer;
+typedef vector<pixel_layer> model_pixels;
+model_pixels model;
 
 //compute distance
 double compute_distance(double x1, double x2, double y1, double y2)
@@ -211,17 +214,37 @@ void match_regex()
 
 void multiply_by_ten(this_layer &layer)
 {
-	//this_layer new_layer;
 	for(auto i = layer.begin(); i != layer.end(); i++)
 	{
-		//this_layer new_layer;
 		i->x *= 10;
 		i->y *= 10;
 		i->extrude_amt *= 10;
-		//i->perimeter = layer[i].perimeter;
-		//converted_model.push_back(new_layer);
 	}
-	//converted_model.push_back(new_layer);
+}
+
+void initialize_pixel_vector()
+{
+	pixel_layer new_pix_layer;
+	int num_rows = 20;
+	int num_columns = 20;
+	new_pix_layer.resize(num_rows);
+	for(int i = 0; i<num_rows; i++)
+	{
+		new_pix_layer[i].resize(num_columns);
+	}
+	for(int j = 0; j<num_rows; j++)
+	{
+		for(int k = 0; k<num_columns; k++)
+		{
+			new_pix_layer[j][k] = 0.0;
+		}
+	}
+	model.push_back(new_pix_layer);
+}
+
+void fill_pixel_vector(all_layers &model)
+{
+
 }
 
 int main()
@@ -242,6 +265,15 @@ int main()
 		multiply_by_ten(*i);
 	}
 	//print_stuff(converted_model);
-	print_stuff(model_layers);
+	//print_stuff(model_layers);
+	
+	//create vector of pixel layers
+	//takes a while, so commented out.  But, it works!
+	for(int i = 0; i<layer_index; i++)
+	{
+		initialize_pixel_vector();
+	}
+	cout << "Num layers in model: " << model.size() << endl;
+
 	return 0;
 }
