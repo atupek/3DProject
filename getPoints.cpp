@@ -17,7 +17,8 @@
 
 //CURRENTLY WORKING ON:
 //DEBUG: get the extrusion amount properly printing in the print_all function call in the print_num_pts_in_layer function
-//multiply x, y by ten & insert into 2D array 1 for filled w point, 0 for not filled, line between points
+//multiply x, y by ten & insert into 2D array 1 for filled w point, 0 for not filled
+// draw line between points
 //slope = m = (y2-y1)/(x2-x1)
 //line (y-y1) = m * (x - x1)
 // so need a function to 'draw' that line in the sparse array
@@ -54,6 +55,8 @@ char gcodeFile[256];
 all_layers model_layers;
 int layer_index = 0;
 
+//all_layers converted_model = model_layers;
+
 //compute distance
 double compute_distance(double x1, double x2, double y1, double y2)
 {
@@ -83,9 +86,9 @@ void print_distance(this_layer layer)
 //this prints out all the points
 //should just print out the i->size()
 //maybe I just need a function to iterate through the model_layers?
-void print_num_pts_in_layer()
+void print_stuff(all_layers &model)
 {
-	for(auto i = model_layers.begin(); i != model_layers.end(); i++)
+	for(auto i = model.begin(); i != model.end(); i++)
 	{
 		for(auto j = i->begin(); j!= i->end(); j++)
 			{
@@ -155,7 +158,7 @@ void make_new_layer(string line)
 	this_layer new_layer;
 	model_layers.push_back(new_layer);
 	layer_index++;
-   	cout << "************** NEW LAYER *******************" << endl;
+   	//cout << "************** NEW LAYER *******************" << endl;
 }
 
 //parse through gcode file & match regexes
@@ -206,6 +209,21 @@ void match_regex()
 	}
 }
 
+void multiply_by_ten(this_layer &layer)
+{
+	//this_layer new_layer;
+	for(auto i = layer.begin(); i != layer.end(); i++)
+	{
+		//this_layer new_layer;
+		i->x *= 10;
+		i->y *= 10;
+		i->extrude_amt *= 10;
+		//i->perimeter = layer[i].perimeter;
+		//converted_model.push_back(new_layer);
+	}
+	//converted_model.push_back(new_layer);
+}
+
 int main()
 {
 	Point my_point(1.0, 4.3, false);
@@ -215,6 +233,15 @@ int main()
 
 	get_file_name();
 	match_regex();
-	print_num_pts_in_layer();
+	//print_stuff(model_layers);
+
+	all_layers converted_model = model_layers;
+
+	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
+	{
+		multiply_by_ten(*i);
+	}
+	//print_stuff(converted_model);
+	print_stuff(model_layers);
 	return 0;
 }
