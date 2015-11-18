@@ -30,6 +30,11 @@
 //slope = m = (y2-y1)/(x2-x1)
 //line (y-y1) = m * (x - x1)
 // so need a function to 'draw' that line in the sparse array
+//DAMN, for distance to work, I need to have the perimeters & infill in the same container...
+//maybe throw everything also into one container?
+//shit.  I think maybe I need to do some oop here.  grrr.
+
+#include "point.h"
 
 #include <iostream>
 using std::cin;
@@ -62,8 +67,8 @@ typedef vector<this_layer> all_layers;
 
 char gcodeFile[256];
 all_layers model_layers;
-all_layers model_perimeter_layers;
-all_layers model_infill_layers;
+//all_layers model_perimeter_layers;
+//all_layers model_infill_layers;
 int layer_index = 0;
 
 //this does what it's supposed to do
@@ -71,11 +76,7 @@ int layer_index = 0;
 float compute_distance(float x1, float x2, float y1, float y2)
 {
 	float x_squared = pow(x2 - x1, 2);
-	//cout << "x_squared: " << x_squared << endl;
 	float y_squared = pow(y2 - y1, 2);
-	//cout << "y_squared: " << y_squared << endl;
-	//float distance =  sqrt(x_squared + y_squared);
-	//cout << "distance: " << distance << endl;
 	return sqrt(x_squared + y_squared);
 }
 
@@ -114,7 +115,7 @@ void print_distance(this_layer layer)
 //maybe I just need a function to iterate through the model_layers?
 void print_num_pts_in_layer()
 {
-	for(auto i = model_perimeter_layers.begin(); i != model_perimeter_layers.end(); i++)
+	for(auto i = model_layers.begin(); i != model_layers.end(); i++)
 	{
 		cout << i->size() << endl;
 		print_x_y(*i);
@@ -176,9 +177,7 @@ void make_new_layer(string line)
     	cout << *i << endl;
     }*/
 	this_layer new_layer;
-	//model_layers.push_back(new_layer);
-	model_perimeter_layers.push_back(new_layer);
-	model_infill_layers.push_back(new_layer);
+	model_layers.push_back(new_layer);
 	layer_index++;
    	cout << "************** NEW LAYER *******************" << endl;
 }
@@ -190,11 +189,9 @@ void get_points()
 	string line;
 	//int layer_index = 0;
 	this_layer current_layer;
-	//model_layers.push_back(current_layer);
-	model_perimeter_layers.push_back(current_layer);
-	model_infill_layers.push_back(current_layer);
-	regex expr1("G1 X"); //TODO FIX THIS TO INCLUDE ENTIRE LINE
-	regex expr2("G1 Z"); //TODO FIX THIS TO INCLUDE ENTIRE LINE
+	model_layers.push_back(current_layer);
+	regex expr1("G1 X");
+	regex expr2("G1 Z"); 
 	regex expr3("perimeter");
 	regex expr4("infill");
 	smatch match;
@@ -225,15 +222,16 @@ void get_points()
 				//cout << "line: " << line << endl;
 				//this_layer layer;
 				string new_line = match.suffix();
+				//get_points_from_line(line, model_layers[layer_index]);
 				if(regex_search(new_line, match, expr3))
 				{
 					//cout << "perimeter!" << endl;
-					get_points_from_line(line, model_perimeter_layers[layer_index]);
+					get_points_from_line(line, model_layers[layer_index]);
 				}
 				if(regex_search(new_line, match, expr4))
 				{
 					//cout << "infill!" << endl;
-					get_points_from_line(line, model_infill_layers[layer_index]);
+					get_points_from_line(line, model_layers[layer_index]);
 				}
 			}
 			//if we match the second regex
@@ -247,27 +245,23 @@ void get_points()
 			}
 
 		}
-		//while we don't match expr2  THIS SEEMS TO BE ADDING IN AN INFINITE LOOP
-		/*else
-		{
-			while (!regex_search (line,match,expr2))
-			{
-				cout << "line1: " << line << endl;
-				this_layer current_layer;
-				get_points_from_line(line, current_layer);
-
-			}
-		}*/
-			//num_lines++;
 	}
 	//cout << num_lines << endl; //okay, the num_lines increment works
 }
 
 int main()
 {
-	get_file_name();
-	get_points();
-	print_num_pts_in_layer();
+	Point my_point(1.0, 4.3, false);
+	//cout << my_point.x << endl;
+	//cout << my_point.y << endl;
+	//cout << my_point.perimeter << endl;
+
+	my_point.print_coords(cout);
+	my_point.print_all(cout);
+
+	//get_file_name();
+	//get_points();
+	//print_num_pts_in_layer();
 	//cout << compute_distance(0.0, 2.0, 0.0, 2.0) << endl;
 	return 0;
 }
