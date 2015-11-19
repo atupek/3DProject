@@ -7,6 +7,7 @@ Point::Point()
 {
     x=0.0;
     y=0.0;
+    extrude_amt = 0.0;
     perimeter = false;
 }
 
@@ -14,6 +15,7 @@ Point::Point(double _x, double _y)
 {
     x = _x;
     y = _y;
+    extrude_amt = 0.0;
     perimeter = false;
 }
 

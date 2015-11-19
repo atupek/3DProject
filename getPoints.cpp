@@ -95,8 +95,8 @@ void print_stuff(all_layers &model)
 	{
 		for(auto j = i->begin(); j!= i->end(); j++)
 			{
-				j->print_coords(cout);
-				//j->print_all(cout);
+				//j->print_coords(cout);
+				j->print_all(cout);
 			}
 		cout << "Number points in layer: " << i->size() << endl;
 		print_distance(*i);
@@ -264,11 +264,11 @@ int main()
 	{
 		multiply_by_ten(*i);
 	}
-	//print_stuff(converted_model);
+	print_stuff(converted_model);
 	//print_stuff(model_layers);
 	
 	//create vector of pixel layers
-	//takes a while, so commented out.  But, it works!
+	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector();
