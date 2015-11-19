@@ -225,8 +225,8 @@ void multiply_by_ten(this_layer &layer)
 void initialize_pixel_vector()
 {
 	pixel_layer new_pix_layer;
-	int num_rows = 20;
-	int num_columns = 20;
+	int num_rows = 2000;
+	int num_columns = 2000;
 	new_pix_layer.resize(num_rows);
 	for(int i = 0; i<num_rows; i++)
 	{
@@ -242,9 +242,18 @@ void initialize_pixel_vector()
 	model.push_back(new_pix_layer);
 }
 
-void fill_pixel_vector(all_layers &model)
+//this_layer is vector of Points
+//pixel_layer is 2D vector of doubles
+//I think I should send it one layer at a time
+void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 {
-
+	for(auto i = gcode_layer.begin(); i != gcode_layer.end(); i++)
+	{
+		int x = lrint(i->x);
+		int y = lrint(i->y);
+		//cout << "x: " << x << ", y: " << y << endl;
+		pix[x][y]=1.0;
+	}
 }
 
 int main()
@@ -264,7 +273,7 @@ int main()
 	{
 		multiply_by_ten(*i);
 	}
-	print_stuff(converted_model);
+	//print_stuff(converted_model);
 	//print_stuff(model_layers);
 	
 	//create vector of pixel layers
@@ -273,6 +282,8 @@ int main()
 	{
 		initialize_pixel_vector();
 	}
+
+	fill_pixel_vector(converted_model[3], model[3]);
 	cout << "Num layers in model: " << model.size() << endl;
 
 	return 0;
