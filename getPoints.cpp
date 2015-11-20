@@ -16,12 +16,15 @@
 //else continue
 
 //CURRENTLY WORKING ON:
-//DEBUG: get the extrusion amount properly printing in the print_all function call in the print_num_pts_in_layer function
-//multiply x, y by ten & insert into 2D array 1 for filled w point, 0 for not filled
+//DEBUG: get the extrusion amount properly printing in the print_all function call in the print_num_pts_in_layer function --DONE!
+//multiply x, y by ten & insert into 2D array 1 for filled w point, 0 for not filled  -- DONE
 // draw line between points
 //slope = m = (y2-y1)/(x2-x1)
 //line (y-y1) = m * (x - x1)
 // so need a function to 'draw' that line in the sparse array
+//TODO: Write Testing Data for 'printing out contents of pixel vector'
+//put pixel processing into own .cpp & .h
+//put gcode processing into own .cpp & .h
 
 
 #include "point.h"
@@ -91,9 +94,9 @@ void print_distance(this_layer layer)
 //maybe I just need a function to iterate through the model_layers?
 void print_stuff(all_layers &model)
 {
-	for(auto i = model.begin(); i != model.end(); i++)
+	for(std::vector<this_layer>::iterator i = model.begin(); i != model.end(); i++)
 	{
-		for(auto j = i->begin(); j!= i->end(); j++)
+		for(std::vector<Point>::iterator j = i->begin(); j!= i->end(); j++)
 			{
 				//j->print_coords(cout);
 				j->print_all(cout);
@@ -123,9 +126,9 @@ void get_perimeter_points(string line, this_layer &layer)
     
     string extrude_amt_str = tokens1[3];
     extrude_amt_str.erase(extrude_amt_str.begin(), extrude_amt_str.begin()+1);
-    double extrude_amt = stod(extrude_amt_str, &sz);
+    double this_extrude_amt = stod(extrude_amt_str, &sz);
 
-    Point new_point(x_coord, y_coord, extrude_amt, true);
+    Point new_point(x_coord, y_coord, this_extrude_amt, true);
     //cout << "New point: ";
     //new_point.print_all(cout);
     layer.push_back(new_point);
@@ -148,9 +151,9 @@ void get_infill_points(string line, this_layer & layer)
     
     string extrude_amt_str = tokens1[3];
 	extrude_amt_str.erase(extrude_amt_str.begin(), extrude_amt_str.begin()+1);
-	double extrude_amt = stod(extrude_amt_str, &sz);
+	double this_extrude_amt = stod(extrude_amt_str, &sz);
 
-	Point new_point(x_coord, y_coord, extrude_amt, false);
+	Point new_point(x_coord, y_coord, this_extrude_amt, false);
     //cout << "New point: ";
     //new_point.print_all(cout);
     layer.push_back(new_point);
@@ -222,6 +225,7 @@ void multiply_by_ten(this_layer &layer)
 	}
 }
 
+//should probably only do this one layer at a time...
 void initialize_pixel_vector()
 {
 	pixel_layer new_pix_layer;
@@ -244,7 +248,7 @@ void initialize_pixel_vector()
 
 //this_layer is vector of Points
 //pixel_layer is 2D vector of doubles
-//I think I should send it one layer at a time
+//only sending one layer at a time
 void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 {
 	for(auto i = gcode_layer.begin(); i != gcode_layer.end(); i++)
@@ -252,16 +256,32 @@ void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 		int x = lrint(i->x);
 		int y = lrint(i->y);
 		//cout << "x: " << x << ", y: " << y << endl;
-		pix[x][y]=1.0;
+		pix[x][y]=1.0; //if point is there, set it to 1.0
 	}
+}
+
+
+void print_pixel_vector(pixel_layer & pix)
+{
+
 }
 
 int main()
 {
-	Point my_point(1.0, 4.3, false);
+	Point my_point(1.0, 4.3, 4, false);
 
+	cout << "Print coords: ";
 	my_point.print_coords(cout);
+	cout << "Print all: ";
 	my_point.print_all(cout);
+
+	this_layer test_layer;
+	test_layer.push_back(my_point);
+	for(auto i = test_layer.begin(); i != test_layer.end(); i++)
+	{
+		cout << "this point: ";
+		i->print_all(cout);
+	}
 
 	get_file_name();
 	match_regex();
@@ -274,7 +294,7 @@ int main()
 		multiply_by_ten(*i);
 	}
 	//print_stuff(converted_model);
-	//print_stuff(model_layers);
+	print_stuff(model_layers);
 	
 	//create vector of pixel layers
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!

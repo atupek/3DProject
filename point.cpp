@@ -35,6 +35,7 @@ Point::Point(double _x, double _y, double _extrude_amt, bool _perim)
     perimeter = _perim;
 }
 
+/*
 //copy constructor
 Point::Point(const Point &p)
 {
@@ -42,7 +43,7 @@ Point::Point(const Point &p)
     y=p.y;
     perimeter=p.perimeter;
 }
-
+*/
 
 void Point::set_x(double _x)
 {
@@ -95,22 +96,22 @@ ostream & operator << (ostream & os, const Point & obj)
 }
 
 //print function to print point coordinates
-void Point::print_coords(ostream &) const
+void Point::print_coords(ostream & os) const
 {
-	cout  << x << ", " << y << endl;
+	os << x << ", " << y << endl;
 
 }
 
 //print function to print all point info
-void Point::print_all(ostream &) const
+void Point::print_all(ostream & os) const
 {
-	cout  << x << ", " << y << ": " << extrude_amt;
+	os  << x << ", " << y << ": " << extrude_amt;
 	if(perimeter == true)
 	{
-		cout << ", perimeter" << endl;
+		os << ", perimeter" << endl;
 	}
 	else
-		cout << ", infill" << endl;
+		os << ", infill" << endl;
 
 }
 

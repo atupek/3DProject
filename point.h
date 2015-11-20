@@ -20,7 +20,7 @@ public:
     Point(double _x, double _y);
     Point(double _x, double _y, double _extrude_amt);
     Point(double _x, double _y, double _extrude_amt, bool _perim);
-    Point(const Point &p);
+    //Point(const Point &p);
     
     //accessor functions
     double get_x()const;
