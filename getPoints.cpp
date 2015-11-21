@@ -22,12 +22,13 @@
 //slope = m = (y2-y1)/(x2-x1)
 //line (y-y1) = m * (x - x1)
 // so need a function to 'draw' that line in the sparse array
-//TODO: Write Testing Data for 'printing out contents of pixel vector'
+//TODO: Write Testing Data for 'printing out contents of pixel vector'  --DONE
 //put pixel processing into own .cpp & .h
 //put gcode processing into own .cpp & .h
 
 
 #include "point.h"
+#include "process_gcode.h"
 
 #include <iostream>
 using std::cin;
@@ -50,15 +51,16 @@ using std::istringstream;
 using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
 
-typedef vector<Point> this_layer;
-typedef vector<this_layer> all_layers; //vector<vector<Point>>
+//typedef vector<Point> this_layer;
+//typedef vector<this_layer> all_layers; //vector<vector<Point>>
 
 
 char gcodeFile[256];
 all_layers model_layers;
-int layer_index = 0;
 
-//typedef double pixel_layer[200][200]; //create 3 pixel_layers using: pixel_layer p1, p2, p3;
+int layer_index = 0; // not being properly incremented...
+
+
 typedef vector<vector<double>> pixel_layer;
 typedef vector<pixel_layer> model_pixels;
 model_pixels model;
@@ -102,116 +104,8 @@ void print_stuff(all_layers &model)
 				j->print_all(cout);
 			}
 		cout << "Number points in layer: " << i->size() << endl;
-		print_distance(*i);
+		//print_distance(*i);
 		cout << "*********************END LAYER*****************************" << endl;
-	}
-}
-
-//refactor again? copied & pasted code for two functions...
-//new function to convert string to double?
-void get_perimeter_points(string line, this_layer &layer)
-{
-	istringstream iss1(line);
-	vector<string> tokens1{istream_iterator<string>{iss1},
-  		                  istream_iterator<string>{}};
-    std::string::size_type sz;
-
-    string x_coord_str = tokens1[1];
-    x_coord_str.erase(x_coord_str.begin(), x_coord_str.begin()+1);
-    double x_coord = stod(x_coord_str, &sz);
-    
-    string y_coord_str = tokens1[2];
-    y_coord_str.erase(y_coord_str.begin(), y_coord_str.begin()+1);
-    double y_coord = stod(y_coord_str, &sz);
-    
-    string extrude_amt_str = tokens1[3];
-    extrude_amt_str.erase(extrude_amt_str.begin(), extrude_amt_str.begin()+1);
-    double this_extrude_amt = stod(extrude_amt_str, &sz);
-
-    Point new_point(x_coord, y_coord, this_extrude_amt, true);
-    //cout << "New point: ";
-    //new_point.print_all(cout);
-    layer.push_back(new_point);
-}
-
-void get_infill_points(string line, this_layer & layer)
-{
-	istringstream iss1(line);
-	vector<string> tokens1{istream_iterator<string>{iss1},
-  		                  istream_iterator<string>{}};
-    std::string::size_type sz;
-
-    string x_coord_str = tokens1[1];
-    x_coord_str.erase(x_coord_str.begin(), x_coord_str.begin()+1);
-    double x_coord = stod(x_coord_str, &sz);
-    
-    string y_coord_str = tokens1[2];
-    y_coord_str.erase(y_coord_str.begin(), y_coord_str.begin()+1);
-    double y_coord = stod(y_coord_str, &sz);
-    
-    string extrude_amt_str = tokens1[3];
-	extrude_amt_str.erase(extrude_amt_str.begin(), extrude_amt_str.begin()+1);
-	double this_extrude_amt = stod(extrude_amt_str, &sz);
-
-	Point new_point(x_coord, y_coord, this_extrude_amt, false);
-    //cout << "New point: ";
-    //new_point.print_all(cout);
-    layer.push_back(new_point);
-}
-
-void make_new_layer(string line)
-{
-	this_layer new_layer;
-	model_layers.push_back(new_layer);
-	layer_index++;
-   	//cout << "************** NEW LAYER *******************" << endl;
-}
-
-//parse through gcode file & match regexes
-void match_regex()
-{
-	ifstream inFile(gcodeFile);
-	string line;
-	this_layer current_layer;
-	model_layers.push_back(current_layer);
-	regex expr1("G1 X");
-	regex expr2("G1 Z"); 
-	regex expr3("perimeter");
-	regex expr4("infill");
-	smatch match;
-
-	while(getline(inFile, line, '\n'))
-	{
-		//look in the line for expr1 & expr2
-		if(!regex_search(line, match, expr1) && !regex_search(line, match, expr2))
-		{
-			//do nothing if no match for expr1 && expr2
-		}
-		
-		else
-		{
-			//if we match the first regex
-			if(regex_search(line, match, expr1))
-			{
-				string new_line = match.suffix();
-				if(regex_search(new_line, match, expr3))
-				{
-					//this is perimeter point
-					get_perimeter_points(line, model_layers[layer_index]);
-				}
-				if(regex_search(new_line, match, expr4))
-				{
-					//this is infill point
-					get_infill_points(line, model_layers[layer_index]);
-				}
-			}
-			//if we match the second regex
-			else if(regex_search (line,match,expr2))
-			{
-				make_new_layer(line);
-			}
-
-		}
 	}
 }
 
@@ -268,42 +162,35 @@ void print_pixel_vector(pixel_layer & pix)
 
 int main()
 {
-	Point my_point(1.0, 4.3, 4, false);
-
-	cout << "Print coords: ";
-	my_point.print_coords(cout);
-	cout << "Print all: ";
-	my_point.print_all(cout);
-
-	this_layer test_layer;
-	test_layer.push_back(my_point);
-	for(auto i = test_layer.begin(); i != test_layer.end(); i++)
-	{
-		cout << "this point: ";
-		i->print_all(cout);
-	}
 
 	get_file_name();
-	match_regex();
-	//print_stuff(model_layers);
+	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
-	all_layers converted_model = model_layers;
+
+	//all_layers converted_model = model_layers;
+	all_layers converted_model = this_model;
+
 
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
 		multiply_by_ten(*i);
 	}
-	print_stuff(converted_model);
-	//print_stuff(model_layers);
+
 	
 	//create vector of pixel layers
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
+	cout << "Layer index in main: " << layer_index << endl;
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector();
 	}
 
-	fill_pixel_vector(converted_model[3], model[3]);
+	//print_stuff(converted_model);
+	//print_stuff(model_layers);
+	//print_stuff(this_model);
+
+	
+	//fill_pixel_vector(converted_model[3], model[3]);
 	cout << "Num layers in model: " << model.size() << endl;
 
 	return 0;
