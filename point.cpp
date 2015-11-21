@@ -35,15 +35,16 @@ Point::Point(double _x, double _y, double _extrude_amt, bool _perim)
     perimeter = _perim;
 }
 
-/*
+
 //copy constructor
 Point::Point(const Point &p)
 {
     x=p.x;
     y=p.y;
+    extrude_amt = p.extrude_amt;
     perimeter=p.perimeter;
 }
-*/
+
 
 void Point::set_x(double _x)
 {

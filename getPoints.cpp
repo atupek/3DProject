@@ -293,8 +293,8 @@ int main()
 	{
 		multiply_by_ten(*i);
 	}
-	//print_stuff(converted_model);
-	print_stuff(model_layers);
+	print_stuff(converted_model);
+	//print_stuff(model_layers);
 	
 	//create vector of pixel layers
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
