@@ -29,6 +29,7 @@ void bresenham(int x1, int x2, int y1, int y2, pixel_layer &layer)
 	int dy2 = 0;
 
 	//what about if w == 0 or h == 0???
+	//looks like it still works...
 	if (w < 0)
 	{
 		dx1 = -1;
@@ -131,20 +132,18 @@ void populate_point_vec()
 
 int main()
 {
-	//initialize_pixel_vector(test_model, num_rows, num_columns);
 	populate_test_model();
 	print_pixel_vector(test_layer);
 	populate_point_vec();
+
 	cout << test_point_vec.size() << endl;
 	
 	for(auto i = 0; i < test_point_vec.size()-1; i++)
 	{
-		//cout << "in loop" << endl;
 		bresenham(test_point_vec[i].x, test_point_vec[i+1].x, test_point_vec[i].y, test_point_vec[i+1].y, test_layer);
-
 	}
 	cout << "**********************************************" << endl;
-	//bresenham(1, 0, 1, 0, test_layer);
+
 	print_pixel_vector(test_layer);
 	return 0;
 }
