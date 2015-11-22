@@ -21,16 +21,17 @@
 // draw line between points
 //slope = m = (y2-y1)/(x2-x1)
 //line (y-y1) = m * (x - x1)
-// so need a function to 'draw' that line in the sparse array
+//so need a function to 'draw' that line in the sparse array
 //TODO: Write Testing Data for 'printing out contents of pixel vector'  --DONE
-//put pixel processing into own .cpp & .h
+//put pixel processing into own .cpp & .h --DONE
 //put gcode processing into own .cpp & .h --DONE
-//put layer processing into own .cpp & .h
+//put layer processing into own .cpp & .h --DONE
 
 
 #include "point.h"
 #include "process_gcode.h"
 #include "process_layers.h"
+#include "process_pixels.h"
 
 #include <iostream>
 using std::cin;
@@ -53,18 +54,11 @@ using std::istringstream;
 using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
 
-//typedef vector<Point> this_layer;
-//typedef vector<this_layer> all_layers; //vector<vector<Point>>
-
-
 char gcodeFile[256];
 all_layers model_layers;
 
 int layer_index = 0; // not being properly incremented...
 
-
-//typedef vector<vector<double>> pixel_layer;
-//typedef vector<pixel_layer> model_pixels;
 model_pixels model;
 
 //gets the file name
@@ -72,47 +66,6 @@ void get_file_name()
 {
 	cout << "Enter the name of the gcode file: ";
 	cin.getline(gcodeFile, 256);
-}
-
-//should probably only do this one layer at a time...
-void initialize_pixel_vector()
-{
-	pixel_layer new_pix_layer;
-	int num_rows = 2000;
-	int num_columns = 2000;
-	new_pix_layer.resize(num_rows);
-	for(int i = 0; i<num_rows; i++)
-	{
-		new_pix_layer[i].resize(num_columns);
-	}
-	for(int j = 0; j<num_rows; j++)
-	{
-		for(int k = 0; k<num_columns; k++)
-		{
-			new_pix_layer[j][k] = 0.0;
-		}
-	}
-	model.push_back(new_pix_layer);
-}
-
-//this_layer is vector of Points
-//pixel_layer is 2D vector of doubles
-//only sending one layer at a time
-void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
-{
-	for(auto i = gcode_layer.begin(); i != gcode_layer.end(); i++)
-	{
-		int x = lrint(i->x);
-		int y = lrint(i->y);
-		//cout << "x: " << x << ", y: " << y << endl;
-		pix[x][y]=1.0; //if point is there, set it to 1.0
-	}
-}
-
-
-void print_pixel_vector(pixel_layer & pix)
-{
-
 }
 
 int main()
@@ -135,7 +88,7 @@ int main()
 	cout << "Layer index in main: " << layer_index << endl;
 	for(int i = 0; i<layer_index; i++)
 	{
-		initialize_pixel_vector();
+		initialize_pixel_vector(model);
 	}
 
 	print_stuff(converted_model);
