@@ -31,7 +31,7 @@ void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 	{
 		int x = lrint(i->x);
 		int y = lrint(i->y);
-		cout << "x: " << x << ", y: " << y << endl;
+		//cout << "x: " << x << ", y: " << y << endl;
 		pix[x][y]=1.0; //if point is there, set it to 1.0
 	}
 }
