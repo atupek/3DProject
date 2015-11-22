@@ -24,11 +24,13 @@
 // so need a function to 'draw' that line in the sparse array
 //TODO: Write Testing Data for 'printing out contents of pixel vector'  --DONE
 //put pixel processing into own .cpp & .h
-//put gcode processing into own .cpp & .h
+//put gcode processing into own .cpp & .h --DONE
+//put layer processing into own .cpp & .h
 
 
 #include "point.h"
 #include "process_gcode.h"
+#include "process_layers.h"
 
 #include <iostream>
 using std::cin;
@@ -61,62 +63,15 @@ all_layers model_layers;
 int layer_index = 0; // not being properly incremented...
 
 
-typedef vector<vector<double>> pixel_layer;
-typedef vector<pixel_layer> model_pixels;
+//typedef vector<vector<double>> pixel_layer;
+//typedef vector<pixel_layer> model_pixels;
 model_pixels model;
-
-//compute distance
-double compute_distance(double x1, double x2, double y1, double y2)
-{
-	double x_squared = pow(x2 - x1, 2);
-	double y_squared = pow(y2 - y1, 2);
-	return sqrt(x_squared + y_squared);
-}
 
 //gets the file name
 void get_file_name()
 {
 	cout << "Enter the name of the gcode file: ";
 	cin.getline(gcodeFile, 256);
-}
-
-//prints distance
-void print_distance(this_layer layer)
-{
-	double this_distance = 0.0;
-	for(int i = 1; i<layer.size(); i++)
-	{
-		this_distance = compute_distance(layer[i].x, layer[i-1].x, layer[i].y, layer[i-1].y);
-		cout << "distance: " << this_distance << endl;
-	}
-}
-
-//this prints out all the points
-//should just print out the i->size()
-//maybe I just need a function to iterate through the model_layers?
-void print_stuff(all_layers &model)
-{
-	for(std::vector<this_layer>::iterator i = model.begin(); i != model.end(); i++)
-	{
-		for(std::vector<Point>::iterator j = i->begin(); j!= i->end(); j++)
-			{
-				//j->print_coords(cout);
-				j->print_all(cout);
-			}
-		cout << "Number points in layer: " << i->size() << endl;
-		//print_distance(*i);
-		cout << "*********************END LAYER*****************************" << endl;
-	}
-}
-
-void multiply_by_ten(this_layer &layer)
-{
-	for(auto i = layer.begin(); i != layer.end(); i++)
-	{
-		i->x *= 10;
-		i->y *= 10;
-		i->extrude_amt *= 10;
-	}
 }
 
 //should probably only do this one layer at a time...
@@ -166,8 +121,6 @@ int main()
 	get_file_name();
 	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
-
-	//all_layers converted_model = model_layers;
 	all_layers converted_model = this_model;
 
 
@@ -185,7 +138,7 @@ int main()
 		initialize_pixel_vector();
 	}
 
-	//print_stuff(converted_model);
+	print_stuff(converted_model);
 	//print_stuff(model_layers);
 	//print_stuff(this_model);
 
