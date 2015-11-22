@@ -6,7 +6,7 @@
 #include "process_layers.h"
 
 //should probably only do this one layer at a time...
-void initialize_pixel_vector(model_pixels & model);
+void initialize_pixel_vector(model_pixels & model, int num_rows, int num_columns);
 
 //this_layer is vector of Points
 //pixel_layer is 2D vector of doubles

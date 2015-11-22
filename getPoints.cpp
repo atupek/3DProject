@@ -57,7 +57,12 @@ using std::istream_iterator;
 char gcodeFile[256];
 all_layers model_layers;
 
-int layer_index = 0; // not being properly incremented...
+int layer_index = 0;
+
+//2000 for 0.1mm resolution, use multiply_by_ten
+//200 for 1.0mm resolution, don't use mulitply_by_ten
+int num_pixel_rows = 200;
+int num_pixel_columns = 200;
 
 model_pixels model;
 
@@ -88,16 +93,19 @@ int main()
 	cout << "Layer index in main: " << layer_index << endl;
 	for(int i = 0; i<layer_index; i++)
 	{
-		initialize_pixel_vector(model);
+		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
-	print_stuff(converted_model);
+	//print_stuff(converted_model);
 	//print_stuff(model_layers);
 	//print_stuff(this_model);
 
 	
 	//fill_pixel_vector(converted_model[3], model[3]);
+	fill_pixel_vector(model_layers[3], model[3]);
 	cout << "Num layers in model: " << model.size() << endl;
+
+	print_pixel_vector(model[3]);
 
 	return 0;
 }

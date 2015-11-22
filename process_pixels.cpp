@@ -1,16 +1,16 @@
 #include "process_pixels.h"
 
 //should probably only do this one layer at a time...
-void initialize_pixel_vector(model_pixels & model)
+void initialize_pixel_vector(model_pixels & model, int num_rows, int num_columns)
 {
 	pixel_layer new_pix_layer;
-	int num_rows = 2000;
-	int num_columns = 2000;
+
 	new_pix_layer.resize(num_rows);
 	for(int i = 0; i<num_rows; i++)
 	{
 		new_pix_layer[i].resize(num_columns);
 	}
+
 	for(int j = 0; j<num_rows; j++)
 	{
 		for(int k = 0; k<num_columns; k++)
@@ -18,6 +18,7 @@ void initialize_pixel_vector(model_pixels & model)
 			new_pix_layer[j][k] = 0.0;
 		}
 	}
+
 	model.push_back(new_pix_layer);
 }
 
@@ -30,7 +31,7 @@ void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 	{
 		int x = lrint(i->x);
 		int y = lrint(i->y);
-		//cout << "x: " << x << ", y: " << y << endl;
+		cout << "x: " << x << ", y: " << y << endl;
 		pix[x][y]=1.0; //if point is there, set it to 1.0
 	}
 }
@@ -38,5 +39,20 @@ void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 
 void print_pixel_vector(pixel_layer & pix)
 {
+	for(auto i = pix.begin(); i != pix.end(); i++)
+	{
+		for(auto j = i->begin(); j != i->end(); j++)
+		{
+			if(*j == 0.0)
+			{
+				cout << " "; //nothing if no point there
+			}
+			else
+			{
+				cout << "X"; //an X if there is a point
+			}
+		}
+		cout << endl;
+	}
 
 }
