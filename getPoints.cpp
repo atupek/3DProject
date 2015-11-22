@@ -106,7 +106,14 @@ int main()
 	fill_pixel_vector(model_layers[3], model[3]);
 	cout << "Num layers in model: " << model.size() << endl;
 
-	print_pixel_vector(model[3]);
+	//print_pixel_vector(model[3]);
+
+	this_layer test_point_vec = this_model[3];
+
+	for(auto i = 0; i < test_point_vec.size()-1; i++)
+	{
+		bresenham(test_point_vec[i].x, test_point_vec[i+1].x, test_point_vec[i].y, test_point_vec[i+1].y, model[3]);
+	}
 
 	return 0;
 }
