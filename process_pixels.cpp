@@ -11,13 +11,14 @@ void initialize_pixel_vector(model_pixels & model, int num_rows, int num_columns
 		new_pix_layer[i].resize(num_columns);
 	}
 
+/*
 	for(int j = 0; j<num_rows; j++)
 	{
 		for(int k = 0; k<num_columns; k++)
 		{
 			new_pix_layer[j][k] = 0.0;
 		}
-	}
+	}*/
 
 	model.push_back(new_pix_layer);
 }
