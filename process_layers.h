@@ -25,8 +25,10 @@ using std::istringstream;
 using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
 
+
 typedef vector<vector<double>> pixel_layer;
 typedef vector<pixel_layer> model_pixels;
+
 
 double compute_distance(double x1, double x2, double y1, double y2);
 void print_distance(this_layer layer);
