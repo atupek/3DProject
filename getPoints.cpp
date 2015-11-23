@@ -33,9 +33,9 @@
 
 //Demo code for Monday:
 // fill 2000 x 2000 vector with points from two subsequent layers
-// print bitmap for layer1 & layer 2
-// find binary difference between layers
-// print bitmap of difference
+// print bitmap for layer1 & layer 2  --DONE
+// find binary difference between layers --DONE
+// print bitmap of difference --DONE
 
 
 #include "point.h"
@@ -76,8 +76,8 @@ int layer_index = 0;
 
 //2000 for 0.1mm resolution, use multiply_by_ten
 //200 for 1.0mm resolution, don't use mulitply_by_ten
-int num_pixel_rows = 200;
-int num_pixel_columns = 200;
+int num_pixel_rows = 2000;
+int num_pixel_columns = 2000;
 
 model_pixels model;
 
@@ -157,15 +157,13 @@ int main()
 	//print_stuff(converted_model);
 	
 	//not sure why this isn't working...
-	//fill_pixel_vector(converted_model[3], model[3]);
+	fill_pixel_vector(converted_model[3], model[3]);
 
+/*
 	fill_pixel_vector(model_layers[3], model[3]);
-	fill_pixel_vector(model_layers[4], model[4]);
+	fill_pixel_vector(model_layers[4], model[4]);*/
 	cout << "Num layers in model: " << model.size() << endl;
-
-	print_bitmap(model[3], 3);
-	print_bitmap(model[4], 4);
-
+/*
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < this_model[3].size(); i++)
 	{
@@ -175,7 +173,21 @@ int main()
 	for(auto i = 0; i < this_model[4].size(); i++)
 	{
 		bresenham(this_model[4][i].x, this_model[4][i+1].x, this_model[4][i].y, this_model[4][i+1].y, model[4]);
+	}*/
+
+	//draw lines between the points using bresenham algorithm
+	for(auto i = 0; i < converted_model[3].size(); i++)
+	{
+		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[3]);
 	}
+	
+	for(auto i = 0; i < converted_model[4].size(); i++)
+	{
+		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
+	}
+
+	print_bitmap(model[3], 3);
+	print_bitmap(model[4], 4);
 
 	//compare pixel layers & load difference into a third layer
 	//in this call, it will be blank because comparing model to itself will result in 0 differences
