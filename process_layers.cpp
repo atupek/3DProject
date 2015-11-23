@@ -47,8 +47,3 @@ void print_stuff(all_layers &model)
 		cout << "*********************END LAYER*****************************" << endl;
 	}
 }
-
-void compare_layers(this_layer &layer1, this_layer &layer2)
-{
-	
-}

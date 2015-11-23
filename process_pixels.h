@@ -15,4 +15,6 @@ void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix);
 
 void print_pixel_vector(pixel_layer & pix);
 
+void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2);
+
 #endif //Pixels_Included
