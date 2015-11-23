@@ -58,7 +58,22 @@ void print_pixel_vector(pixel_layer & pix)
 
 }
 
-void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2)
+//so pix1 & pix2 are both 2D vectors of doubles (1.0 or 0.0 depending on filled or not)
+//they are of the same size...
+void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &diff)
 {
-
+	for(auto i = 0; i < pix1.size(); i++)
+	{
+		for (auto j = 0; j != pix1[i].size(); j++)
+		{
+			if(pix1[i][j] == pix2[i][j]) //if they're the same, then there shouldn't be a point
+			{
+				diff[i][j] = 0.0;
+			}
+			else
+			{
+				diff[i][j] = 1.0; //if they're different, then there should be a point
+			}
+		}
+	}
 }

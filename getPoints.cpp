@@ -119,6 +119,8 @@ int main()
 
 	//cout << "***************************************************************************" << endl;
 	//print_pixel_vector(model[3]);
+	compare_pixel_layers(model[3], model[3], model[3]);
+	print_pixel_vector(model[3]);
 
 	return 0;
 }
