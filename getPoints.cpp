@@ -104,14 +104,19 @@ void print_bitmap(pixel_layer &pix, int index)
       	//draw.pen_color(0, 0, 0);
 		for(auto j = 0; j < pix[i].size(); j++)
 		{
-			if(pix[i][j] == 1.0)
+			if(pix[i][j] == 1.0) //not for printing differences
 			{
 				draw.pen_color(0, 0, 0);
 				draw.plot_pixel(i, j);
 			}
+			if(pix[i][j] == 3.0) // n
+			{
+				draw.pen_color(255, 0, 0); //nothing beneath, not okay, red
+				draw.plot_pixel(i, j);
+			}
 			if(pix[i][j] == 2.0)
 			{
-				draw.pen_color(255, 0, 0); //make it red
+				draw.pen_color(0, 255, 0); //nothing above, is okay, green
 				draw.plot_pixel(i, j);
 			}
 		}
@@ -120,38 +125,6 @@ void print_bitmap(pixel_layer &pix, int index)
 
    image.save_image(bitmap_name);
 }
-/*
-void print_bitmap_1(pixel_layer &pix)
-{
-	bitmap_image image(num_pixel_rows, num_pixel_columns);
-
-   // set background to white
-   image.set_all_channels(255,255,255);
-
-   image_drawer draw(image);
-
-   for(auto i = 0; i < pix.size(); i++)
-	{
-		draw.pen_width(1);
-      	//draw.pen_color(0, 0, 0);
-		for(auto j = 0; j < pix[i].size(); j++)
-		{
-			if(pix[i][j] == 1.0)
-			{
-				draw.pen_color(0, 0, 0);
-				draw.plot_pixel(i, j);
-			}
-			if(pix[i][j] == 2.0)
-			{
-				draw.pen_color(255, 0, 0); //make it red
-				draw.plot_pixel(i, j);
-			}
-		}
-	}
-
-
-   image.save_image("output1.bmp");
-}*/
 
 int main()
 {
@@ -190,8 +163,8 @@ int main()
 	fill_pixel_vector(model_layers[4], model[4]);
 	cout << "Num layers in model: " << model.size() << endl;
 
-	//print_bitmap_1(model[3]);
-	//print_bitmap(model[4]);
+	print_bitmap(model[3], 3);
+	print_bitmap(model[4], 4);
 
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < this_model[3].size(); i++)

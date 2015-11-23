@@ -76,11 +76,11 @@ void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &dif
 			}
 			else if((pix1[i][j] != pix2[i][j]) && pix1[i][j] == 1.0)  //if pix1 has point there, but pix2 does not
 			{
-				diff[i][j] = 2.0; //if they're different, then there should be a point
+				diff[i][j] = 2.0; //nothing above it is okay, make it green
 			}
 			else // if layers not equal and nothing under pix2
 			{
-				diff[i][j] = 1.0;
+				diff[i][j] = 3.0; //nothing below it is not okay, make it red
 			}
 		}
 	}
