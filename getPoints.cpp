@@ -21,11 +21,13 @@
 // draw line between points
 //slope = m = (y2-y1)/(x2-x1)
 //line (y-y1) = m * (x - x1)
-//so need a function to 'draw' that line in the sparse array  --Using Bresenham Algorithm
+//so need a function to 'draw' that line in the sparse array  --Using Bresenham Algorithm  --DONE
 //TODO: Write Testing Data for 'printing out contents of pixel vector'  --DONE
 //put pixel processing into own .cpp & .h --DONE
 //put gcode processing into own .cpp & .h --DONE
 //put layer processing into own .cpp & .h --DONE
+//write code to find layer difference in points --DONE
+//refactor some names to be more self-explanatory ie: this_layer is from gcode, make this obvious from name
 
 
 #include "point.h"
@@ -33,6 +35,9 @@
 #include "process_layers.h"
 #include "process_pixels.h"
 #include "bresenham.h"
+
+//for printing bitmaps
+#include "bitmap/bitmap_image.hpp"
 
 #include <iostream>
 using std::cin;
@@ -72,6 +77,56 @@ void get_file_name()
 {
 	cout << "Enter the name of the gcode file: ";
 	cin.getline(gcodeFile, 256);
+}
+
+void print_bitmap(pixel_layer &pix)
+{
+	bitmap_image image(num_pixel_rows, num_pixel_columns);
+
+   // set background to white
+   image.set_all_channels(255,255,255);
+
+   image_drawer draw(image);
+
+   //draw.pen_width(3);
+   //draw.pen_color(255,0,0);
+   //draw.circle(image.width() / 2, image.height() / 2,50);
+   /*
+   draw.pen_width(1);
+   draw.pen_color(0,0,0);
+   //draw.rectangle(50,50,150,150);
+   draw.plot_pixel(50, 50);
+
+   for(int i = 0; i < 100; i++)
+   {
+      draw.pen_width(1);
+      draw.pen_color(0, 0, 0);
+      draw.plot_pixel(i, i);
+   }*/
+
+   for(auto i = 0; i < pix.size(); i++)
+	{
+		draw.pen_width(1);
+      	draw.pen_color(0, 0, 0);
+		for(auto j = 0; j < pix[i].size(); j++)
+		{
+			if(pix[i][j] == 1.0)
+			{
+				//cout << "X"; //draw point if point is there
+				//draw.pen_width(1);
+      			//draw.pen_color(0, 0, 0);
+				draw.plot_pixel(i, j);
+			}
+			else
+			{
+				//do nothing
+				//cout << " "; //space if no point
+			}
+		}
+	}
+
+
+   image.save_image("output.bmp");
 }
 
 int main()
@@ -119,8 +174,10 @@ int main()
 
 	//cout << "***************************************************************************" << endl;
 	//print_pixel_vector(model[3]);
-	compare_pixel_layers(model[3], model[3], model[3]);
-	print_pixel_vector(model[3]);
+	
+	//compare_pixel_layers(model[3], model[3], model[3]);
+	//print_pixel_vector(model[3]);
+	print_bitmap(model[3]);
 
 	return 0;
 }

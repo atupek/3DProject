@@ -58,6 +58,7 @@ void print_pixel_vector(pixel_layer & pix)
 
 }
 
+//points in diff are the points that need to be supported
 //so pix1 & pix2 are both 2D vectors of doubles (1.0 or 0.0 depending on filled or not)
 //they are of the same size...
 void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &diff)
