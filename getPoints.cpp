@@ -28,6 +28,14 @@
 //put layer processing into own .cpp & .h --DONE
 //write code to find layer difference in points --DONE
 //refactor some names to be more self-explanatory ie: this_layer is from gcode, make this obvious from name
+//refactor print_bitmap into own .h & .cpp
+//write code to show layer difference in points for test0.gcode layers
+
+//Demo code for Monday:
+// fill 2000 x 2000 vector with points from two subsequent layers
+// print bitmap for layer1 & layer 2
+// find binary difference between layers
+// print bitmap of difference
 
 
 #include "point.h"
@@ -49,6 +57,7 @@ using std::ifstream;
 #include <string>
 using std::string;
 using std::stod;
+using std::to_string;
 #include <regex>
 using std::regex;
 using std::smatch;
@@ -79,7 +88,40 @@ void get_file_name()
 	cin.getline(gcodeFile, 256);
 }
 
-void print_bitmap(pixel_layer &pix)
+void print_bitmap(pixel_layer &pix, int index)
+{
+	string bitmap_name = "output" + to_string(index) + ".bmp";
+	bitmap_image image(num_pixel_rows, num_pixel_columns);
+
+   // set background to white
+   image.set_all_channels(255,255,255);
+
+   image_drawer draw(image);
+
+   for(auto i = 0; i < pix.size(); i++)
+	{
+		draw.pen_width(1);
+      	//draw.pen_color(0, 0, 0);
+		for(auto j = 0; j < pix[i].size(); j++)
+		{
+			if(pix[i][j] == 1.0)
+			{
+				draw.pen_color(0, 0, 0);
+				draw.plot_pixel(i, j);
+			}
+			if(pix[i][j] == 2.0)
+			{
+				draw.pen_color(255, 0, 0); //make it red
+				draw.plot_pixel(i, j);
+			}
+		}
+	}
+
+
+   image.save_image(bitmap_name);
+}
+/*
+void print_bitmap_1(pixel_layer &pix)
 {
 	bitmap_image image(num_pixel_rows, num_pixel_columns);
 
@@ -88,96 +130,85 @@ void print_bitmap(pixel_layer &pix)
 
    image_drawer draw(image);
 
-   //draw.pen_width(3);
-   //draw.pen_color(255,0,0);
-   //draw.circle(image.width() / 2, image.height() / 2,50);
-   /*
-   draw.pen_width(1);
-   draw.pen_color(0,0,0);
-   //draw.rectangle(50,50,150,150);
-   draw.plot_pixel(50, 50);
-
-   for(int i = 0; i < 100; i++)
-   {
-      draw.pen_width(1);
-      draw.pen_color(0, 0, 0);
-      draw.plot_pixel(i, i);
-   }*/
-
    for(auto i = 0; i < pix.size(); i++)
 	{
 		draw.pen_width(1);
-      	draw.pen_color(0, 0, 0);
+      	//draw.pen_color(0, 0, 0);
 		for(auto j = 0; j < pix[i].size(); j++)
 		{
 			if(pix[i][j] == 1.0)
 			{
-				//cout << "X"; //draw point if point is there
-				//draw.pen_width(1);
-      			//draw.pen_color(0, 0, 0);
+				draw.pen_color(0, 0, 0);
 				draw.plot_pixel(i, j);
 			}
-			else
+			if(pix[i][j] == 2.0)
 			{
-				//do nothing
-				//cout << " "; //space if no point
+				draw.pen_color(255, 0, 0); //make it red
+				draw.plot_pixel(i, j);
 			}
 		}
 	}
 
 
-   image.save_image("output.bmp");
-}
+   image.save_image("output1.bmp");
+}*/
 
 int main()
 {
 
 	get_file_name();
+
+	//match regex & create points, load them into layers, specified by the layer index
 	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
 	all_layers converted_model = this_model;
 
-
+	//multiply x, y, & e by 10 for the higher resolution
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
 		multiply_by_ten(*i);
 	}
 
 	
-	//create vector of pixel layers
+	//create vector of pixel layers, these are empty to begin with
+	//and NEED TO BE POPULATED
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
-	cout << "Layer index in main: " << layer_index << endl;
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
+	//print x, y coordinates of Point vector
+	//set to either just print the coordinates,
+	//or to print all of the Point's data members
 	//print_stuff(converted_model);
-	//print_stuff(model_layers);
-	//print_stuff(this_model);
-
 	
+	//not sure why this isn't working...
 	//fill_pixel_vector(converted_model[3], model[3]);
+
 	fill_pixel_vector(model_layers[3], model[3]);
+	fill_pixel_vector(model_layers[4], model[4]);
 	cout << "Num layers in model: " << model.size() << endl;
 
-	//print_pixel_vector(model[3]);
+	//print_bitmap_1(model[3]);
+	//print_bitmap(model[4]);
 
-	//this_layer test_point_vec = this_model[3];
-
-	//for(auto i = 0; i < test_point_vec.size()-1; i++)
+	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < this_model[3].size(); i++)
 	{
-		//bresenham(test_point_vec[i].x, test_point_vec[i+1].x, test_point_vec[i].y, test_point_vec[i+1].y, model[3]);
 		bresenham(this_model[3][i].x, this_model[3][i+1].x, this_model[3][i].y, this_model[3][i+1].y, model[3]);
 	}
-
-	//cout << "***************************************************************************" << endl;
-	//print_pixel_vector(model[3]);
 	
-	//compare_pixel_layers(model[3], model[3], model[3]);
-	//print_pixel_vector(model[3]);
-	print_bitmap(model[3]);
+	for(auto i = 0; i < this_model[4].size(); i++)
+	{
+		bresenham(this_model[4][i].x, this_model[4][i+1].x, this_model[4][i].y, this_model[4][i+1].y, model[4]);
+	}
+
+	//compare pixel layers & load difference into a third layer
+	//in this call, it will be blank because comparing model to itself will result in 0 differences
+	compare_pixel_layers(model[3], model[4], model[5]);
+
+	print_bitmap(model[5], 5);
 
 	return 0;
 }

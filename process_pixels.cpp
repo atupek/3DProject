@@ -37,7 +37,8 @@ void fill_pixel_vector(this_layer &gcode_layer, pixel_layer &pix)
 	}
 }
 
-
+//print pixels as X's on screen, not needed now that
+//bitmap library has been included
 void print_pixel_vector(pixel_layer & pix)
 {
 	for(auto i = pix.begin(); i != pix.end(); i++)
@@ -59,6 +60,8 @@ void print_pixel_vector(pixel_layer & pix)
 }
 
 //points in diff are the points that need to be supported
+//TODO: make different value if upper layer has point or lower layer has point
+//pix1 is layer n, pix2 is layer n+1, so pix1 is below pix2
 //so pix1 & pix2 are both 2D vectors of doubles (1.0 or 0.0 depending on filled or not)
 //they are of the same size...
 void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &diff)
@@ -71,9 +74,13 @@ void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &dif
 			{
 				diff[i][j] = 0.0;
 			}
-			else
+			else if((pix1[i][j] != pix2[i][j]) && pix1[i][j] == 1.0)  //if pix1 has point there, but pix2 does not
 			{
-				diff[i][j] = 1.0; //if they're different, then there should be a point
+				diff[i][j] = 2.0; //if they're different, then there should be a point
+			}
+			else // if layers not equal and nothing under pix2
+			{
+				diff[i][j] = 1.0;
 			}
 		}
 	}
