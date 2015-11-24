@@ -46,6 +46,7 @@
 
 //for printing bitmaps
 #include "bitmap/bitmap_image.hpp"
+#include "process_bitmap.h"
 
 #include <iostream>
 using std::cin;
@@ -88,44 +89,6 @@ void get_file_name()
 	cin.getline(gcodeFile, 256);
 }
 
-void print_bitmap(pixel_layer &pix, int index)
-{
-	string bitmap_name = "output" + to_string(index) + ".bmp";
-	bitmap_image image(num_pixel_rows, num_pixel_columns);
-
-   // set background to white
-   image.set_all_channels(255,255,255);
-
-   image_drawer draw(image);
-
-   for(auto i = 0; i < pix.size(); i++)
-	{
-		draw.pen_width(1);
-      	//draw.pen_color(0, 0, 0);
-		for(auto j = 0; j < pix[i].size(); j++)
-		{
-			if(pix[i][j] == 1.0) //not for printing differences
-			{
-				draw.pen_color(0, 0, 0);
-				draw.plot_pixel(i, j);
-			}
-			if(pix[i][j] == 3.0) // n
-			{
-				draw.pen_color(255, 0, 0); //nothing beneath, not okay, red
-				draw.plot_pixel(i, j);
-			}
-			if(pix[i][j] == 2.0)
-			{
-				draw.pen_color(0, 255, 0); //nothing above, is okay, green
-				draw.plot_pixel(i, j);
-			}
-		}
-	}
-
-
-   image.save_image(bitmap_name);
-}
-
 int main()
 {
 
@@ -136,31 +99,36 @@ int main()
 
 	all_layers converted_model = this_model;
 
+	//print_bitmap_from_pt_vector(this_model[3], 1);
+	print_bitmap_lines_from_pt_vector(this_model[3], 1, num_pixel_rows, num_pixel_columns);
+
 	//multiply x, y, & e by 10 for the higher resolution
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
 		multiply_by_ten(*i);
 	}
 
-	
+	print_bitmap_lines_from_pt_vector(converted_model[3], 0, num_pixel_rows, num_pixel_columns);
+/*
 	//create vector of pixel layers, these are empty to begin with
 	//and NEED TO BE POPULATED
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
-	}
+	}*/
 
 	//print x, y coordinates of Point vector
 	//set to either just print the coordinates,
 	//or to print all of the Point's data members
 	//print_stuff(converted_model);
 	
-	fill_pixel_vector(converted_model[3], model[3]);
+	//fill_pixel_vector(converted_model[3], model[3]);
 
-/*
-	fill_pixel_vector(model_layers[3], model[3]);
-	fill_pixel_vector(model_layers[4], model[4]);*/
+
+	//fill_pixel_vector(model_layers[3], model[3]);
+	//fill_pixel_vector(model_layers[4], model[4]);
+	
 	cout << "Num layers in model: " << model.size() << endl;
 /*
 	//draw lines between the points using bresenham algorithm
@@ -173,7 +141,7 @@ int main()
 	{
 		bresenham(this_model[4][i].x, this_model[4][i+1].x, this_model[4][i].y, this_model[4][i+1].y, model[4]);
 	}*/
-
+/*
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < converted_model[3].size(); i++)
 	{
@@ -184,15 +152,16 @@ int main()
 	{
 		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
 	}
+*/
 
-	print_bitmap(model[3], 3);
-	print_bitmap(model[4], 4);
+	//print_bitmap(model[3], 3);
+	//print_bitmap(model[4], 4);
 
 	//compare pixel layers & load difference into a third layer
 	//in this call, it will be blank because comparing model to itself will result in 0 differences
-	compare_pixel_layers(model[3], model[4], model[5]);
+	//compare_pixel_layers(model[3], model[4], model[5]);
 
-	print_bitmap(model[5], 5);
+	//print_bitmap(model[5], 5);
 
 	return 0;
 }
