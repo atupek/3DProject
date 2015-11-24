@@ -28,8 +28,11 @@
 //put layer processing into own .cpp & .h --DONE
 //write code to find layer difference in points --DONE
 //refactor some names to be more self-explanatory ie: this_layer is from gcode, make this obvious from name
-//refactor print_bitmap into own .h & .cpp
+//refactor print_bitmap into own .h & .cpp --DONE
 //refactor the function calls to be only sending the layer to the the different functions, as opposed to sending vectors of layers
+//figure out .5mm resolution as opposed to .1mm resolution, will assume the 'line' drawn by printer is .5mm wide
+//this assumption is reasonable, considering that's what my extrusion width is set to in slicer
+//also figure out how to make the lines drawn 'fatter'
 
 //Demo code for Monday:
 // fill 2000 x 2000 vector with points from two subsequent layers  -DONE
@@ -109,14 +112,14 @@ int main()
 	}
 
 	print_bitmap_lines_from_pt_vector(converted_model[3], 0, num_pixel_rows, num_pixel_columns);
-/*
+
 	//create vector of pixel layers, these are empty to begin with
 	//and NEED TO BE POPULATED
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
-	}*/
+	}
 
 	//print x, y coordinates of Point vector
 	//set to either just print the coordinates,
@@ -130,7 +133,7 @@ int main()
 	//fill_pixel_vector(model_layers[4], model[4]);
 	
 	cout << "Num layers in model: " << model.size() << endl;
-/*
+
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < this_model[3].size(); i++)
 	{
@@ -140,8 +143,8 @@ int main()
 	for(auto i = 0; i < this_model[4].size(); i++)
 	{
 		bresenham(this_model[4][i].x, this_model[4][i+1].x, this_model[4][i].y, this_model[4][i+1].y, model[4]);
-	}*/
-/*
+	}
+
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < converted_model[3].size(); i++)
 	{
@@ -152,16 +155,10 @@ int main()
 	{
 		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
 	}
-*/
-
-	//print_bitmap(model[3], 3);
-	//print_bitmap(model[4], 4);
 
 	//compare pixel layers & load difference into a third layer
 	//in this call, it will be blank because comparing model to itself will result in 0 differences
-	//compare_pixel_layers(model[3], model[4], model[5]);
-
-	//print_bitmap(model[5], 5);
+	compare_pixel_layers(model[3], model[4], model[5]);
 
 	return 0;
 }
