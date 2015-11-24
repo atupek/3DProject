@@ -29,10 +29,10 @@
 //write code to find layer difference in points --DONE
 //refactor some names to be more self-explanatory ie: this_layer is from gcode, make this obvious from name
 //refactor print_bitmap into own .h & .cpp
-//write code to show layer difference in points for test0.gcode layers
+//refactor the function calls to be only sending the layer to the the different functions, as opposed to sending vectors of layers
 
 //Demo code for Monday:
-// fill 2000 x 2000 vector with points from two subsequent layers
+// fill 2000 x 2000 vector with points from two subsequent layers  -DONE
 // print bitmap for layer1 & layer 2  --DONE
 // find binary difference between layers --DONE
 // print bitmap of difference --DONE
@@ -156,7 +156,6 @@ int main()
 	//or to print all of the Point's data members
 	//print_stuff(converted_model);
 	
-	//not sure why this isn't working...
 	fill_pixel_vector(converted_model[3], model[3]);
 
 /*
