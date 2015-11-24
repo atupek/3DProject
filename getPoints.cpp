@@ -107,7 +107,8 @@ int main()
 	//print_bitmap_from_pt_vector(this_model[3], 1);
 	print_bitmap_lines_from_pt_vector(this_model[3], 1, num_pixel_rows, num_pixel_columns);
 
-	//multiply x, y, & e by 10 for the higher resolution
+	//multiply x, y, & e by 10 for the highest resolution
+	//mulitply x, y, & e by 2 for the middle resolution
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
 		multiply_by_two(*i);
@@ -123,9 +124,6 @@ int main()
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
-	fatten_lines(model[3], num_pixel_rows, num_pixel_columns);
-	//fatten_lines(converted_model[3], num_pixel_rows, num_pixel_columns);
-
 	print_bitmap_lines_from_pt_vector(converted_model[3], 7, num_pixel_rows, num_pixel_columns);
 
 	//print x, y coordinates of Point vector
@@ -133,8 +131,10 @@ int main()
 	//or to print all of the Point's data members
 	//print_stuff(converted_model);
 	
-	//fill_pixel_vector(converted_model[3], model[3]);
+	fill_pixel_vector(converted_model[3], model[3]);
+	fatten_lines(model[3], model[4], num_pixel_rows, num_pixel_columns);
 
+	print_bitmap(model[4], 11, num_pixel_rows, num_pixel_columns);
 
 	//fill_pixel_vector(model_layers[3], model[3]);
 	//fill_pixel_vector(model_layers[4], model[4]);
