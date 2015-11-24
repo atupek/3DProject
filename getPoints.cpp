@@ -30,9 +30,9 @@
 //refactor some names to be more self-explanatory ie: this_layer is from gcode, make this obvious from name
 //refactor print_bitmap into own .h & .cpp --DONE
 //refactor the function calls to be only sending the layer to the the different functions, as opposed to sending vectors of layers
-//figure out .5mm resolution as opposed to .1mm resolution, will assume the 'line' drawn by printer is .5mm wide
+//figure out .5mm resolution as opposed to .1mm resolution, will assume the 'line' drawn by printer is .5mm wide -DONE
 //this assumption is reasonable, considering that's what my extrusion width is set to in slicer
-//also figure out how to make the lines drawn 'fatter'
+//also figure out how to make the lines drawn 'fatter' on the .1mm resolution...Dilate
 
 //Demo code for Monday:
 // fill 2000 x 2000 vector with points from two subsequent layers  -DONE
@@ -79,9 +79,10 @@ all_layers model_layers;
 int layer_index = 0;
 
 //2000 for 0.1mm resolution, use multiply_by_ten
-//200 for 1.0mm resolution, don't use mulitply_by_ten
-int num_pixel_rows = 2000;
-int num_pixel_columns = 2000;
+//400 for .5mm resolution, use multipy_by_two
+//200 for 1.0mm resolution, no multiplication
+int num_pixel_rows = 400;
+int num_pixel_columns = 400;
 
 model_pixels model;
 
@@ -100,6 +101,7 @@ int main()
 	//match regex & create points, load them into layers, specified by the layer index
 	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
+	//make a new model for the converted model
 	all_layers converted_model = this_model;
 
 	//print_bitmap_from_pt_vector(this_model[3], 1);
@@ -108,7 +110,7 @@ int main()
 	//multiply x, y, & e by 10 for the higher resolution
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
-		multiply_by_ten(*i);
+		multiply_by_two(*i);
 	}
 
 	print_bitmap_lines_from_pt_vector(converted_model[3], 0, num_pixel_rows, num_pixel_columns);
@@ -120,6 +122,11 @@ int main()
 	{
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
+
+
+	//fatten_lines(converted_model[3], num_pixel_rows, num_pixel_columns);
+
+	print_bitmap_lines_from_pt_vector(converted_model[3], 7, num_pixel_rows, num_pixel_columns);
 
 	//print x, y coordinates of Point vector
 	//set to either just print the coordinates,
@@ -133,7 +140,7 @@ int main()
 	//fill_pixel_vector(model_layers[4], model[4]);
 	
 	cout << "Num layers in model: " << model.size() << endl;
-
+/*
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < this_model[3].size(); i++)
 	{
@@ -143,8 +150,9 @@ int main()
 	for(auto i = 0; i < this_model[4].size(); i++)
 	{
 		bresenham(this_model[4][i].x, this_model[4][i+1].x, this_model[4][i].y, this_model[4][i+1].y, model[4]);
-	}
+	}*/
 
+/*
 	//draw lines between the points using bresenham algorithm
 	for(auto i = 0; i < converted_model[3].size(); i++)
 	{
@@ -154,11 +162,11 @@ int main()
 	for(auto i = 0; i < converted_model[4].size(); i++)
 	{
 		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
-	}
+	}*/
 
 	//compare pixel layers & load difference into a third layer
 	//in this call, it will be blank because comparing model to itself will result in 0 differences
-	compare_pixel_layers(model[3], model[4], model[5]);
+	//compare_pixel_layers(model[3], model[4], model[5]);
 
 	return 0;
 }

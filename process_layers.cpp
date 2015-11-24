@@ -20,6 +20,7 @@ void print_distance(this_layer layer)
 	}
 }
 
+//for .1mm resolution
 void multiply_by_ten(this_layer &layer)
 {
 	for(auto i = layer.begin(); i != layer.end(); i++)
@@ -45,5 +46,16 @@ void print_stuff(all_layers &model)
 		cout << "Number points in layer: " << i->size() << endl;
 		print_distance(*i);
 		cout << "*********************END LAYER*****************************" << endl;
+	}
+}
+
+//for .5mm resolution
+void multiply_by_two(this_layer &layer)
+{
+	for(auto i = layer.begin(); i != layer.end(); i++)
+	{
+		i->x *= 2;
+		i->y *= 2;
+		i->extrude_amt *= 2;
 	}
 }

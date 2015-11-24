@@ -35,4 +35,6 @@ void print_distance(this_layer layer);
 void multiply_by_ten(this_layer &layer);
 void print_stuff(all_layers &model);
 
+void multiply_by_two(this_layer & layer);
+
 #endif //Layers_Included
