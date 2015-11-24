@@ -17,6 +17,6 @@ void print_pixel_vector(pixel_layer & pix);
 
 void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer & diff);
 
-//void fatten_lines(pixel_layer & pix1, int num_rows, int num_columns);
+void fatten_lines(pixel_layer & pix1, int num_rows, int num_columns);
 
 #endif //Pixels_Included

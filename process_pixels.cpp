@@ -86,7 +86,7 @@ void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &dif
 	}
 }
 
-/*
+
 void fatten_lines(pixel_layer & pix1, int num_rows, int num_columns)
 {
 	int num_neighbors = 0;
@@ -94,7 +94,7 @@ void fatten_lines(pixel_layer & pix1, int num_rows, int num_columns)
 	{
 		for (int j = 1; j < num_columns -1; j++)
 		{
-			//get_num_neighbors(i, j);
+			//get_num_neighbors(i, j)
 			if(pix1[i-1][j-1] == 1.0)
 			{
 				num_neighbors++;
@@ -129,7 +129,7 @@ void fatten_lines(pixel_layer & pix1, int num_rows, int num_columns)
 			}
 		}
 	}
-	if(num_neighbors >= 4)
+	/*if(num_neighbors >= 4)
 	{
 		pix1[i-1][j-1] = 1.0;
 		pix1[i][j-1] = 1.0;
@@ -139,6 +139,5 @@ void fatten_lines(pixel_layer & pix1, int num_rows, int num_columns)
 		pix1[i-1][j+1] = 1.0;
 		pix1[i][j+1] = 1.0;
 		pix1[i+1][j+1] = 1.0;
-	}
+	}*/
 }
-*/

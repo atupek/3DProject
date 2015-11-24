@@ -123,7 +123,7 @@ int main()
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
-
+	fatten_lines(model[3], num_pixel_rows, num_pixel_columns);
 	//fatten_lines(converted_model[3], num_pixel_rows, num_pixel_columns);
 
 	print_bitmap_lines_from_pt_vector(converted_model[3], 7, num_pixel_rows, num_pixel_columns);
