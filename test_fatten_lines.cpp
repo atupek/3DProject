@@ -11,12 +11,13 @@ using std::vector;
 #include "process_pixels.h"
 #include "point.h"
 #include "bresenham.h"
+#include "process_bitmap.h"
 
 
 pixel_layer test_layer;
 model_pixels test_model;
 
-vector<Point> test_point_vec;
+vector<Point> test_point_vec;  //a this_layer...
 
 int num_rows = 30;
 int num_columns = 30;
@@ -60,16 +61,18 @@ void populate_point_vec()
 int main()
 {
 	populate_test_model();
-	print_pixel_vector(test_layer);
 	populate_point_vec();
 
 	//need to fill pixel vector with points from test_point_vec
-	fill_pixel_vector();
+	fill_pixel_vector(test_point_vec, test_layer);
 
-	cout << test_point_vec.size() << endl;
+	//so now we have a pixel vector full of 1's and 0's and now we need to draw a line from n to n+1
+	//takes a this_layer, index, num_rows, num_columns
+	print_bitmap_lines_from_pt_vector(test_point_vec, 12, num_rows, num_columns);
+
+	//now we need to fatten up the lines
+	//which means we need 
+	//void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_columns);
 	
-	cout << "**********************************************" << endl;
-
-	print_pixel_vector(test_layer);
 	return 0;
 }
