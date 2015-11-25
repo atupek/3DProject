@@ -33,6 +33,7 @@
 //figure out .5mm resolution as opposed to .1mm resolution, will assume the 'line' drawn by printer is .5mm wide -DONE
 //this assumption is reasonable, considering that's what my extrusion width is set to in slicer
 //also figure out how to make the lines drawn 'fatter' on the .1mm resolution...Dilate
+//create test data for the fatten lines function
 
 //Demo code for Monday:
 // fill 2000 x 2000 vector with points from two subsequent layers  -DONE

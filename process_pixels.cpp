@@ -86,7 +86,7 @@ void compare_pixel_layers(pixel_layer &pix1, pixel_layer &pix2, pixel_layer &dif
 	}
 }
 
-
+//not quite working right.  need to create test data & check it out...
 void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_columns)
 {
 	int num_neighbors = 0;
