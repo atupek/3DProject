@@ -32,14 +32,19 @@
 //refactor the function calls to be only sending the layer to the the different functions, as opposed to sending vectors of layers
 //figure out .5mm resolution as opposed to .1mm resolution, will assume the 'line' drawn by printer is .5mm wide -DONE
 //this assumption is reasonable, considering that's what my extrusion width is set to in slicer
-//also figure out how to make the lines drawn 'fatter' on the .1mm resolution...Dilate
-//create test data for the fatten lines function
+//also figure out how to make the lines drawn 'fatter' on the .1mm resolution...Dilate  --DONE for .5mm resolution
+//create test data for the fatten lines function  --DONE
 
 //Demo code for Monday:
 // fill 2000 x 2000 vector with points from two subsequent layers  -DONE
 // print bitmap for layer1 & layer 2  --DONE
 // find binary difference between layers --DONE
 // print bitmap of difference --DONE
+
+//TODO next:
+//compare compared_pixel_model's red pixels to processed_pixel_model's pixels
+//and determine number of neighbors that red pixel has to determine whether or not it needs support
+//if it has one(?) neighbor it doesn't need support.
 
 
 #include "point.h"
