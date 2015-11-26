@@ -129,43 +129,39 @@ int main()
 	//takes x, y coords from the first argument and sets those pixels in the second argument
 	fill_pixel_vector(converted_model[3], model[3]);
 
+	//for debug...appears to print correctly.
+	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
+	
 	//draw the lines in the pixel vector from point n to n+1
-	//input is the point vector, output is the pixel vector
+	//input is the point vector, output SHOULD BE the pixel vector (output is currently void)
 	//and the lines in the pixel vector then need to be fattened up
+	//PROBLEM: RIGHT NOW THE DRAW LINES DO NOT SAVE DATA IN A WAY I CAN WORK WITH IT!!!
+	//I THINK THAT IS A PROBLEM, CHECKING THE BRESENHAM ALG THAT I WROTE TO SEE IF I AM WRONG OR RIGHT...
+
+	//draw lines between the points using bresenham algorithm
+	//this takes in a pixel layer and draws the line from n to n+1 for a pixel layer
+	//this might work better than using the bitmap library...
+	//CONFUSED: converted_model is a 2D vector of Points, so this_model[3] is a vector of Points
+	//and the bresenham is supposed to take a pixel_layer which is a 2D vector of doubles...
+	//Oh, wait.  the function call is right.  It's that I'm iterating through the vector of Points to
+	//print out the stuff in the pixel layer...damn...confusing.
+	//so when this is done, model[3] should have lines drawn in it...
+	for(auto i = 0; i < converted_model[3].size(); i++)
+	{
+		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[4]);
+	}
 	
 
 	//fatten up the lines
-	fatten_lines(model[3], model[4], num_pixel_rows, num_pixel_columns);
+	//takes first pixel layer and 'fattens the lines' into second pixel layer
+	//input is pixel layer 1, output SHOULD BE pixel layer 2
+	fatten_lines(model[4], model[5], num_pixel_rows, num_pixel_columns);
 
-	print_bitmap(model[4], 11, num_pixel_rows, num_pixel_columns);
+	//print the bitmap from the unfattened lines pixel layer for debug
+	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);
 
-	//fill_pixel_vector(model_layers[3], model[3]);
-	//fill_pixel_vector(model_layers[4], model[4]);
-	
-	cout << "Num layers in model: " << model.size() << endl;
-/*
-	//draw lines between the points using bresenham algorithm
-	for(auto i = 0; i < this_model[3].size(); i++)
-	{
-		bresenham(this_model[3][i].x, this_model[3][i+1].x, this_model[3][i].y, this_model[3][i+1].y, model[3]);
-	}
-	
-	for(auto i = 0; i < this_model[4].size(); i++)
-	{
-		bresenham(this_model[4][i].x, this_model[4][i+1].x, this_model[4][i].y, this_model[4][i+1].y, model[4]);
-	}*/
-
-/*
-	//draw lines between the points using bresenham algorithm
-	for(auto i = 0; i < converted_model[3].size(); i++)
-	{
-		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[3]);
-	}
-	
-	for(auto i = 0; i < converted_model[4].size(); i++)
-	{
-		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
-	}*/
+	//print the bitmap from the fattened lines pixel layer for debug
+	print_bitmap(model[5], 2, num_pixel_rows, num_pixel_columns);
 
 	//compare pixel layers & load difference into a third layer
 	//in this call, it will be blank because comparing model to itself will result in 0 differences
