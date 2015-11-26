@@ -129,7 +129,7 @@ void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_
 			}
 			if(num_neighbors >= 4)
 			{
-				pix2[i][j] = 1.0;
+				//pix2[i][j] = 1.0;
 				pix2[i-1][j-1] = 1.0;
 				pix2[i][j-1] = 1.0;
 				pix2[i+1][j-1] = 1.0;
@@ -139,6 +139,11 @@ void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_
 				pix2[i][j+1] = 1.0;
 				pix2[i+1][j+1] = 1.0;
 			}
+			if(pix1[i][j] == 1.0)
+			{
+				pix2[i][j] = 1.0;
+			}
+			num_neighbors = 0;
 		}
 	}
 }

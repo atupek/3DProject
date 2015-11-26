@@ -17,20 +17,21 @@ using std::vector;
 pixel_layer test_layer;
 model_pixels test_model;
 
+pixel_layer fat_line_layer;
+
 vector<Point> test_point_vec;  //a this_layer...
 
 int num_rows = 30;
 int num_columns = 30;
 
-void populate_test_model()
+void populate_test_model(pixel_layer &layer)
 {
-	test_layer.resize(num_rows);
+	layer.resize(num_rows);
 	for(int i = 0; i<num_rows; i++)
 	{
-		test_layer[i].resize(num_columns);
+		layer[i].resize(num_columns);
 	}
 }
-
 
 //okay, this is some ugly hard-coding...
 void populate_point_vec()
@@ -60,7 +61,8 @@ void populate_point_vec()
 
 int main()
 {
-	populate_test_model();
+	populate_test_model(test_layer);
+	populate_test_model(fat_line_layer);
 	populate_point_vec();
 
 	//need to fill pixel vector with points from test_point_vec
@@ -72,7 +74,14 @@ int main()
 
 	//now we need to fatten up the lines
 	//which means we need 
-	//void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_columns);
+	fatten_lines(test_layer, fat_line_layer, num_rows, num_columns);
+
+	//not we need to print fat_line_layer...
+	//which means 
+	//print_bitmap_lines_from_pt_vector(test_point_vec, 13, num_rows, num_columns);
+	print_pixel_vector(fat_line_layer);
+	cout << "**********************************************" << endl;
+	print_pixel_vector(test_layer);
 	
 	return 0;
 }
