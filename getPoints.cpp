@@ -88,6 +88,12 @@ int num_pixel_columns = 400;
 model_pixels model;
 model_pixels processed_pix_model;
 
+//index will be off by one from processed_pix_model
+//compared_pix_model[0] will be the difference between processed_pix_model[0] & [1]
+//compared_pix_model[1] will be the difference between processed_pix_model[1] & [2]
+//compared_pix_model[n] will be the difference between processed_pix_model[n] & [n+1]
+model_pixels compared_pix_model;
+
 //gets the file name
 void get_file_name()
 {
@@ -131,6 +137,13 @@ int main()
 		initialize_pixel_vector(processed_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
+	//create vector of pixel layers, these are empty to begin with
+	//and will be populated by compare_pixel_layers
+	for(int i = 0; i < layer_index; i++)
+	{
+		initialize_pixel_vector(compared_pix_model, num_pixel_rows, num_pixel_columns);
+	}
+
 	//print x, y coordinates of Point vector
 	//set to either just print the coordinates,
 	//or to print all of the Point's data members in point.cpp
@@ -166,7 +179,6 @@ int main()
 	{
 		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
 	}
-		cout << "size of converted model layer 4: " << converted_model[4].size() << endl;
 
 	//fatten up the lines
 	//takes first pixel layer and 'fattens the lines' into second pixel layer
@@ -187,9 +199,9 @@ int main()
 	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);
 
 	//compare pixel layers & load difference into a third layer
-	compare_pixel_layers(processed_pix_model[3], processed_pix_model[4], processed_pix_model[5]);
+	compare_pixel_layers(processed_pix_model[3], processed_pix_model[4], compared_pix_model[3]);
 
-	print_bitmap(processed_pix_model[5], 4, num_pixel_rows, num_pixel_columns);
+	print_bitmap(compared_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
 
 	return 0;
 }
