@@ -86,6 +86,7 @@ int num_pixel_rows = 400;
 int num_pixel_columns = 400;
 
 model_pixels model;
+model_pixels processed_pix_model;
 
 //gets the file name
 void get_file_name()
@@ -121,6 +122,15 @@ int main()
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
+	//create vector of pixel layers, empty to begin with
+	//will be populated by fatten_lines
+	//these are the pixel vectors that will eventually be compared
+	//to get the points that need to be supported
+	for(int i = 0; i<layer_index; i++)
+	{
+		initialize_pixel_vector(processed_pix_model, num_pixel_rows, num_pixel_columns);
+	}
+
 	//print x, y coordinates of Point vector
 	//set to either just print the coordinates,
 	//or to print all of the Point's data members in point.cpp
@@ -148,24 +158,31 @@ int main()
 	//so when this is done, model[3] should have lines drawn in it...
 	for(auto i = 0; i < converted_model[3].size(); i++)
 	{
-		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[4]);
+		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[3]);
 	}
-	
 
 	//fatten up the lines
 	//takes first pixel layer and 'fattens the lines' into second pixel layer
 	//input is pixel layer 1, output SHOULD BE pixel layer 2
-	fatten_lines(model[4], model[5], num_pixel_rows, num_pixel_columns);
+	fatten_lines(model[3], processed_pix_model[3], num_pixel_rows, num_pixel_columns);
+
+	//calling fatten_lines without calling bresenham to draw the lines, just to see the difference
+	fatten_lines(model[4], processed_pix_model[4], num_pixel_rows, num_pixel_columns);
 
 	//print the bitmap from the unfattened lines pixel layer for debug
-	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);
+	print_bitmap(model[3], 1, num_pixel_rows, num_pixel_columns);
 
 	//print the bitmap from the fattened lines pixel layer for debug
-	print_bitmap(model[5], 2, num_pixel_rows, num_pixel_columns);
+	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
+
+	//processed_pix_model[4] is showing up as blank...
+	//which is why the comparison is showing up as all green...
+	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);
 
 	//compare pixel layers & load difference into a third layer
-	//in this call, it will be blank because comparing model to itself will result in 0 differences
-	//compare_pixel_layers(model[3], model[4], model[5]);
+	compare_pixel_layers(processed_pix_model[3], processed_pix_model[4], processed_pix_model[5]);
+
+	print_bitmap(processed_pix_model[5], 4, num_pixel_rows, num_pixel_columns);
 
 	return 0;
 }
