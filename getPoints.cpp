@@ -138,6 +138,7 @@ int main()
 	
 	//takes x, y coords from the first argument and sets those pixels in the second argument
 	fill_pixel_vector(converted_model[3], model[3]);
+	fill_pixel_vector(converted_model[4], model[4]);
 
 	//for debug...appears to print correctly.
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
@@ -156,10 +157,16 @@ int main()
 	//Oh, wait.  the function call is right.  It's that I'm iterating through the vector of Points to
 	//print out the stuff in the pixel layer...damn...confusing.
 	//so when this is done, model[3] should have lines drawn in it...
-	for(auto i = 0; i < converted_model[3].size(); i++)
+	for(auto i = 0; i < converted_model[3].size()-1; i++)
 	{
 		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[3]);
 	}
+
+	for(auto i = 0; i < converted_model[4].size()-1; i++)
+	{
+		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
+	}
+		cout << "size of converted model layer 4: " << converted_model[4].size() << endl;
 
 	//fatten up the lines
 	//takes first pixel layer and 'fattens the lines' into second pixel layer
@@ -176,7 +183,7 @@ int main()
 	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
 
 	//processed_pix_model[4] is showing up as blank...
-	//which is why the comparison is showing up as all green...
+	//which is why the comparison is showing up as all green...ah-ha, because I didn't fill the pixel vector, I think...
 	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);
 
 	//compare pixel layers & load difference into a third layer
