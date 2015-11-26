@@ -96,7 +96,7 @@ void get_file_name()
 
 int main()
 {
-
+	//obvious.
 	get_file_name();
 
 	//match regex & create points, load them into layers, specified by the layer index
@@ -105,34 +105,36 @@ int main()
 	//make a new model for the converted model
 	all_layers converted_model = this_model;
 
-	//print_bitmap_from_pt_vector(this_model[3], 1);
-	print_bitmap_lines_from_pt_vector(this_model[3], 1, num_pixel_rows, num_pixel_columns);
-
-	//multiply x, y, & e by 10 for the highest resolution
-	//mulitply x, y, & e by 2 for the middle resolution
+	//multiply x, y, & e by 10 for the highest resolution (.1mm)
+	//mulitply x, y, & e by 2 for the middle resolution (.5mm)
+	//multiply by nothing for the lowest resolution (1mm)
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
 		multiply_by_two(*i);
 	}
 
-	print_bitmap_lines_from_pt_vector(converted_model[3], 0, num_pixel_rows, num_pixel_columns);
-
 	//create vector of pixel layers, these are empty to begin with
-	//and NEED TO BE POPULATED
+	//and NEED TO BE POPULATED with fill_pixel_vector
 	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
-	print_bitmap_lines_from_pt_vector(converted_model[3], 7, num_pixel_rows, num_pixel_columns);
-
 	//print x, y coordinates of Point vector
 	//set to either just print the coordinates,
-	//or to print all of the Point's data members
+	//or to print all of the Point's data members in point.cpp
 	//print_stuff(converted_model);
 	
+	//takes x, y coords from the first argument and sets those pixels in the second argument
 	fill_pixel_vector(converted_model[3], model[3]);
+
+	//draw the lines in the pixel vector from point n to n+1
+	//input is the point vector, output is the pixel vector
+	//and the lines in the pixel vector then need to be fattened up
+	
+
+	//fatten up the lines
 	fatten_lines(model[3], model[4], num_pixel_rows, num_pixel_columns);
 
 	print_bitmap(model[4], 11, num_pixel_rows, num_pixel_columns);

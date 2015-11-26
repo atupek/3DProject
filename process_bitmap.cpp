@@ -80,7 +80,7 @@ void print_bitmap_lines_from_pt_vector(this_layer &gcode_layer, int index, int n
 	{
 		draw.pen_width(1);
       	draw.pen_color(0, 0, 0);
-		//draw.line_segment(i->x, i->y, (i++)->x, (i++)->y);
+      	//draw.line_segment only draws the line, it doesn't actually save the new points in the point vector...
 		draw.line_segment(gcode_layer[i].x, gcode_layer[i].y, gcode_layer[(i+1)].x, gcode_layer[(i+1)].y);
 	}
 
@@ -88,3 +88,7 @@ void print_bitmap_lines_from_pt_vector(this_layer &gcode_layer, int index, int n
    image.save_image(bitmap_name);
 
 }
+
+//should get the points from the bitmap & save them to a 2D vector of pixels.
+//or I could just use the bresenham function I've already written to get the pixels...
+//void get_points_from_bitmap()
