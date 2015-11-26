@@ -58,12 +58,38 @@ void populate_point_vec()
 	test_point_vec.push_back(p10);
 }
 
+void populate_point_vec_1()
+{
+	Point p11(0.0, 0.0, 0.0, true);
+	test_point_vec.push_back(p11);
+	Point p12(1.0, 0.0, 0.0, true);
+	test_point_vec.push_back(p12);
+	Point p13(0.0, 1.0, 0.0, true);
+	test_point_vec.push_back(p13);
+	Point p14(1.0, 1.0, 0.0, true);
+	test_point_vec.push_back(p14);
+
+	Point p15(10.0, 10.0, 0.0, true);
+	test_point_vec.push_back(p15);
+	Point p16(10.0, 11.0, 0.0, true);
+	test_point_vec.push_back(p16);
+	Point p17(11.0, 10.0, 0.0, true);
+	test_point_vec.push_back(p17);
+	Point p18(11.0, 11.0, 0.0, true);
+	test_point_vec.push_back(p18);
+
+	Point p19(2.0, 2.0, 0.0, true);
+	test_point_vec.push_back(p19);
+
+	Point p20(12.0, 12.0, 0.0, true);
+	test_point_vec.push_back(p20);
+}
 
 int main()
 {
 	populate_test_model(test_layer);
 	populate_test_model(fat_line_layer);
-	populate_point_vec();
+	populate_point_vec_1();
 
 	//need to fill pixel vector with points from test_point_vec
 	fill_pixel_vector(test_point_vec, test_layer);
