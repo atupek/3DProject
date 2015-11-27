@@ -147,3 +147,8 @@ void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_
 		}
 	}
 }
+
+void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, int num_rows, int num_columns)
+{
+
+}
