@@ -47,13 +47,13 @@
 //if it has one(?) neighbor it doesn't need support. --DONE
 
 //TODO now:
-//create test model that requires support because test0.gcode (current test data)
-//by shifting points over --DONE
-//go through pixel vector & pull out all points that need support (not the green ones, only the red ones)
+//create test model that requires support because test0.gcode (current test data) by shifting points over --DONE
+//go through pixel vector & pull out all points that need support (not the green ones, only the red ones) --DONE
 //then get started on the bridge creation algorithm & neural net...
 //also need to put all of this into a single function call that takes two layers & returns the collection of points that
 //need support on each layer
 //need a function then to go backward through the layers from top to bottom and get the points where all the bridges must exist?
+//see what happens when we don't draw lines, and just check the info for the endpoints of the paths...
 
 
 #include "point.h"
@@ -201,6 +201,7 @@ void getPoints()
 	//Oh, wait.  the function call is right.  It's that I'm iterating through the vector of Points to
 	//print out the stuff in the pixel layer...damn...confusing.
 	//so when this is done, model[3] should have lines drawn in it...
+	/*
 	for(auto i = 0; i < converted_model[3].size()-1; i++)
 	{
 		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[3]);
@@ -209,7 +210,7 @@ void getPoints()
 	for(auto i = 0; i < converted_model[4].size()-1; i++)
 	{
 		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
-	}
+	}*/
 
 	//fatten up the lines
 	//takes first pixel layer and 'fattens the lines' into second pixel layer
