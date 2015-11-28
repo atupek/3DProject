@@ -208,5 +208,9 @@ int main()
 
 	print_bitmap(compared_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
 
+	check_neighbors(compared_pix_model[3], processed_pix_model[3], num_pixel_rows, num_pixel_columns);
+
+	print_bitmap(compared_pix_model[3], 5, num_pixel_rows, num_pixel_columns);
+
 	return 0;
 }

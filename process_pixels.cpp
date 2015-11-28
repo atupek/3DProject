@@ -150,5 +150,51 @@ void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_
 
 void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, int num_rows, int num_columns)
 {
-
+	for(int i = 1; i < num_rows - 1; i++)
+	{
+		for (int j = 1; j < num_columns -1; j++)
+		{
+			if(diff_pix[i][j] == 3.0)//if diff_pix[i][j] == red we need to check number pixels
+			{
+				int num_neighbors = 0;  //figure out best place to put this, as it will need to be reset...
+				if(comp_pix[i-1][j-1] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i][j-1] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i+1][j-1] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i-1][j] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i+1][j] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i-1][j+1] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i][j+1] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(comp_pix[i+1][j+1] == 1.0)
+				{
+					num_neighbors++;
+				}
+				if(num_neighbors >= 1)
+				{
+					//then we don't need to support this pixel
+					diff_pix[i][j] = 0.0;
+				}
+			}
+		}
+	}
 }
