@@ -198,3 +198,19 @@ void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, int num_row
 		}
 	}
 }
+
+void list_points(pixel_layer &diff_pix, this_layer & pts_to_support, int num_rows, int num_columns)
+{
+	for(int i = 1; i < num_rows - 1; i++)
+	{
+		for (int j = 1; j < num_columns -1; j++)
+		{
+			if(diff_pix[i][j] == 3.0)
+			{
+				Point new_point(i, j);
+				pts_to_support.push_back(new_point);
+
+			}
+		}
+	}
+}

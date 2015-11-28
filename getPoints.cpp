@@ -42,9 +42,18 @@
 // print bitmap of difference --DONE
 
 //TODO next:
-//compare compared_pixel_model's red pixels to processed_pixel_model's pixels
-//and determine number of neighbors that red pixel has to determine whether or not it needs support
-//if it has one(?) neighbor it doesn't need support.
+//compare compared_pixel_model's red pixels to processed_pixel_model's pixels  --DONE
+//and determine number of neighbors that red pixel has to determine whether or not it needs support --DONE
+//if it has one(?) neighbor it doesn't need support. --DONE
+
+//TODO now:
+//create test model that requires support because test0.gcode (current test data)
+//by shifting points over --DONE
+//go through pixel vector & pull out all points that need support (not the green ones, only the red ones)
+//then get started on the bridge creation algorithm & neural net...
+//also need to put all of this into a single function call that takes two layers & returns the collection of points that
+//need support on each layer
+//need a function then to go backward through the layers from top to bottom and get the points where all the bridges must exist?
 
 
 #include "point.h"
@@ -99,6 +108,8 @@ model_pixels processed_pix_model;
 //compared_pix_model[n] will be the difference between processed_pix_model[n] & [n+1]
 model_pixels compared_pix_model;
 
+this_layer points_needing_support;
+
 //gets the file name
 void get_file_name()
 {
@@ -106,7 +117,19 @@ void get_file_name()
 	cin.getline(gcodeFile, 256);
 }
 
-int main()
+//for testing points
+//shift to the right 10mm
+//takes a vector of Points
+//and adds 10 to the x coordinate
+void shiftPoints(this_layer &pt_layer)
+{
+	for(auto i = 0; i < pt_layer.size(); i++)
+	{
+		pt_layer[i].x +=10.0;
+	}
+}
+
+void getPoints()
 {
 	//obvious.
 	get_file_name();
@@ -124,6 +147,8 @@ int main()
 	{
 		multiply_by_two(*i);
 	}
+
+	shiftPoints(converted_model[4]);
 
 	//create vector of pixel layers, these are empty to begin with
 	//and NEED TO BE POPULATED with fill_pixel_vector
@@ -166,6 +191,7 @@ int main()
 	//and the lines in the pixel vector then need to be fattened up
 	//PROBLEM: RIGHT NOW THE DRAW LINES DO NOT SAVE DATA IN A WAY I CAN WORK WITH IT!!!
 	//I THINK THAT IS A PROBLEM, CHECKING THE BRESENHAM ALG THAT I WROTE TO SEE IF I AM WRONG OR RIGHT...
+	//NOPE, not a problem, it works correctly, just confused on function calls...
 
 	//draw lines between the points using bresenham algorithm
 	//this takes in a pixel layer and draws the line from n to n+1 for a pixel layer
@@ -212,5 +238,16 @@ int main()
 
 	print_bitmap(compared_pix_model[3], 5, num_pixel_rows, num_pixel_columns);
 
+	list_points(compared_pix_model[3], points_needing_support, num_pixel_rows, num_pixel_columns);
+
+	for(auto i = points_needing_support.begin(); i != points_needing_support.end(); i++)
+	{
+		i->print_coords(cout);
+	}
+}
+
+int main()
+{
+	getPoints();
 	return 0;
 }
