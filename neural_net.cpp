@@ -7,11 +7,19 @@ Neuron::Neuron()
 	output = 0.0;
 }
 
+Neuron::Neuron(int _num_inputs)
+{
+	num_inputs = _num_inputs;
+	weights_out = {};
+	output = 0.0;
+}
+
 
 Neuron::Neuron(int _num_inputs, vector<double> _weights_out)
 {
 	num_inputs = _num_inputs;
 	weights_out = _weights_out;
+	output = 0.0;
 }
 
 double Neuron::calculate_output()

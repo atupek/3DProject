@@ -12,7 +12,8 @@ public:
 	vector<double> weights_out;
 	double output;
 	Neuron();
-	Neuron(int num_inputs, vector<double> weights_out);
+	Neuron(int _num_inputs);
+	Neuron(int _num_inputs, vector<double> _weights_out);
 	double calculate_output();
 };
 
