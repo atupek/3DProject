@@ -1,4 +1,4 @@
-//process bitmap
+//neuron class
 #ifndef Neural_Network_Included
 #define Neural_Network_Included
 
