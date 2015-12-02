@@ -4,11 +4,48 @@
 #include "select_bridge.h"
 #include "bridge.h"
 
+set<Point> active_points;
+set<Bridge> active_bridges;
+set<Bridge> bridges;
+
+vector<double> slope_of_sweep;
+
+//for testing...
+void make_point_set()
+{
+	for(int i = 0; i<10; i++)
+	{
+		Point new_point(i, i, i+10, true);
+		active_points.insert(new_point);
+	}
+}
+
+void make_sweep_vector()
+{
+	slope_of_sweep.push_back(0.0); // horizontal
+	slope_of_sweep.push_back(1.0); //45 degrees
+	//slope_of_sweep.push_back() //how to represent vertical line???
+}
+
+int main()
+{
+	int i = 0;
+	make_point_set();
+	make_sweep_vector();
+	create_anchoring_segments(active_points, slope_of_sweep, i);
+	return 0;
+}
+
+
+//set<Segment> anchoring_segments;
+//set<SweepDirections> sweep_directions;
+
 //structures needed:
 //set_of_active_elements
 //set_of_anchoring_segments
 //queue_of_events
 //set_of_bridges
+//set_of_sweep_directions (equations of sweep plane?)
 
 //functions needed:
 //create_anchoring_segments
