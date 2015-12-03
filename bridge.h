@@ -25,6 +25,8 @@ public:
 	void print_bridge_pts_height(ostream & os) const;
 
     friend ostream & operator<<(ostream &, const Bridge &);
+    friend bool operator < (const Bridge & lhs, const Bridge & rhs);
+    friend bool operator > (const Bridge & lhs, const Bridge & rhs);
 };
 
 #endif //Bridge_Included

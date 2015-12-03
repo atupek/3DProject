@@ -32,7 +32,7 @@ int main()
 	int i = 0;
 	make_point_set();
 	make_sweep_vector();
-	create_anchoring_segments(active_points, slope_of_sweep, i);
+	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
 	return 0;
 }
 
@@ -49,7 +49,7 @@ int main()
 
 //functions needed:
 //create_anchoring_segments
-//intersect_sets
+//union_sets
 //select_bridge
 //difference_sets
 //snap_element_and_bridge
@@ -73,7 +73,7 @@ while(true)
 			e = pop_queue //leftmost event
 			for each anchoring_segment in set_of_anchoring_segments
 				starting in e do
-				segements_crossing_sweep_plane = segments_crossing_sweep_plane intersected with s
+				segements_crossing_sweep_plane = segments_crossing_sweep_plane union with s
 			selected = selectBridge(segments_crossing_sweep_plane)
 			if(score_of_selected_bridge > score_of_best_bridge)
 			{

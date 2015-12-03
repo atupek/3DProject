@@ -29,6 +29,16 @@ ostream & operator << (ostream & os, const Bridge & obj)
     return os;
 }
 
+bool operator < (const Bridge & lhs, const Bridge & rhs)
+{
+    return lhs.p1.x < rhs.p1.x;
+}
+
+bool operator > (const Bridge & lhs, const Bridge & rhs)
+{
+    return lhs.p1.x > rhs.p1.x;
+}
+
 //print function to print point coordinates
 void Bridge::print_bridge_members(ostream & os) const
 {
