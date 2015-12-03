@@ -4,6 +4,7 @@
 
 #include "point.h"
 #include "bridge.h"
+#include "anchoring_segment.h"
 
 #include <iostream>
 using std::cout;
@@ -17,12 +18,16 @@ using std::queue;
 using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 
+set<Anchoring_Segment> segments;
+
 void draw_line(Point pt, double slope)
 {
 	//line should be centered at the point, and orthogonal to the slope, of a specific, given distance
 	//should return a line segment, which is the anchoring segment
-	//need anchoring segment class now that is a line segment with three points, a length, a height
-	cout << "A LINE?" << endl;
+	cout << "A LINE:" << endl;
+	Anchoring_Segment new_segment(pt, slope);
+	new_segment.print_coords(cout);
+	segments.insert(new_segment);
 }
 
 void create_anchoring_segments(set<Point> point_set, set<Bridge> bridge_set, vector<double> &sweep_direction, int i)

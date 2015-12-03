@@ -29,7 +29,7 @@ void make_sweep_vector()
 
 int main()
 {
-	int i = 0;
+	int i = 1;
 	make_point_set();
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
