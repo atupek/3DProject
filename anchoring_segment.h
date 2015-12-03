@@ -2,6 +2,7 @@
 
 #ifndef Anchoring_Segment_Included
 #define Anchoring_Segment_Included
+
 #include "point.h"
 #include <vector>
 using std::vector;
@@ -17,8 +18,22 @@ public:
 	double slope;
 	vector<Point> intersected_points;
 	vector<Bridge> intersected_bridges;
+	double distance; //max length of bridge in mm
+	double x1;
+	double y1;
+	double x2;
+	double y2;
+	double slope_squared;
+	double delta_x;
+	double delta_y;
+	double new_x1;
+	double new_y1;
+	double new_x2;
+	double new_y2;
 
-	Anchoring_Segment(vector<Point> _intersection_points, vector<Bridge> _intersection_bridges, double slope);
+	//anchoring segment is created from a point and a slope
+	//the point is either from the points that need support or the endpoints of the bridges that are already in place
+	Anchoring_Segment(Point _midpt, double _slope);
 };
 
 #endif //Anchoring_Segment_Included
