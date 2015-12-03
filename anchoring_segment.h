@@ -9,6 +9,7 @@ using std::vector;
 #include "bridge.h"
 
 //anchoring_segments are composed of two endpoints, a slope, and any points that intersect it (a vector of points)
+//and any bridges that intersect it (a vector of bridges)
 
 class Anchoring_Segment
 {
@@ -34,6 +35,13 @@ public:
 	//anchoring segment is created from a point and a slope
 	//the point is either from the points that need support or the endpoints of the bridges that are already in place
 	Anchoring_Segment(Point _midpt, double _slope);
+
+	//function for sending point to ostream for printing
+    void print_coords(ostream &)const;
+
+	friend ostream & operator<<(ostream &, const Anchoring_Segment &);
+    friend bool operator < (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs);
+    friend bool operator > (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs);
 };
 
 #endif //Anchoring_Segment_Included

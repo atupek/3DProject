@@ -31,3 +31,27 @@ Anchoring_Segment::Anchoring_Segment(Point _midpt, double _slope)
 	endpt2.perimeter = true;
 
 }
+
+//overloaded << operator
+ostream & operator << (ostream & os, const Anchoring_Segment & obj)
+{
+    os << obj;
+    return os;
+}
+
+bool operator < (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
+{
+    return lhs.new_x1 < rhs.new_x1;
+}
+
+bool operator > (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
+{
+    return lhs.new_x1 > rhs.new_x1;
+}
+
+//print function to print point coordinates
+void Anchoring_Segment::print_coords(ostream & os) const
+{
+	os << endpt1.x << ", " << endpt1.y << " to " << endpt2.x << ", " << endpt2.y << endl;
+
+}
