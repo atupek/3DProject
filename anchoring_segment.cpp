@@ -11,8 +11,6 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 	endpt2 = _eventpt;
 	x1 = _eventpt.x;
 	y1 = _eventpt.y;
-	//x2 = _midpt.y;
-	//y2 = _midpt.y;
 
 	slope_squared = pow(slope, 2);
 	delta_x = distance/sqrt(1+slope_squared);
@@ -34,10 +32,7 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 	endpt1.extrude_amt = 0;
 	endpt1.perimeter = true;
 
-	//endpt2.x = new_x2;
-	//endpt2.y = new_y2;
-	//endpt2.extrude_amt = 0;
-	//endpt2.perimeter = true;
+	height = 0.0; //TODO: GET THIS FIXED/FIGURED OUT
 
 }
 

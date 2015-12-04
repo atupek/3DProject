@@ -35,9 +35,17 @@ int main()
 	make_point_set();
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+	
+	//for testing union & difference of sets
+	/*
+	cout << "segments size before difference: " << segments.size() << endl;
+	difference_sets(segments, test_seg);
+	cout << "segments size after difference: " << segments.size() << endl;
 	cout << "test_seg size before union: " << test_seg.size() << endl;
 	union_sets(test_seg, segments);
-	cout << "test_segments size after union: " << test_seg.size() << endl;
+	cout << "test_seg size after union: " << test_seg.size() << endl;
+	difference_sets(test_seg, segments);
+	cout << "test_seg size after difference: " << test_seg.size() << endl;*/
 	return 0;
 }
 
@@ -48,14 +56,14 @@ int main()
 //structures needed:
 //set_of_active_elements --DONE set<Point> active_points
 //set_of_anchoring_segments --DONE set<Anchring_Segments> segments
-//queue_of_events, which is a queue_of_points
+//queue_of_events, which is a queue_of_points  ***************************TODO********************************
 //set_of_bridges --DONE set<Bridges> bridges
 //set_of_sweep_directions (equations of sweep plane?) --DONE vector<double> slope_of_sweep
 
 //functions needed:
 //create_anchoring_segments --DONE
 //create_events --DONE
-//union_sets
+//union_sets --DONE
 //select_bridge
 //difference_sets
 //snap_element_and_bridge

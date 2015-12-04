@@ -92,4 +92,20 @@ void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & 
 	}
 }
 
+void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set)
+{
+	//go through all segments in remove_set
+	//look for them in original_set
+	//if they're in original_set, remove them
+	for(auto i = remove_set.begin(); i != remove_set.end(); i++)
+	{
+		std::set<Anchoring_Segment>::iterator it;
+		it = original_set.find(*i);
+		if(it != original_set.end())
+		{
+			original_set.erase(it);
+		}
+	}
+}
+
 #endif //Generate_Scaffolding_Included
