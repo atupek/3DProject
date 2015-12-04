@@ -35,7 +35,7 @@ double calculate_score(double gain, int num_elements, double lmax)
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
 //returns bestBridge
 //Container (C) initialized with segments that intesect sweep plane
-//Z, sort all segments in container by Z
+//Z, sort all segments in container (C) by Z
 //for each level (z)
 //	for i=0 to size(Z)-1
 //		Points_supported_by_bridge (A) <- 0 //initialize to empty set

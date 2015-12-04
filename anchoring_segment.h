@@ -26,19 +26,20 @@ public:
 	double distance; //max length of bridge in mm
 	double x1;
 	double y1;
-	double x2;
-	double y2;
+	//double x2;
+	//double y2;
 	double slope_squared;
 	double delta_x;
 	double delta_y;
 	double new_x1;
 	double new_y1;
-	double new_x2;
-	double new_y2;
+	//double new_x2;
+	//double new_y2;
+	double height;
 
 	//anchoring segment is created from a point and a slope
 	//the point is either from the points that need support or the endpoints of the bridges that are already in place
-	Anchoring_Segment(Point _midpt, double _slope);
+	Anchoring_Segment(Point _eventpt, double _slope, bool negative);
 
 	//function for sending point to ostream for printing
     void print_coords(ostream &)const;
