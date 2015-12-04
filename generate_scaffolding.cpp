@@ -56,7 +56,8 @@ int main()
 //structures needed:
 //set_of_active_elements --DONE set<Point> active_points
 //set_of_anchoring_segments --DONE set<Anchring_Segments> segments
-//queue_of_events, which is a queue_of_points  ***************************TODO********************************
+//queue_of_events, which is a queue_of_points  --DONE queue<Point> events
+//events needs to be refactored as a PRIORITY_QUEUE --DONE
 //set_of_bridges --DONE set<Bridges> bridges
 //set_of_sweep_directions (equations of sweep plane?) --DONE vector<double> slope_of_sweep
 
@@ -64,9 +65,10 @@ int main()
 //create_anchoring_segments --DONE
 //create_events --DONE
 //union_sets --DONE
-//select_bridge
-//difference_sets
-//snap_element_and_bridge
+//select_bridge ******************************TODO******************************
+//difference_sets --DONE
+//snap_element_and_bridge *******************************TODO**********************************
+//check_collisions ***********************************TODO****************************
 
 //input: a set of points that require supports AND d, the number of sweep directions
 //output: a valid bridge structure

@@ -13,13 +13,16 @@ using std::endl;
 #include <set>
 #include <queue>
 using std::set;
-using std::queue;
+//using std::queue;
+using std::priority_queue;
+#include <functional> //for greater
 #include <vector>
 using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 
 set<Anchoring_Segment> segments;
-queue<Point> events;
+//queue<Point> events;
+priority_queue<Point, vector<Point>, std::greater<Point> > events;
 
 //for testing union_sets:
 set<Anchoring_Segment> test_seg;
