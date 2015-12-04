@@ -19,6 +19,7 @@ using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 
 set<Anchoring_Segment> segments;
+queue<Point> events;
 
 void draw_line(Point pt, double slope)
 {
@@ -43,6 +44,21 @@ void create_anchoring_segments(set<Point> point_set, set<Bridge> bridge_set, vec
 	{
 		draw_line(i->p1, plane);
 		draw_line(i->p2, plane);
+	}
+}
+
+void create_events(Anchoring_Segment _segment)
+{
+	//get intersecting points out of the anchoring segment
+	for(auto i = _segment.intersected_points.begin(); i != _segment.intersected_points.end(); i++)
+	{
+		events.push(*i);
+	}
+	//get intersecting bridge points out of the anchoring segment
+	for(auto i = _segment.intersected_bridges.begin(); i != _segment.intersected_bridges.end(); i++)
+	{
+		events.push(i->p1);
+		events.push(i->p2);
 	}
 }
 

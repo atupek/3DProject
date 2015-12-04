@@ -10,5 +10,6 @@ int main()
 	double test_slope = 0.5;
 	Anchoring_Segment test_anchor(test_point, test_slope);
 	test_anchor.print_coords(cout);
+	cout << test_anchor.intersected_points.size() << endl;
 	return 0;
 }

@@ -11,6 +11,10 @@ using std::vector;
 //anchoring_segments are composed of two endpoints, a slope, and any points that intersect it (a vector of points)
 //and any bridges that intersect it (a vector of bridges)
 
+//TODO: anchoring segment needs to change:
+//one endpoint should be the event (midpt, which needs to be changed)
+//so there should be two anchoring segments created from this, not one...fuck
+
 class Anchoring_Segment
 {
 public:

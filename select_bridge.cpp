@@ -32,7 +32,30 @@ double calculate_score(double gain, int num_elements, double lmax)
 	return gain - num_elements * lmax;
 }
 
+//input to select_bridge set of segments (P) intersecting sweep plane at the current event
+//returns bestBridge
+//Container (C) initialized with segments that intesect sweep plane
+//Z, sort all segments in container by Z
+//for each level (z)
+//for i=0 to size(Z)-1
+//Points_supported_by_bridge (A) <- 0 //initialize to empty set
+//for j=0 to size(Z) -1
+//if distance from C[i] to C[j] <= max_distance
+//put C[j] into Points_supported_by_bridge
+//if there are collisions between points_supported_by_bridge, i, j, z then break
+//get bridge gain & score for points_supported_by_bridge, i, j, z
+//if gain>0 and score > bestScore then bestBridge = currentBridge
+//return bestBridge
+Bridge select_bridge(set<Anchoring_Segment> segment)
+{
+
+}
+
+
+
+
 /*
+	data from test_select_bridge
 	double bridge_height = 1.0;
 	double bridge_length = 2.0;
 	int num_elements_supported = 4;
