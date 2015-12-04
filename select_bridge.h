@@ -3,8 +3,11 @@
 #define Select_Bridge_Included
 
 #include "bridge.h"
+#include "anchoring_segment.h"
+#include <set>
+using std::set;
 
-Bridge select_bridge();
+void select_bridge(set<Anchoring_Segment> segment);
 
 double calculate_lmax(double height, double length);
 double calculate_gain(double height, double length, int num_elements);

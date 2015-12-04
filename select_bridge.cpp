@@ -37,17 +37,32 @@ double calculate_score(double gain, int num_elements, double lmax)
 //Container (C) initialized with segments that intesect sweep plane
 //Z, sort all segments in container by Z
 //for each level (z)
-//for i=0 to size(Z)-1
-//Points_supported_by_bridge (A) <- 0 //initialize to empty set
-//for j=0 to size(Z) -1
-//if distance from C[i] to C[j] <= max_distance
-//put C[j] into Points_supported_by_bridge
-//if there are collisions between points_supported_by_bridge, i, j, z then break
-//get bridge gain & score for points_supported_by_bridge, i, j, z
-//if gain>0 and score > bestScore then bestBridge = currentBridge
+//	for i=0 to size(Z)-1
+//		Points_supported_by_bridge (A) <- 0 //initialize to empty set
+//		for j=i to size(Z) -1
+//			if distance from C[i] to C[j] <= max_distance
+//				put C[j] into Points_supported_by_bridge
+//				if there are collisions between points_supported_by_bridge, i, j, z then break
+//				get bridge gain & score for points_supported_by_bridge, i, j, z
+//				if gain>0 and score > bestScore then bestBridge = currentBridge
 //return bestBridge
-Bridge select_bridge(set<Anchoring_Segment> segment)
+void select_bridge(set<Anchoring_Segment> segment)
 {
+	for(auto i = segment.begin(); i!= segment.end(); i++)
+	{
+		set<Point> supported_by_bridge;
+		for(auto j = i; j != segment.end(); j++)
+		{
+			//calculate distance from segment[i] to segment[j]
+			//if that distance is less than max distance
+			//add points of C[j] to supported_by_bridge
+			//check for collisions between supported_by_bridge, segment[i], segment[j], z-height
+			//calculate gain & score of a bridge composed of supported_by_bridge, segemnt[i], segment[j], z-height
+			//if gain > 0 && score > best_score
+			//best_bridge = current_bridge;
+			cout << "yep" << endl;
+		}
+	}
 
 }
 
