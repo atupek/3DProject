@@ -24,7 +24,7 @@ void make_point_set()
 
 void make_sweep_vector()
 {
-	slope_of_sweep.push_back(0.0); // horizontal
+	slope_of_sweep.push_back(0.0); // horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
 	slope_of_sweep.push_back(1.0); //45 degrees
 	slope_of_sweep.push_back(inf); // vertical
 }
@@ -53,11 +53,11 @@ int main()
 //set<Segment> anchoring_segments;
 //set<SweepDirections> sweep_directions;
 
-//structures needed:
+//structures needed: //ALL DONE, I THINK
 //set_of_active_elements --DONE set<Point> active_points
 //set_of_anchoring_segments --DONE set<Anchring_Segments> segments
 //queue_of_events, which is a queue_of_points  --DONE queue<Point> events
-//events needs to be refactored as a PRIORITY_QUEUE --DONE
+//events needs to be refactored as a PRIORITY_QUEUE --DONE priority_queue<Point> events
 //set_of_bridges --DONE set<Bridges> bridges
 //set_of_sweep_directions (equations of sweep plane?) --DONE vector<double> slope_of_sweep
 
@@ -69,6 +69,21 @@ int main()
 //difference_sets --DONE
 //snap_element_and_bridge *******************************TODO**********************************
 //check_collisions ***********************************TODO****************************
+//input: model, bridge, each connector to the elements above it
+//A, i, j, z
+//A is points (above) supported by bridge
+//i is P[i] anchoring segment
+//j is P[j] anchoring segment
+//z is layer
+//calculate_gain_and_score ********************************TODO**************************
+//input: bridge created from A, i, j, z
+//A is points (above) supported by bridge, use size() of function
+//i is P[i] anchoring segment
+//j is P[j] anchoring segment
+//z is layer
+//call calculate_score, call calculate_gain
+//add_supported *******************************TODO********************************
+//move P[j] into supported_elements container
 
 //input: a set of points that require supports AND d, the number of sweep directions
 //output: a valid bridge structure
