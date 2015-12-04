@@ -21,14 +21,27 @@ using std::vector; //vector of sweep directions
 set<Anchoring_Segment> segments;
 queue<Point> events;
 
+//for testing union_sets:
+set<Anchoring_Segment> test_seg;
+
 void draw_line(Point pt, double slope)
 {
-	//line should be centered at the point, and orthogonal to the slope, of a specific, given distance
-	//should return a line segment, which is the anchoring segment
+	//line should be orthogonal to the slope, of a specific given distance
+	//endpoints are the point passed, and a point at the positive distance
+	//endpoints are the point passed, and a point at the negative distance
+	//thus, creates two anchoring segments
 	cout << "A LINE:" << endl;
-	Anchoring_Segment new_segment(pt, slope);
+	Anchoring_Segment new_segment(pt, slope, true);
 	new_segment.print_coords(cout);
 	segments.insert(new_segment);
+
+	Anchoring_Segment new_segment1(pt, slope, false);
+	new_segment1.print_coords(cout);
+	segments.insert(new_segment1);
+
+	//for testing union_sets:
+	test_seg.insert(new_segment1);
+
 }
 
 void create_anchoring_segments(set<Point> point_set, set<Bridge> bridge_set, vector<double> &sweep_direction, int i)
@@ -63,9 +76,20 @@ void create_events(Anchoring_Segment _segment)
 }
 
 //sets of segements crossing sweep plane with anchoring segments(?)
-void union_sets()
+void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set)
 {
-
+	//go through all segments in new set,
+	//look for them in original set,
+	//if not in original set, insert into original set
+	for(auto i = new_set.begin(); i != new_set.end(); i++)
+	{
+		std::set<Anchoring_Segment>::iterator it;
+		it = original_set.find(*i);
+		if(it == original_set.end())
+		{
+			original_set.insert(*i);
+		}
+	}
 }
 
 #endif //Generate_Scaffolding_Included

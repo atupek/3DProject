@@ -35,6 +35,9 @@ int main()
 	make_point_set();
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+	cout << "test_seg size before union: " << test_seg.size() << endl;
+	union_sets(test_seg, segments);
+	cout << "test_segments size after union: " << test_seg.size() << endl;
 	return 0;
 }
 
