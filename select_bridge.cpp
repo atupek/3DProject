@@ -67,15 +67,23 @@ void select_bridge(set<Anchoring_Segment> segment)
 			//cout << "in j loop" << endl;
 			//calculate distance from segment[i] to segment[j]
 			//cout << "num elements in i intersected points: " << i->intersected_points.size() << endl;
-			for(auto k = i->intersected_points.begin(); k!= i->intersected_points.end(); k++)
+			
+			//for(auto k = i->intersected_points.begin(); k!= i->intersected_points.end(); k++)
+			for(auto k = 0; k < i->intersected_points.size()-1; k++)
 			{
 				//cout << "in k loop" << endl;
 				//cout << "num elements in j intersected points: " << j->intersected_points.size() << endl;
-				for(auto m = j->intersected_points.begin(); m != j->intersected_points.end(); m++)
+				
+				//for(auto m = j->intersected_points.begin(); m != j->intersected_points.end(); m++)
+				for(auto m = k; m < i->intersected_points.size(); m++)
 				{
 					//cout << "in m loop" << endl;
-					cout << "calculating distance between: " << k->x << ", " << k->y << " & " << m->x << ", " << m->y << endl;
-					double dist = calculate_distance(k->x, k->y, m->x, m->y);
+					//cout << "calculating distance between: " << k->x << ", " << k->y << " & " << m->x << ", " << m->y << endl;
+					//double dist = calculate_distance(k->x, k->y, m->x, m->y);
+					
+					cout  << "calculating distance betwen: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
+							i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
+					double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);
 					cout << "distance: " << dist << endl;
 				}
 			}
