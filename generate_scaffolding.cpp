@@ -5,50 +5,97 @@
 #include "bridge.h"
 #include <limits> //for infinity
 
-set<Point> active_points;
-set<Bridge> active_bridges;
-set<Bridge> bridges;
+set<Anchoring_Segment> segments;
+//queue<Point> events;
+priority_queue<Point, vector<Point>, std::greater<Point> > events;
 
-vector<double> slope_of_sweep;
-double inf = std::numeric_limits<double>::infinity();
+//for testing union_sets:
+set<Anchoring_Segment> test_seg;
 
-//for testing...
-void make_point_set()
+//creates anchoring segment
+void draw_line(Point pt, double slope)
 {
-	for(int i = 0; i<10; i++)
+	//line should be orthogonal to the slope, of a specific given distance
+	//endpoints are the point passed, and a point at the positive distance
+	//endpoints are the point passed, and a point at the negative distance
+	//thus, creates two anchoring segments
+	cout << "A LINE:" << endl;
+	Anchoring_Segment new_segment(pt, slope, true);
+	new_segment.print_coords(cout);
+	segments.insert(new_segment);
+
+	Anchoring_Segment new_segment1(pt, slope, false);
+	new_segment1.print_coords(cout);
+	segments.insert(new_segment1);
+
+	//for testing union_sets:
+	test_seg.insert(new_segment1);
+
+}
+
+void create_anchoring_segments(set<Point> point_set, set<Bridge> bridge_set, vector<double> &sweep_direction, int i)
+{
+	double plane = sweep_direction[i];
+	//for each Point in point_set, create anchor segment of length max_length orthoganl to sweep_direction, centered on Point
+	//for_each(point_set.begin(), point_set.end(), draw_line(sweep_direction[i]));
+	for(auto i = point_set.begin(); i != point_set.end(); i++)
 	{
-		Point new_point(i, i, i+10, true);
-		active_points.insert(new_point);
+		draw_line(*i, plane);
+	}
+	for(auto i = bridge_set.begin(); i != bridge_set.end(); i++)
+	{
+		draw_line(i->p1, plane);
+		draw_line(i->p2, plane);
 	}
 }
 
-void make_sweep_vector()
+void create_events(Anchoring_Segment _segment)
 {
-	slope_of_sweep.push_back(0.0); // horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
-	slope_of_sweep.push_back(1.0); //45 degrees
-	slope_of_sweep.push_back(inf); // vertical
+	//get intersecting points out of the anchoring segment
+	for(auto i = _segment.intersected_points.begin(); i != _segment.intersected_points.end(); i++)
+	{
+		events.push(*i);
+	}
+	//get intersecting bridge points out of the anchoring segment
+	for(auto i = _segment.intersected_bridges.begin(); i != _segment.intersected_bridges.end(); i++)
+	{
+		events.push(i->p1);
+		events.push(i->p2);
+	}
 }
 
-int main()
+//sets of segements crossing sweep plane with anchoring segments(?)
+void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set)
 {
-	int i = 1;
-	make_point_set();
-	make_sweep_vector();
-	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
-	
-	//for testing union & difference of sets
-	/*
-	cout << "segments size before difference: " << segments.size() << endl;
-	difference_sets(segments, test_seg);
-	cout << "segments size after difference: " << segments.size() << endl;
-	cout << "test_seg size before union: " << test_seg.size() << endl;
-	union_sets(test_seg, segments);
-	cout << "test_seg size after union: " << test_seg.size() << endl;
-	difference_sets(test_seg, segments);
-	cout << "test_seg size after difference: " << test_seg.size() << endl;*/
-	return 0;
+	//go through all segments in new set,
+	//look for them in original set,
+	//if not in original set, insert into original set
+	for(auto i = new_set.begin(); i != new_set.end(); i++)
+	{
+		std::set<Anchoring_Segment>::iterator it;
+		it = original_set.find(*i);
+		if(it == original_set.end())
+		{
+			original_set.insert(*i);
+		}
+	}
 }
 
+void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set)
+{
+	//go through all segments in remove_set
+	//look for them in original_set
+	//if they're in original_set, remove them
+	for(auto i = remove_set.begin(); i != remove_set.end(); i++)
+	{
+		std::set<Anchoring_Segment>::iterator it;
+		it = original_set.find(*i);
+		if(it != original_set.end())
+		{
+			original_set.erase(it);
+		}
+	}
+}
 
 //set<Segment> anchoring_segments;
 //set<SweepDirections> sweep_directions;
