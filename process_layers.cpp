@@ -2,10 +2,14 @@
 #include "process_layers.h"
 
 //compute distance
-double compute_distance(double x1, double x2, double y1, double y2)
+double compute_distance(double x1, double y1, double x2, double y2)
 {
 	double x_squared = pow(x2 - x1, 2);
+	cout << "x2 - x1 = " << x2 - x1 << endl;
+	cout << "x_squared = " << x_squared << endl;
 	double y_squared = pow(y2 - y1, 2);
+	cout << "y2 - y1 = " << y2 - y1 << endl;
+	cout << "y_squared = " << y_squared << endl;
 	return sqrt(x_squared + y_squared);
 }
 

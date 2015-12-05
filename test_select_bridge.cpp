@@ -75,6 +75,9 @@ int main()
 	double this_dist = calculate_distance(75, 75, 0, 0);
 	cout << "DISTANCE: " << this_dist << endl;
 
+	double second_dist = compute_distance(75, 75, 0, 0);
+	cout << "SECOND DISTANCE: " << second_dist << endl;
+
 	double x_squared = pow(0 - 75, 2);
 	double y_squared = pow(0 - 75, 2);
 	double final_distance = sqrt(x_squared + y_squared);
@@ -89,7 +92,7 @@ int main()
 	test_set.insert(test_anchor2);
 
 	cout << "Anchoring Segment test_set size: " << test_set.size() << endl;
-	//select_bridge(test_set);
+	select_bridge(test_set);
 
 
 	return 0;

@@ -30,7 +30,7 @@ typedef vector<vector<double>> pixel_layer;
 typedef vector<pixel_layer> model_pixels;
 
 
-double compute_distance(double x1, double x2, double y1, double y2);
+double compute_distance(double x1, double y1, double x2, double y2);
 void print_distance(this_layer layer);
 void multiply_by_ten(this_layer &layer);
 void print_stuff(all_layers &model);

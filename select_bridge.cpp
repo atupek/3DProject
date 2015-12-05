@@ -32,7 +32,7 @@ double calculate_score(double gain, int num_elements, double lmax)
 	return gain - num_elements * lmax;
 }
 
-double calculate_distance(double x1, double x2, double y1, double y2)
+double calculate_distance(double x1, double y1, double x2, double y2)
 {
 	double x_squared = pow(x2 - x1, 2);
 	double y_squared = pow(y2 - y1, 2);
