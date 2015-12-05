@@ -80,11 +80,13 @@ void select_bridge(set<Anchoring_Segment> segment)
 					//cout << "in m loop" << endl;
 					//cout << "calculating distance between: " << k->x << ", " << k->y << " & " << m->x << ", " << m->y << endl;
 					//double dist = calculate_distance(k->x, k->y, m->x, m->y);
-					
-					cout  << "calculating distance betwen: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
-							i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
-					double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);
-					cout << "distance: " << dist << endl;
+					if((i->intersected_points[k].x != i->intersected_points[m].x) && (i->intersected_points[k].y != i->intersected_points[m].y))
+					{
+						cout  << "calculating distance between: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
+																	 i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
+						double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);
+						cout << "distance: " << dist << endl;
+					}
 				}
 			}
 			//if that distance is less than max distance
