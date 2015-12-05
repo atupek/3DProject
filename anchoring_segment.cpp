@@ -6,7 +6,7 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 {
 	slope = -1/_slope;
 	intersected_points = {_eventpt}; //vector only contains _eventpt right now.
-	intersected_bridges = {}; //empty vector
+	intersected_bridges = {}; //empty vector for now
 	distance = 30; //max length of bridge in mm
 	endpt2 = _eventpt;
 	x1 = _eventpt.x;

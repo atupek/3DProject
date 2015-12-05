@@ -32,6 +32,13 @@ double calculate_score(double gain, int num_elements, double lmax)
 	return gain - num_elements * lmax;
 }
 
+double calculate_distance(double x1, double x2, double y1, double y2)
+{
+	double x_squared = pow(x2 - x1, 2);
+	double y_squared = pow(y2 - y1, 2);
+	return sqrt(x_squared + y_squared);
+}
+
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
 //returns bestBridge
 //Container (C) initialized with segments that intesect sweep plane
@@ -48,19 +55,37 @@ double calculate_score(double gain, int num_elements, double lmax)
 //return bestBridge
 void select_bridge(set<Anchoring_Segment> segment)
 {
+	//go through set of segments, measure distance between segments
+	//segment has intersected points vector
+	//cout << "num elements in segment: " << segment.size() << endl;
 	for(auto i = segment.begin(); i!= segment.end(); i++)
 	{
 		set<Point> supported_by_bridge;
+		//cout << "in i loop" << endl;
 		for(auto j = i; j != segment.end(); j++)
 		{
+			//cout << "in j loop" << endl;
 			//calculate distance from segment[i] to segment[j]
+			//cout << "num elements in i intersected points: " << i->intersected_points.size() << endl;
+			for(auto k = i->intersected_points.begin(); k!= i->intersected_points.end(); k++)
+			{
+				//cout << "in k loop" << endl;
+				//cout << "num elements in j intersected points: " << j->intersected_points.size() << endl;
+				for(auto m = j->intersected_points.begin(); m != j->intersected_points.end(); m++)
+				{
+					//cout << "in m loop" << endl;
+					cout << "calculating distance between: " << k->x << ", " << k->y << " & " << m->x << ", " << m->y << endl;
+					double dist = calculate_distance(k->x, k->y, m->x, m->y);
+					cout << "distance: " << dist << endl;
+				}
+			}
 			//if that distance is less than max distance
 			//add points of C[j] to supported_by_bridge
 			//check for collisions between supported_by_bridge, segment[i], segment[j], z-height
 			//calculate gain & score of a bridge composed of supported_by_bridge, segemnt[i], segment[j], z-height
 			//if gain > 0 && score > best_score
 			//best_bridge = current_bridge;
-			cout << "yep" << endl;
+			//cout << "yep" << endl;
 		}
 	}
 

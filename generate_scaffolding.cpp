@@ -30,7 +30,6 @@ void draw_line(Point pt, double slope)
 
 	//for testing union_sets:
 	test_seg.insert(new_segment1);
-
 }
 
 void create_anchoring_segments(set<Point> point_set, set<Bridge> bridge_set, vector<double> &sweep_direction, int i)
