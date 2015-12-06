@@ -16,6 +16,7 @@ public:
 	bool pt1_open;
 	bool pt2_open;
 	
+	Bridge();
 	Bridge(Point _p1, Point _p2, double _height);
     Bridge(Point _p1, Point _p2, double _length, double _height, bool _pt1_open, bool _pt2_open);
 

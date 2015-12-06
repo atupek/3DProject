@@ -73,15 +73,15 @@ int main()
 
 	Point test_point3(75, 75, 0, true);
 	double this_dist = calculate_distance(75, 75, 0, 0);
-	cout << "DISTANCE: " << this_dist << endl;
+	//cout << "DISTANCE: " << this_dist << endl;
 
 	double second_dist = compute_distance(75, 75, 0, 0);
-	cout << "SECOND DISTANCE: " << second_dist << endl;
+	//cout << "SECOND DISTANCE: " << second_dist << endl;
 
 	double x_squared = pow(0 - 75, 2);
 	double y_squared = pow(0 - 75, 2);
 	double final_distance = sqrt(x_squared + y_squared);
-	cout << "FINAL DISTANCE: " << final_distance << endl;
+	//cout << "FINAL DISTANCE: " << final_distance << endl;
 
 	test_anchor.intersected_points.push_back(test_point3);
 	//cout << test_anchor.intersected_points.size() << endl;

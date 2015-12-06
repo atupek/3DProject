@@ -1,6 +1,17 @@
 #include "bridge.h"
 #include "process_layers.h"
 
+Bridge::Bridge()
+{
+	Point this_point(0.0, 0.0, 0.0, true);
+	p1 = this_point;
+	p2 = this_point;
+	height = 0;
+	length = 0;
+	pt1_open = true;
+	pt2_open = true;
+}
+
 Bridge::Bridge(Point _p1, Point _p2, double _height)
 {
 	p1 = _p1;
