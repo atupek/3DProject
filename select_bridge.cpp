@@ -39,6 +39,11 @@ double calculate_distance(double x1, double y1, double x2, double y2)
 	return sqrt(x_squared + y_squared);
 }
 
+void check_collision()
+{
+	//I HAVE NO IDEA HOW TO DO THIS
+}
+
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
 //returns bestBridge
 //Container (C) initialized with segments that intesect sweep plane
@@ -55,50 +60,52 @@ double calculate_distance(double x1, double y1, double x2, double y2)
 //return bestBridge
 void select_bridge(set<Anchoring_Segment> segment)
 {
+	double max_dist = 30.0;
 	//go through set of segments, measure distance between segments
 	//segment has intersected points vector
-	//cout << "num elements in segment: " << segment.size() << endl;
 	for(auto i = segment.begin(); i!= segment.end(); i++)
 	{
 		set<Point> supported_by_bridge;
-		//cout << "in i loop" << endl;
-		//for(auto j = i; j != segment.end(); j++)
-		//{
-			//cout << "in j loop" << endl;
-			//calculate distance from segment[i] to segment[j]
-			//cout << "num elements in i intersected points: " << i->intersected_points.size() << endl;
-			
-			//for(auto k = i->intersected_points.begin(); k!= i->intersected_points.end(); k++)
-			for(auto k = 0; k < i->intersected_points.size(); k++)
+		for(auto k = 0; k < i->intersected_points.size(); k++)
+		{
+			for(auto m = k+1; m < i->intersected_points.size(); m++)
 			{
-				//cout << "in k loop" << endl;
-				//cout << "num elements in j intersected points: " << j->intersected_points.size() << endl;
-				
-				//for(auto m = j->intersected_points.begin(); m != j->intersected_points.end(); m++)
-				for(auto m = k+1; m < i->intersected_points.size(); m++)
+				//cout  << "calculating distance between: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
+															// i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
+				double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);
+				//cout << "distance: " << dist << endl;
+				if(dist <= max_dist)
 				{
-					//cout << "in m loop" << endl;
-					//cout << "calculating distance between: " << k->x << ", " << k->y << " & " << m->x << ", " << m->y << endl;
-					//double dist = calculate_distance(k->x, k->y, m->x, m->y);
-					//if((i->intersected_points[k].x != i->intersected_points[m].x) && (i->intersected_points[k].y != i->intersected_points[m].y))
-					//{
-						cout  << "calculating distance between: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
-																	 i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
-						double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);
-						cout << "distance: " << dist << endl;
-					//}
+					supported_by_bridge.insert(i->intersected_points[m]);
+					//if there are collisions, break
+
+					//evaluate bridge to get gain & score
+					//calculate_gain(height, length, num_elements)
+					//Bridge(Point _p1, Point _p2, double _length, double _height, bool _pt1_open, bool _pt2_open);
+					//bridge's endpoints are supported_by_bridge[0], supported_by_bridge[size-1]
+					//length can be computed by calculating distance between the two endpoints
+					//height is given by current z (which is not yet in this algorithm?!?)
+					//both points are open to begin with, set closed by snap function
+					Point endpt1 = *supported_by_bridge.begin();
+					Point endpt2 = *supported_by_bridge.rbegin(); //iterator to last element
+					Bridge current_bridge(endpt1, endpt2, 0);
+					current_bridge.print_bridge_pts_height(cout);
+					//if gain > 0 and score > best_score then
+						//best_bridge = current_bridge;
 				}
 			}
-			//if that distance is less than max distance
-			//add points of C[j] to supported_by_bridge
-			//check for collisions between supported_by_bridge, segment[i], segment[j], z-height
-			//calculate gain & score of a bridge composed of supported_by_bridge, segemnt[i], segment[j], z-height
-			//if gain > 0 && score > best_score
-			//best_bridge = current_bridge;
-			//cout << "yep" << endl;
-		//}
+			//cout << "Supported by bridge size: " << supported_by_bridge.size() << endl;
+			supported_by_bridge.clear();
+		}
+		//if that distance is less than max distance
+		//add points of C[j] to supported_by_bridge
+		//check for collisions between supported_by_bridge, segment[i], segment[j], z-height
+		//calculate gain & score of a bridge composed of supported_by_bridge, segemnt[i], segment[j], z-height
+		//if gain > 0 && score > best_score
+		//best_bridge = current_bridge;
+		//cout << "yep" << endl;
 	}
-
+	//return best_bridge
 }
 
 
