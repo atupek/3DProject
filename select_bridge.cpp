@@ -62,6 +62,8 @@ void check_collision()
 //return bestBridge
 void select_bridge(set<Anchoring_Segment> segment)
 {
+	set<Point> pts_supported_by_best_bridge;
+	cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	Bridge best_bridge;
 	double best_score = neg_inf;
@@ -114,6 +116,7 @@ void select_bridge(set<Anchoring_Segment> segment)
 						{
 							best_score = this_score;
 							best_bridge = current_bridge;
+							pts_supported_by_best_bridge = supported_by_bridge;
 						}
 					}
 				}
@@ -131,6 +134,11 @@ void select_bridge(set<Anchoring_Segment> segment)
 	}
 	cout << "BEST BRIDGE AFTER: " << endl;
 	best_bridge.print_bridge_pts_height(cout);
+	cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
+	for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
+	{
+		j->print_coords(cout);
+	}
 	//return best_bridge
 }
 
