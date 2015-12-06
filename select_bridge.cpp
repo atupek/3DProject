@@ -114,6 +114,7 @@ void select_bridge(set<Anchoring_Segment> segment)
 						//if gain > 0 and score > best_score then
 						if(this_gain > 0 && this_score > best_score)
 						{
+							pts_supported_by_best_bridge.clear();
 							best_score = this_score;
 							best_bridge = current_bridge;
 							pts_supported_by_best_bridge = supported_by_bridge;
