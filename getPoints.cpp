@@ -137,8 +137,11 @@ void getPoints()
 		fill_pixel_vector(converted_model[i], model[i]);
 	}
 
-	//for debug...appears to print correctly.
+	//for debug...
+	//before drawing lines...both should just be sets of points.
+	//OK, THEY PRINT CORRECTLY
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
+	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);
 
 	//draw lines between the points using bresenham algorithm
 	//takes in a point_layer and draws a line from point n to n+1 in the corresponding pixel_layer in the initial model
@@ -151,12 +154,27 @@ void getPoints()
 		}
 	}
 
+	//for debug...
+	//after drawing lines...both should have lines.
+	//OKAY, THEY PRINT CORRECTLY
+	print_bitmap(model[3], 2, num_pixel_rows, num_pixel_columns);
+	print_bitmap(model[4], 3, num_pixel_rows, num_pixel_columns);
+
 	//fatten up the lines
 	//takes pixel layer from initial model and fattens lines into corresponding layer of processed_pix_model
 	for(auto i = 0; i < layer_index; i++)
 	{
 		fatten_lines(model[i], processed_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
+
+	//for debug...
+	//after fattening lines...	4, 5 should have thin lines.
+	//							6, 7 should have fat lines
+	//THEY PRINT OKAY, BUT FATTEN LINES NEEDS TO BE TWEAKED *********************TODO*******************************
+	print_bitmap(model[3], 4, num_pixel_rows, num_pixel_columns);
+	print_bitmap(model[4], 5, num_pixel_rows, num_pixel_columns);
+	print_bitmap(processed_pix_model[3], 6, num_pixel_rows, num_pixel_columns);
+	print_bitmap(processed_pix_model[4], 7, num_pixel_rows, num_pixel_columns);
 
 	//compare pixel layers & load difference into a third layer
 	//compare pixel layers n (processed_pix_model), n+1 (initial model)
@@ -166,12 +184,25 @@ void getPoints()
 		compare_pixel_layers(processed_pix_model[i], model[i+1], compared_pix_model[i]);
 	}
 
+	//for debug...
+	//after comparing layers...
+	//THEY PRINT OKAY
+	print_bitmap(model[4], 8, num_pixel_rows, num_pixel_columns);
+	print_bitmap(processed_pix_model[3], 9, num_pixel_rows, num_pixel_columns);
+	print_bitmap(compared_pix_model[3], 10, num_pixel_rows, num_pixel_columns);
+
 	//check neighbors between processed_pix_model[n], compared_pix_model[n+1]
 	//if neighbors exist in layer below, then point in compared_pix_model doesn't need support
 	for(auto i = 0; i < layer_index-1; i++)
 	{
 		check_neighbors(compared_pix_model[i+1], processed_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
+
+	//for debug...
+	//after checking neighbors...
+	//PRINTS OKAY
+	print_bitmap(compared_pix_model[3], 11, num_pixel_rows, num_pixel_columns);
+
 
 	//fill point vector with points that need support
 	//TODO: points_needing_support needs to be 2D vector of points, one vector of points for each layer
