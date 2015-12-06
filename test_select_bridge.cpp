@@ -91,7 +91,23 @@ int main()
 	test_set.insert(test_anchor1);
 	test_set.insert(test_anchor2);
 
+/*
 	cout << "Anchoring Segment test_set size: " << test_set.size() << endl;
+	cout << "test_anchor size: "  << test_anchor.intersected_points.size() << endl;
+	for(auto i = test_anchor.intersected_points.begin(); i != test_anchor.intersected_points.end(); i++)
+	{
+		cout << i->x << ", " << i->y << endl;
+	}
+	cout << "test_anchor1 size: " << test_anchor1.intersected_points.size() << endl;
+	for(auto j = test_anchor1.intersected_points.begin(); j != test_anchor1.intersected_points.end(); j++)
+	{
+		cout << j->x << ", " << j->y << endl;
+	}
+	cout << "test_anchor2 size: " << test_anchor2.intersected_points.size() << endl;
+	for(auto k = test_anchor2.intersected_points.begin(); k != test_anchor2.intersected_points.end(); k++)
+	{
+		cout << k->x << ", " << k->y << endl;
+	}*/
 	select_bridge(test_set);
 
 
