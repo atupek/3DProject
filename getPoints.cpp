@@ -112,6 +112,8 @@ void getPoints()
 	}
 
 	//create vector of pixel layers, empty to begin with
+	//TODO >>>> WILL BE POPULATED BY DRAW LINES FUNCTION
+	//TODO >>>> FIX THIS DOCUMENTATION NOTE
 	//will be populated by fatten_lines
 	//these are the pixel vectors that will eventually be compared
 	//(model layer n+1, processed_pix_model layer n+1)
@@ -121,13 +123,35 @@ void getPoints()
 		initialize_pixel_vector(processed_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
+	//create vector of pixel layers, empty to begin with
+	//TODO >>>> WILL BE POPULATED BY FATTEN LINES FUNCTION
+	//TODO >>>> FIX THIS DOCUMENTATION NOTE
+	//these are the pixel vectors that will eventually be compared
+	//(model layer n+1, processed_pix_model layer n+1)
+	//to get the points that need to be supported
+	for(int i = 0; i<layer_index; i++)
+	{
+		initialize_pixel_vector(fattened_pix_model, num_pixel_rows, num_pixel_columns);
+	}
+
 	//create vector of pixel layers, these are empty to begin with
+	//TODO >>>> FIX THIS DOCUMENTATION NOTE
 	//and will be populated by compare_pixel_layers
 	//and then be compared with processed_pix_model layer n-1
 	//to determine points that need support
 	for(int i = 0; i < layer_index; i++)
 	{
 		initialize_pixel_vector(compared_pix_model, num_pixel_rows, num_pixel_columns);
+	}
+
+	//create vector of pixel layers, these are empty to begin with
+	//TODO >>>> FIX THIS DOCUMENTATION NOTE
+	//and will be populated by compare_pixel_layers
+	//and then be compared with processed_pix_model layer n-1
+	//to determine points that need support
+	for(int i = 0; i < layer_index; i++)
+	{
+		initialize_pixel_vector(final_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 	
 	//takes x, y coords from Point vector (first argument) and sets those pixels in the pixel layer (second argument)
@@ -205,6 +229,7 @@ void getPoints()
 
 
 	//fill point vector with points that need support
+	// ******************************TODO*****************************************************
 	//TODO: points_needing_support needs to be 2D vector of points, one vector of points for each layer
 	list_points(compared_pix_model[3], points_needing_support, num_pixel_rows, num_pixel_columns);
 /*
