@@ -133,6 +133,6 @@ all_layers match_regex(string gcodeFile, all_layers & model_layers, int &layer_i
 
 		}
 	}
-	cout << "layer_index: " << layer_index << endl;
+	//cout << "layer_index: " << layer_index << endl;
 	return model_layers;
 }

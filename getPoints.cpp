@@ -1,61 +1,4 @@
-//lines that we're looking for are in the form
-//G1 Xnnnn Ynnnn Ennnn with options Fnnnn
-//pull out X & Y coordinate as points
-//pull out E as amount of filament to extrude
-//(may need it later...)
-//need to 'draw' line between points n, n-1
-//at G1 Znnnn command, begin new layer
-
-//while !eof
-//get line
-//match regex 1 (G1 Xnnnn Ynnnn Ennnn Fnnnn)
-//if match, store x, y, e to file
-//else continue
-//match regex 2 (G1 Znnnnn)
-//if match, start new layer
-//else continue
-
-//CURRENTLY WORKING ON:
-//DEBUG: get the extrusion amount properly printing in the print_all function call in the print_num_pts_in_layer function --DONE!
-//multiply x, y by ten & insert into 2D array 1 for filled w point, 0 for not filled  -- DONE
-// draw line between points
-//slope = m = (y2-y1)/(x2-x1)
-//line (y-y1) = m * (x - x1)
-//so need a function to 'draw' that line in the sparse array  --Using Bresenham Algorithm  --DONE
-//TODO: Write Testing Data for 'printing out contents of pixel vector'  --DONE
-//put pixel processing into own .cpp & .h --DONE
-//put gcode processing into own .cpp & .h --DONE
-//put layer processing into own .cpp & .h --DONE
-//write code to find layer difference in points --DONE
-//refactor some names to be more self-explanatory ie: this_layer is from gcode, make this obvious from name
-//refactor print_bitmap into own .h & .cpp --DONE
-//refactor the function calls to be only sending the layer to the the different functions, as opposed to sending vectors of layers
-//figure out .5mm resolution as opposed to .1mm resolution, will assume the 'line' drawn by printer is .5mm wide -DONE
-//this assumption is reasonable, considering that's what my extrusion width is set to in slicer
-//also figure out how to make the lines drawn 'fatter' on the .1mm resolution...Dilate  --DONE for .5mm resolution
-//create test data for the fatten lines function  --DONE
-
-//Demo code for Monday:
-// fill 2000 x 2000 vector with points from two subsequent layers  -DONE
-// print bitmap for layer1 & layer 2  --DONE
-// find binary difference between layers --DONE
-// print bitmap of difference --DONE
-
-//TODO next:
-//compare compared_pixel_model's red pixels to processed_pixel_model's pixels  --DONE
-//and determine number of neighbors that red pixel has to determine whether or not it needs support --DONE
-//if it has one(?) neighbor it doesn't need support. --DONE
-
-//TODO now:
-//create test model that requires support because test0.gcode (current test data) by shifting points over --DONE
-//go through pixel vector & pull out all points that need support (not the green ones, only the red ones) --DONE
-//then get started on the bridge creation algorithm & neural net...
-//also need to put all of this into a single function call that takes two layers & returns the collection of points that
-//need support on each layer
-//need a function then to go backward through the layers from top to bottom and get the points where all the bridges must exist?
-//see what happens when we don't draw lines, and just check the info for the endpoints of the paths...
-
-
+//getPoints.cpp
 #include "point.h"
 #include "process_gcode.h"
 #include "process_layers.h"
@@ -99,7 +42,10 @@ int layer_index = 0;
 int num_pixel_rows = 400;
 int num_pixel_columns = 400;
 
+//initial model into which converted points go
 model_pixels model;
+
+//lines are drawn in this model
 model_pixels processed_pix_model;
 
 //index will be off by one from processed_pix_model
@@ -108,6 +54,7 @@ model_pixels processed_pix_model;
 //compared_pix_model[n] will be the difference between processed_pix_model[n] & [n+1]
 model_pixels compared_pix_model;
 
+//these are the points that should be sent to the next algorithm that creates the bridges
 this_layer points_needing_support;
 
 //gets the file name
@@ -137,6 +84,11 @@ void getPoints()
 	//match regex & create points, load them into layers, specified by the layer index
 	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
+	//first three layers of model have no points because of way gcode is sliced
+	this_model.erase(this_model.begin(), this_model.begin()+2);
+	//last layer must also be removed for some reason...
+	layer_index--;
+
 	//make a new model for the converted model
 	all_layers converted_model = this_model;
 
@@ -148,11 +100,12 @@ void getPoints()
 		multiply_by_two(*i);
 	}
 
+	//for testing
 	shiftPoints(converted_model[4]);
 
 	//create vector of pixel layers, these are empty to begin with
-	//and NEED TO BE POPULATED with fill_pixel_vector
-	//takes a while for a 2000 x 2000 vector for 100 layers.  But, it works!
+	//and will be populated with fill_pixel_vector
+	//using the points from converted_model
 	for(int i = 0; i<layer_index; i++)
 	{
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
@@ -161,6 +114,7 @@ void getPoints()
 	//create vector of pixel layers, empty to begin with
 	//will be populated by fatten_lines
 	//these are the pixel vectors that will eventually be compared
+	//(model layer n+1, processed_pix_model layer n+1)
 	//to get the points that need to be supported
 	for(int i = 0; i<layer_index; i++)
 	{
@@ -169,82 +123,64 @@ void getPoints()
 
 	//create vector of pixel layers, these are empty to begin with
 	//and will be populated by compare_pixel_layers
+	//and then be compared with processed_pix_model layer n-1
+	//to determine points that need support
 	for(int i = 0; i < layer_index; i++)
 	{
 		initialize_pixel_vector(compared_pix_model, num_pixel_rows, num_pixel_columns);
 	}
-
-	//print x, y coordinates of Point vector
-	//set to either just print the coordinates,
-	//or to print all of the Point's data members in point.cpp
-	//print_stuff(converted_model);
 	
-	//takes x, y coords from the first argument and sets those pixels in the second argument
-	fill_pixel_vector(converted_model[3], model[3]);
-	fill_pixel_vector(converted_model[4], model[4]);
+	//takes x, y coords from Point vector (first argument) and sets those pixels in the pixel layer (second argument)
+	//loops through all Point vectors for the entire model
+	for(auto i = 0; i < layer_index; i++)
+	{
+		fill_pixel_vector(converted_model[i], model[i]);
+	}
 
 	//for debug...appears to print correctly.
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
-	
-	//draw the lines in the pixel vector from point n to n+1
-	//input is the point vector, output SHOULD BE the pixel vector (output is currently void)
-	//and the lines in the pixel vector then need to be fattened up
-	//PROBLEM: RIGHT NOW THE DRAW LINES DO NOT SAVE DATA IN A WAY I CAN WORK WITH IT!!!
-	//I THINK THAT IS A PROBLEM, CHECKING THE BRESENHAM ALG THAT I WROTE TO SEE IF I AM WRONG OR RIGHT...
-	//NOPE, not a problem, it works correctly, just confused on function calls...
 
 	//draw lines between the points using bresenham algorithm
-	//this takes in a pixel layer and draws the line from n to n+1 for a pixel layer
-	//this might work better than using the bitmap library...
-	//CONFUSED: converted_model is a 2D vector of Points, so this_model[3] is a vector of Points
-	//and the bresenham is supposed to take a pixel_layer which is a 2D vector of doubles...
-	//Oh, wait.  the function call is right.  It's that I'm iterating through the vector of Points to
-	//print out the stuff in the pixel layer...damn...confusing.
-	//so when this is done, model[3] should have lines drawn in it...
-	/*
-	for(auto i = 0; i < converted_model[3].size()-1; i++)
+	//takes in a point_layer and draws a line from point n to n+1 in the corresponding pixel_layer in the initial model
+	for(auto i = 0; i < layer_index; i++)
 	{
-		bresenham(converted_model[3][i].x, converted_model[3][i+1].x, converted_model[3][i].y, converted_model[3][i+1].y, model[3]);
+		cout << "converted_model[i].size(): " << converted_model[i].size() << endl;
+		for(auto j = 0; j < converted_model[i].size()-1; j++)
+		{
+			bresenham(converted_model[i][j].x, converted_model[i][j+1].x, converted_model[i][j].y, converted_model[i][j+1].y, model[i]);
+		}
 	}
 
-	for(auto i = 0; i < converted_model[4].size()-1; i++)
-	{
-		bresenham(converted_model[4][i].x, converted_model[4][i+1].x, converted_model[4][i].y, converted_model[4][i+1].y, model[4]);
-	}*/
-
 	//fatten up the lines
-	//takes first pixel layer and 'fattens the lines' into second pixel layer
-	//input is pixel layer 1, output SHOULD BE pixel layer 2
-	fatten_lines(model[3], processed_pix_model[3], num_pixel_rows, num_pixel_columns);
-
-	//calling fatten_lines without calling bresenham to draw the lines, just to see the difference
-	fatten_lines(model[4], processed_pix_model[4], num_pixel_rows, num_pixel_columns);
-
-	//print the bitmap from the unfattened lines pixel layer for debug
-	print_bitmap(model[3], 1, num_pixel_rows, num_pixel_columns);
-
-	//print the bitmap from the fattened lines pixel layer for debug
-	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
-
-	//processed_pix_model[4] is showing up as blank...
-	//which is why the comparison is showing up as all green...ah-ha, because I didn't fill the pixel vector, I think...
-	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);
+	//takes pixel layer from initial model and fattens lines into corresponding layer of processed_pix_model
+	for(auto i = 0; i < layer_index; i++)
+	{
+		fatten_lines(model[i], processed_pix_model[i], num_pixel_rows, num_pixel_columns);
+	}
 
 	//compare pixel layers & load difference into a third layer
-	compare_pixel_layers(processed_pix_model[3], processed_pix_model[4], compared_pix_model[3]);
+	//compare pixel layers n (processed_pix_model), n+1 (initial model)
+	//and load difference into compared_pix_model
+	for(auto i = 0; i < layer_index-1; i++)
+	{
+		compare_pixel_layers(processed_pix_model[i], model[i+1], compared_pix_model[i]);
+	}
 
-	print_bitmap(compared_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
+	//check neighbors between processed_pix_model[n], compared_pix_model[n+1]
+	//if neighbors exist in layer below, then point in compared_pix_model doesn't need support
+	for(auto i = 0; i < layer_index-1; i++)
+	{
+		check_neighbors(compared_pix_model[i+1], processed_pix_model[i], num_pixel_rows, num_pixel_columns);
+	}
 
-	check_neighbors(compared_pix_model[3], processed_pix_model[3], num_pixel_rows, num_pixel_columns);
-
-	print_bitmap(compared_pix_model[3], 5, num_pixel_rows, num_pixel_columns);
-
+	//fill point vector with points that need support
+	//TODO: points_needing_support needs to be 2D vector of points, one vector of points for each layer
 	list_points(compared_pix_model[3], points_needing_support, num_pixel_rows, num_pixel_columns);
-
+/*
 	for(auto i = points_needing_support.begin(); i != points_needing_support.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 }
 
 int main()
