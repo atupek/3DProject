@@ -233,9 +233,11 @@ void getPoints()
 
 	//check neighbors between model[i+1] and fattened_pix_model[i+1]
 	//if neighbors exist in layer, then point in final_pix_model doesn't need support
+	//********************CHECKING BETWEEN COMPARED & FATTENED************************
+	//there seems to be no difference....
 	for(auto i = 0; i < layer_index-1; i++)
 	{
-		check_neighbors(model[i+1], fattened_pix_model[i+1], final_pix_model[i], num_pixel_rows, num_pixel_columns);
+		check_neighbors(compared_pix_model[i+1], fattened_pix_model[i+1], final_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
 /*
@@ -264,8 +266,22 @@ void getPoints()
 	}
 }
 
+void print_bmps()
+{
+	print_bitmap(model[3], 1, num_pixel_rows, num_pixel_columns);
+	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
+	print_bitmap(fattened_pix_model[3], 3, num_pixel_rows, num_pixel_columns);
+	print_bitmap(model[4], 4, num_pixel_rows, num_pixel_columns);
+	print_bitmap(compared_pix_model[3], 5, num_pixel_rows, num_pixel_columns);
+	print_bitmap(fattened_pix_model[4], 6, num_pixel_rows, num_pixel_columns);
+	print_bitmap(final_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
+	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);
+}
+
 int main()
 {
 	getPoints();
+	print_bmps();
+
 	return 0;
 }
