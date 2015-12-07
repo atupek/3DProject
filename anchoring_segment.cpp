@@ -11,6 +11,7 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 	endpt2 = _eventpt;
 	x1 = _eventpt.x;
 	y1 = _eventpt.y;
+	height = _eventpt.z;
 
 	slope_squared = pow(slope, 2);
 	delta_x = distance/sqrt(1+slope_squared);
@@ -29,10 +30,9 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 
 	endpt1.x = new_x1;
 	endpt1.y = new_y1;
+	endpt1.z = _eventpt.z;
 	endpt1.extrude_amt = 0;
 	endpt1.perimeter = true;
-
-	height = 0.0; //TODO: GET THIS FIXED/FIGURED OUT
 
 }
 
@@ -58,10 +58,10 @@ void Anchoring_Segment::print_coords(ostream & os) const
 {
 	if(endpt1 < endpt2)
 	{
-		os << endpt1.x << ", " << endpt1.y << " to " << endpt2.x << ", " << endpt2.y << endl;
+		os << endpt1.x << ", " << endpt1.y << " to " << endpt2.x << ", " << endpt2.y << " at z = " << endpt1.z << endl;
 	}
 	else
 	{
-		os << endpt2.x << ", " << endpt2.y << " to " << endpt1.x << ", " << endpt1.y << endl;
+		os << endpt2.x << ", " << endpt2.y << " to " << endpt1.x << ", " << endpt1.y << " at z = " << endpt1.z << endl;
 	}
 }

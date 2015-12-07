@@ -6,7 +6,9 @@ using std::endl;
 
 int main()
 {
-	Point test_point(100, 100, 0, true);
+	Point test_point(100, 100, 0.8, 0.0, true);
+	cout << "TEST POINT: ";
+	test_point.print_coords_with_z(cout);
 	double test_slope = 0.5;
 	Anchoring_Segment test_anchor(test_point, test_slope, true);
 	Anchoring_Segment test_anchor2(test_point, test_slope, false);
