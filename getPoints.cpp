@@ -111,6 +111,7 @@ void getPoints()
 		multiply_by_two(*i);
 	}
 
+/*
 	//testing z_height
 	//points appear to be constructed okay
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
@@ -121,7 +122,7 @@ void getPoints()
 			//j->print_coords(cout);
 			j->print_coords_with_z(cout);
 		}
-	}
+	}*/
 
 	//************************for testing only************************************** 
 	shiftPoints(converted_model[4]);
@@ -268,6 +269,7 @@ void getPoints()
 		all_points_needing_support.push_back(points_needing_support);
 	}
 	/*
+	//for debug
 	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
 	{
 		cout << "NEW LAYER: " << endl;

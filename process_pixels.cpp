@@ -207,13 +207,13 @@ void list_points(pixel_layer &diff_pix, this_layer & pts_to_support, int num_row
 		{
 			if(diff_pix[i][j] == 3.0)
 			{
-				cout << "z_level: " << z_level << endl;
-				cout << "this z: "  << this_z << endl;
+				//cout << "z_level: " << z_level << endl;
+				//cout << "this z: "  << this_z << endl;
 				Point new_point(i, j, this_z, 0.0, true);
 				//Point new_point(i, j);
 				pts_to_support.push_back(new_point);
-				cout << "New point added: ";
-				new_point.print_coords_with_z(cout);
+				//cout << "New point added: ";
+				//new_point.print_coords_with_z(cout);
 			}
 		}
 	}
