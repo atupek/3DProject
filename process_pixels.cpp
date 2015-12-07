@@ -198,17 +198,22 @@ void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, pixel_layer
 	}
 }
 
-void list_points(pixel_layer &diff_pix, this_layer & pts_to_support, int num_rows, int num_columns)
+void list_points(pixel_layer &diff_pix, this_layer & pts_to_support, int num_rows, int num_columns, int z_level)
 {
+	double this_z = (double)z_level * .2;
 	for(int i = 1; i < num_rows - 1; i++)
 	{
 		for (int j = 1; j < num_columns -1; j++)
 		{
 			if(diff_pix[i][j] == 3.0)
 			{
-				Point new_point(i, j);
+				cout << "z_level: " << z_level << endl;
+				cout << "this z: "  << this_z << endl;
+				Point new_point(i, j, this_z, 0.0, true);
+				//Point new_point(i, j);
 				pts_to_support.push_back(new_point);
-
+				cout << "New point added: ";
+				new_point.print_coords_with_z(cout);
 			}
 		}
 	}

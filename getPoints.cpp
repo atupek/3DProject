@@ -111,6 +111,18 @@ void getPoints()
 		multiply_by_two(*i);
 	}
 
+	//testing z_height
+	//points appear to be constructed okay
+	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
+	{
+		cout << "NEW LAYER: " << endl;
+		for(auto j = i->begin(); j != i->end(); j++)
+		{
+			//j->print_coords(cout);
+			j->print_coords_with_z(cout);
+		}
+	}
+
 	//************************for testing only************************************** 
 	shiftPoints(converted_model[4]);
 
@@ -184,7 +196,7 @@ void getPoints()
 	//takes in a point_layer and draws a line from point n to n+1 in the corresponding pixel_layer in processed_pix_model
 	for(auto i = 0; i < layer_index; i++)
 	{
-		cout << "converted_model[i].size(): " << converted_model[i].size() << endl;
+		//cout << "converted_model[i].size(): " << converted_model[i].size() << endl;
 		for(auto j = 0; j < converted_model[i].size()-1; j++)
 		{
 			bresenham(converted_model[i][j].x, converted_model[i][j+1].x, converted_model[i][j].y, converted_model[i][j+1].y, processed_pix_model[i]);
@@ -252,18 +264,19 @@ void getPoints()
 	for(auto i = 0; i < final_pix_model.size(); i++)
 	{
 		this_layer points_needing_support;
-		list_points(final_pix_model[i], points_needing_support, num_pixel_rows, num_pixel_columns);
+		list_points(final_pix_model[i], points_needing_support, num_pixel_rows, num_pixel_columns, i);
 		all_points_needing_support.push_back(points_needing_support);
 	}
-
+	/*
 	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
 	{
 		cout << "NEW LAYER: " << endl;
 		for(auto j = i->begin(); j != i->end(); j++)
 		{
-			j->print_coords(cout);
+			//j->print_coords(cout);
+			j->print_coords_with_z(cout);
 		}
-	}
+	}*/
 }
 
 void print_bmps()
@@ -281,7 +294,7 @@ void print_bmps()
 int main()
 {
 	getPoints();
-	print_bmps();
+	//print_bmps();
 
 	return 0;
 }

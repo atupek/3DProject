@@ -19,9 +19,9 @@ typedef vector<this_layer> all_layers; //vector<vector<Point>>
 
 //refactor again? copied & pasted code for two functions...
 //new function to convert string to double?
-void get_perimeter_points(string line, this_layer &layer);
+void get_perimeter_points(string line, this_layer &layer, int _layer_index);
 
-void get_infill_points(string line, this_layer & layer);
+void get_infill_points(string line, this_layer & layer, int _layer_index);
 
 void make_new_layer(string line, all_layers & model_layers, int &layer_index);
 

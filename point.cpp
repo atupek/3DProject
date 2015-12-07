@@ -9,6 +9,7 @@ Point::Point()
     y=0.0;
     extrude_amt = 0.0;
     perimeter = false;
+    z=0.0;
 }
 
 Point::Point(double _x, double _y)
@@ -17,6 +18,7 @@ Point::Point(double _x, double _y)
     y = _y;
     extrude_amt = 0.0;
     perimeter = false;
+    z=0.0;
 }
 
 Point::Point(double _x, double _y, double _extrude_amt)
@@ -25,6 +27,7 @@ Point::Point(double _x, double _y, double _extrude_amt)
     y = _y;
     extrude_amt = _extrude_amt;
     perimeter = false;
+    z=0.0;
 }
 
 Point::Point(double _x, double _y, double _extrude_amt, bool _perim)
@@ -33,6 +36,16 @@ Point::Point(double _x, double _y, double _extrude_amt, bool _perim)
     y = _y;
     extrude_amt = _extrude_amt;
     perimeter = _perim;
+    z=0.0;
+}
+
+Point::Point(double _x, double _y, double _z, double _extrude_amt, bool _perim)
+{
+    x = _x;
+    y = _y;
+    extrude_amt = _extrude_amt;
+    perimeter = _perim;
+    z=_z;
 }
 
 
@@ -43,6 +56,7 @@ Point::Point(const Point &p)
     y=p.y;
     extrude_amt = p.extrude_amt;
     perimeter=p.perimeter;
+    z=p.z;
 }
 
 
@@ -55,6 +69,11 @@ void Point::set_x(double _x)
 void Point::set_y(double _y)
 {
     y = _y;
+}
+
+void Point::set_z(double _z)
+{
+    z = _z;
 }
 
 void Point::set_extrude(double _extrude_amt)
@@ -113,10 +132,15 @@ void Point::print_coords(ostream & os) const
 
 }
 
+void Point::print_coords_with_z(ostream & os) const
+{
+    os << x << ", " << y << ", " << z << endl;
+}
+
 //print function to print all point info
 void Point::print_all(ostream & os) const
 {
-	os  << x << ", " << y << ": " << extrude_amt;
+	os  << x << ", " << y << ", " << z << ": " << extrude_amt;
 	if(perimeter == true)
 	{
 		os << ", perimeter" << endl;

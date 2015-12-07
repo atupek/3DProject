@@ -25,7 +25,7 @@ using std::istream_iterator;
 
 //refactor again? copied & pasted code for two functions...
 //new function to convert string to double?
-void get_perimeter_points(string line, this_layer &layer)
+void get_perimeter_points(string line, this_layer &layer, int _layer_index)
 {
 	istringstream iss1(line);
 	vector<string> tokens1{istream_iterator<string>{iss1},
@@ -44,13 +44,15 @@ void get_perimeter_points(string line, this_layer &layer)
     extrude_amt_str.erase(extrude_amt_str.begin(), extrude_amt_str.begin()+1);
     double this_extrude_amt = stod(extrude_amt_str, &sz);
 
-    Point new_point(x_coord, y_coord, this_extrude_amt, true);
+    double z_coord = (_layer_index * .2)-.4;
+
+    Point new_point(x_coord, y_coord, z_coord, this_extrude_amt, true);
     //cout << "New point: ";
     //new_point.print_all(cout);
     layer.push_back(new_point);
 }
 
-void get_infill_points(string line, this_layer & layer)
+void get_infill_points(string line, this_layer & layer, int _layer_index)
 {
 	istringstream iss1(line);
 	vector<string> tokens1{istream_iterator<string>{iss1},
@@ -69,7 +71,9 @@ void get_infill_points(string line, this_layer & layer)
 	extrude_amt_str.erase(extrude_amt_str.begin(), extrude_amt_str.begin()+1);
 	double this_extrude_amt = stod(extrude_amt_str, &sz);
 
-	Point new_point(x_coord, y_coord, this_extrude_amt, false);
+	double z_coord = (_layer_index * .2)-.4;
+
+	Point new_point(x_coord, y_coord, z_coord, this_extrude_amt, false);
     //cout << "New point: ";
     //new_point.print_all(cout);
     layer.push_back(new_point);
@@ -114,13 +118,13 @@ all_layers match_regex(string gcodeFile, all_layers & model_layers, int &layer_i
 				{
 					//this is perimeter point
 					//cout << "MATCHED PERIMETER POINT" << endl;
-					get_perimeter_points(line, model_layers[layer_index]);
+					get_perimeter_points(line, model_layers[layer_index], layer_index);
 				}
 				if(regex_search(new_line, match, expr4))
 				{
 					//this is infill point
 					//cout << "MATCHED INFILL POINT" << endl;
-					get_infill_points(line, model_layers[layer_index]);
+					get_infill_points(line, model_layers[layer_index], layer_index);
 				}
 			}
 			//if we match the second regex
