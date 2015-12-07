@@ -32,4 +32,6 @@ void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & 
 
 void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set);
 
+void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge);
+
 #endif //Generate_Scaffolding_Included

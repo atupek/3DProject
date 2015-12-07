@@ -96,6 +96,11 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 	}
 }
 
+void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge)
+{
+
+}
+
 //set<Segment> anchoring_segments;
 //set<SweepDirections> sweep_directions;
 

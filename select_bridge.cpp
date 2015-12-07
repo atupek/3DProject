@@ -44,6 +44,8 @@ double calculate_distance(double x1, double y1, double x2, double y2)
 void check_collision()
 {
 	//I HAVE NO IDEA HOW TO DO THIS
+	//checking for collisions between bridge and model?
+	
 }
 
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
@@ -103,15 +105,15 @@ void select_bridge(set<Anchoring_Segment> segment)
 					{
 						//Bridge current_bridge(endpt1, endpt2, 10); //TODO: bridge_height = 10 for now, needs to be fixed
 						Bridge current_bridge(endpt1, endpt2, endpt1.z);
-						current_bridge.print_bridge_pts_height(cout);
+						//current_bridge.print_bridge_pts_height(cout);
 						//calculate_gain(double height, double length, int num_elements)
 						double this_gain = calculate_gain(current_bridge.height, current_bridge.length, supported_by_bridge.size());
-						cout << "This gain: " << this_gain << endl;
+						//cout << "This gain: " << this_gain << endl;
 						//calculate_score(double gain, int num_elements, double lmax)
 						double this_lmax = calculate_lmax(current_bridge.height, current_bridge.length);
-						cout << "This lmax: " << this_lmax << endl;
+						//cout << "This lmax: " << this_lmax << endl;
 						double this_score = calculate_score(this_gain, supported_by_bridge.size(), this_lmax);
-						cout << "This score: " << this_score << endl; 
+						//cout << "This score: " << this_score << endl; 
 						//if gain > 0 and score > best_score then
 						if(this_gain > 0 && this_score > best_score)
 						{
@@ -136,11 +138,12 @@ void select_bridge(set<Anchoring_Segment> segment)
 		//cout << "yep" << endl;
 	}
 	cout << "BEST BRIDGE AFTER: " << endl;
-	best_bridge.print_bridge_pts_height(cout);
+	//best_bridge.print_bridge_pts_height(cout);
+	best_bridge.print_bridge_members(cout);
 	cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
 	for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
 	{
-		j->print_coords(cout);
+		j->print_coords_with_z(cout);
 	}
 	//return best_bridge
 }

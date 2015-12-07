@@ -16,7 +16,7 @@ void make_point_set()
 {
 	for(int i = 0; i<10; i++)
 	{
-		Point new_point(i, i, i+10, true);
+		Point new_point(i, i, .8, i+10, true);
 		active_points.insert(new_point);
 	}
 }
@@ -34,6 +34,13 @@ int main()
 	make_point_set();
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+	
+	//Point(double _x, double _y, double _z, double _extrude_amt, bool _perim);
+	Point best_endpt_1(1.0, 1.0, .8, 0.0, true);
+	Point best_endpt_2(9.0, 9.0, .8, 0.0, true);
+
+	Bridge best_bridge(best_endpt_1, best_endpt_2, best_endpt_1.z);
+	snap(best_bridge, active_points);
 	
 	//for testing union & difference of sets
 	/*
