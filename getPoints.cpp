@@ -32,7 +32,11 @@ using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
 
 char gcodeFile[256];
+//all the points from the original model
 all_layers model_layers;
+
+//all the points needing support
+all_layers all_points_needing_support;
 
 int layer_index = 0;
 
@@ -62,7 +66,7 @@ model_pixels compared_pix_model;
 model_pixels final_pix_model;
 
 //these are the points that should be sent to the next algorithm that creates the bridges
-this_layer points_needing_support;
+//this_layer layer_points_needing_support;
 
 //gets the file name
 void get_file_name()
@@ -169,11 +173,12 @@ void getPoints()
 		fill_pixel_vector(converted_model[i], model[i]);
 	}
 
+/*
 	//for debug...
 	//before drawing lines...both should just be sets of points.
 	//OK, THEY PRINT CORRECTLY
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
-	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);
+	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);*/
 
 	//draw lines between the points using bresenham algorithm
 	//takes in a point_layer and draws a line from point n to n+1 in the corresponding pixel_layer in processed_pix_model
@@ -187,11 +192,12 @@ void getPoints()
 	}
 
 	fattened_pix_model = processed_pix_model;
+	/*
 	//for debug...
 	//after drawing lines...both should have lines.
 	//OKAY, THEY PRINT CORRECTLY
 	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
-	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);
+	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);*/
 
 	//fatten up the lines
 	//takes pixel layer from processed_pix_model and fattens lines into corresponding layer of fattened_pix_model
@@ -200,12 +206,12 @@ void getPoints()
 		fatten_lines(processed_pix_model[i], fattened_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
+/*
 	//for debug...
 	//after fattening lines...	4, 5 should have thin lines.
 	//							6, 7 should have fat lines
-	//THEY PRINT OKAY, BUT FATTEN LINES NEEDS TO BE TWEAKED *********************TODO*******************************
 	print_bitmap(fattened_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
-	print_bitmap(fattened_pix_model[4], 5, num_pixel_rows, num_pixel_columns);
+	print_bitmap(fattened_pix_model[4], 5, num_pixel_rows, num_pixel_columns);*/
 
 	//compare pixel layers & load difference into a third layer
 	//compare pixel layers n (fattened_pix_model), n+1 (initial model)
@@ -217,12 +223,13 @@ void getPoints()
 
 	final_pix_model = compared_pix_model;
 
+/*
 	//for debug...
 	//after comparing layers...
 	//THEY PRINT OKAY
 	print_bitmap(model[4], 6, num_pixel_rows, num_pixel_columns);
 	print_bitmap(fattened_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
-	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);
+	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);*/
 
 	//check neighbors between model[i+1] and fattened_pix_model[i+1]
 	//if neighbors exist in layer, then point in final_pix_model doesn't need support
@@ -231,20 +238,29 @@ void getPoints()
 		check_neighbors(model[i+1], fattened_pix_model[i+1], final_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
+/*
 	//for debug...
 	//after checking neighbors...
 	//PRINTS OKAY
-	print_bitmap(final_pix_model[3], 9, num_pixel_rows, num_pixel_columns);
+	print_bitmap(final_pix_model[3], 9, num_pixel_rows, num_pixel_columns);*/
 
 
 	//fill point vector with points that need support
-	// ******************************TODO*****************************************************
-	//TODO: points_needing_support needs to be 2D vector of points, one vector of points for each layer
-	list_points(final_pix_model[3], points_needing_support, num_pixel_rows, num_pixel_columns);
-
-	for(auto i = points_needing_support.begin(); i != points_needing_support.end(); i++)
+	//all_points_needing_support is a vector of this_layer (vector<Point>)
+	for(auto i = 0; i < final_pix_model.size(); i++)
 	{
-		i->print_coords(cout);
+		this_layer points_needing_support;
+		list_points(final_pix_model[i], points_needing_support, num_pixel_rows, num_pixel_columns);
+		all_points_needing_support.push_back(points_needing_support);
+	}
+
+	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
+	{
+		cout << "NEW LAYER: " << endl;
+		for(auto j = i->begin(); j != i->end(); j++)
+		{
+			j->print_coords(cout);
+		}
 	}
 }
 
