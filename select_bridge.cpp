@@ -101,7 +101,8 @@ void select_bridge(set<Anchoring_Segment> segment)
 					//if pt1 == pt2 then do nothing...which is also if the size of supported_by_bridge ==1, right?
 					if(supported_by_bridge.size() != 1)
 					{
-						Bridge current_bridge(endpt1, endpt2, 10); //TODO: bridge_height = 10 for now, needs to be fixed
+						//Bridge current_bridge(endpt1, endpt2, 10); //TODO: bridge_height = 10 for now, needs to be fixed
+						Bridge current_bridge(endpt1, endpt2, endpt1.z);
 						current_bridge.print_bridge_pts_height(cout);
 						//calculate_gain(double height, double length, int num_elements)
 						double this_gain = calculate_gain(current_bridge.height, current_bridge.length, supported_by_bridge.size());

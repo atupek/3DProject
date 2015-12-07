@@ -24,7 +24,7 @@ void make_points_vec(int _test_slope)
 {
 	for(int i = 0; i<10; i++)
 	{
-		Point new_point(i, i, i+10, true);
+		Point new_point(i, i, 20.7, i+10, true);
 		point_vec.push_back(new_point);
 		//cout << "new point: ";
 		//new_point.print_all(cout);
@@ -46,11 +46,11 @@ int main()
 	int num_elements_supported = 4;
 	double bridge_h1 = 2.0;
 	double bridge_h2 = 4.0;
-
+/*
 	double lmax = calculate_lmax(bridge_height, bridge_length);
 	double gain = calculate_gain(bridge_height, bridge_length, num_elements_supported);
 	double gain_above = calculate_gain_above_object(num_elements_supported, bridge_height, bridge_length, bridge_h1, bridge_h2);
-	double score = calculate_score(gain, num_elements_supported, lmax);
+	double score = calculate_score(gain, num_elements_supported, lmax);*/
 /*
 	cout << "lmax: " << lmax << " expected: 3.0" << endl;
 	cout << "gain: " << gain << " expected: 0" << endl;
