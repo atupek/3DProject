@@ -15,6 +15,7 @@ public:
 	double height;
 	bool pt1_open;
 	bool pt2_open;
+	double score;
 	
 	Bridge();
 	Bridge(Point _p1, Point _p2, double _height);

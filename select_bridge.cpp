@@ -118,6 +118,7 @@ void select_bridge(set<Anchoring_Segment> segment)
 							pts_supported_by_best_bridge.clear();
 							best_score = this_score;
 							best_bridge = current_bridge;
+							best_bridge.score = this_score;
 							pts_supported_by_best_bridge = supported_by_bridge;
 						}
 					}
