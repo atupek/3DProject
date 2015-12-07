@@ -60,7 +60,6 @@ void print_pixel_vector(pixel_layer & pix)
 }
 
 //points in diff are the points that need to be supported
-//TODO: make different value if upper layer has point or lower layer has point
 //pix1 is layer n, pix2 is layer n+1, so pix1 is below pix2
 //so pix1 & pix2 are both 2D vectors of doubles (1.0 or 0.0 depending on filled or not)
 //they are of the same size...
@@ -127,7 +126,7 @@ void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_
 			{
 				num_neighbors++;
 			}
-			if(num_neighbors >= 4)
+			if(num_neighbors >= 2)
 			{
 				//pix2[i][j] = 1.0;
 				pix2[i-1][j-1] = 1.0;
@@ -148,7 +147,7 @@ void fatten_lines(pixel_layer & pix1, pixel_layer & pix2, int num_rows, int num_
 	}
 }
 
-void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, int num_rows, int num_columns)
+void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, pixel_layer & final_pix, int num_rows, int num_columns)
 {
 	for(int i = 1; i < num_rows - 1; i++)
 	{
@@ -192,7 +191,7 @@ void check_neighbors(pixel_layer & diff_pix, pixel_layer & comp_pix, int num_row
 				if(num_neighbors >= 1)
 				{
 					//then we don't need to support this pixel
-					diff_pix[i][j] = 0.0;
+					final_pix[i][j] = 0.0;
 				}
 			}
 		}
