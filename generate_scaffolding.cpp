@@ -98,7 +98,12 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 
 void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge)
 {
-
+	//removes points supported by bridge from active elements set
+	//puts endpoints of bridge into active elements set
+	//but these do not get anchoring segments because the bridge is as long as it's going to be(?)
+	//which can be taken care of with an if stmt in create_anchoring_segments as to
+	//whether or not the endpt is open, if it is, then it gets anchoring segment, if not, then no anchoring segment
+	//also creates pillars to points above that are supported h(pt) to h(bridge)
 }
 
 //set<Segment> anchoring_segments;
