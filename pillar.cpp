@@ -1,4 +1,4 @@
-//point class for project
+//pillar class for project
 
 #include "pillar.h"
 
