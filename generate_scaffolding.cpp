@@ -105,9 +105,18 @@ Pillar make_pillar(Point point1, double height)
 	return temp;
 }
 
-void make_cube_primitive(Point point1, Point point2)
+/*
+double x1;
+    double y1;
+    double x2;
+    double y2;
+    double z_upper;
+    double z_lower;*/
+Cube_Primitive make_cube_primitive(Point point1, Point point2)
 {
-
+	cout << "making cube..." << endl;
+	Cube_Primitive temp = Cube_Primitive(point1.x, point1.y, point2.x, point2.y, point1.z, point1.z+0.4);
+	return temp;
 }
 
 void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
@@ -127,6 +136,17 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pi
 		Pillar new_pillar = make_pillar(*i, dist_to_obj_above);
 		pillars.push_back(new_pillar);
 		new_pillar.print_all(cout);
+	}
+
+	//for testing...
+	best_bridge.pt1_open = false;
+	best_bridge.pt2_open = false;
+
+	//get endpoints of best_bridge & create 'cube' if both endpoints are closed
+	if(!best_bridge.pt1_open && !best_bridge.pt2_open)
+	{
+		Cube_Primitive new_cube = make_cube_primitive(best_bridge.p1, best_bridge.p2);
+		cubes.push_back(new_cube);
 	}
 }
 

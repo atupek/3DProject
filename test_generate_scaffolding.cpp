@@ -52,6 +52,7 @@ int main()
 	snap(best_bridge, active_points, scad_pillars, scad_cubes, height_difference);
 
 	cout << "Pillar vector size: " << scad_pillars.size() << endl;
+	cout << "Cube_Primitive vector size: " << scad_cubes.size() << endl;
 	
 	//for testing union & difference of sets
 	/*

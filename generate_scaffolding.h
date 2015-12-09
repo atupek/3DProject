@@ -36,7 +36,7 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 
 Pillar make_pillar(Point point1, double height);
 
-void make_cube_primitive(Point point1, Point point2);
+Cube_Primitive make_cube_primitive(Point point1, Point point2);
 
 void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj);
 
