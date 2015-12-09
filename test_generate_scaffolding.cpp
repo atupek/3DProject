@@ -3,10 +3,15 @@
 #include "select_bridge.h"
 #include "bridge.h"
 #include <limits> //for infinity
+#include "pillar.h"
+#include "cube_primitive.h"
 
 set<Point> active_points;
 set<Bridge> active_bridges;
 set<Bridge> bridges;
+
+vector<Pillar> scad_pillars;
+vector<Cube_Primitive> scad_cubes;
 
 vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
@@ -34,13 +39,19 @@ int main()
 	make_point_set();
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+
+	double height_difference = 5.0; //TODO, currently a hack
 	
 	//Point(double _x, double _y, double _z, double _extrude_amt, bool _perim);
 	Point best_endpt_1(1.0, 1.0, .8, 0.0, true);
 	Point best_endpt_2(9.0, 9.0, .8, 0.0, true);
 
 	Bridge best_bridge(best_endpt_1, best_endpt_2, best_endpt_1.z);
-	snap(best_bridge, active_points);
+	
+	//TODO height_difference is currently a hack...
+	snap(best_bridge, active_points, scad_pillars, scad_cubes, height_difference);
+
+	cout << "Pillar vector size: " << scad_pillars.size() << endl;
 	
 	//for testing union & difference of sets
 	/*

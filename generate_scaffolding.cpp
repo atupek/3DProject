@@ -4,6 +4,8 @@
 #include "select_bridge.h"
 #include "bridge.h"
 #include <limits> //for infinity
+#include "pillar.h"
+#include "cube_primitive.h"
 
 set<Anchoring_Segment> segments;
 //queue<Point> events;
@@ -96,7 +98,19 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 	}
 }
 
-void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge)
+Pillar make_pillar(Point point1, double height)
+{
+	cout << "Making pillar..." << endl;
+	Pillar temp = Pillar(point1.x, point1.y, point1.z, point1.z+height); 
+	return temp;
+}
+
+void make_cube_primitive(Point point1, Point point2)
+{
+
+}
+
+void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
 {
 	//removes points supported by bridge from active elements set
 	//puts endpoints of bridge into active elements set
@@ -104,6 +118,16 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge)
 	//which can be taken care of with an if stmt in create_anchoring_segments as to
 	//whether or not the endpt is open, if it is, then it gets anchoring segment, if not, then no anchoring segment
 	//also creates pillars to points above that are supported h(pt) to h(bridge)
+	//once both ends of bridge are snapped, creates 'cube primitive' scad primitive 
+
+	//get points supported by bridge & create pillars
+	for(auto i = points_supported_by_bridge.begin(); i != points_supported_by_bridge.end(); i++)
+	{
+		//i->print_coords(cout);
+		Pillar new_pillar = make_pillar(*i, dist_to_obj_above);
+		pillars.push_back(new_pillar);
+		new_pillar.print_all(cout);
+	}
 }
 
 //set<Segment> anchoring_segments;

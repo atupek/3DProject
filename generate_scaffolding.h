@@ -5,6 +5,8 @@
 #include "point.h"
 #include "bridge.h"
 #include "anchoring_segment.h"
+#include "pillar.h"
+#include "cube_primitive.h"
 
 #include <iostream>
 using std::cout;
@@ -32,6 +34,10 @@ void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & 
 
 void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set);
 
-void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge);
+Pillar make_pillar(Point point1, double height);
+
+void make_cube_primitive(Point point1, Point point2);
+
+void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj);
 
 #endif //Generate_Scaffolding_Included
