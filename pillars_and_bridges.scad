@@ -16,9 +16,15 @@ pillar_y = 6.0;
 pillar_z1 = 2.0;
 pillar_z2 = 10.0;
 
-//function pillar_height(pillar_z2, pillar_z1) = pillar_z2-pillar_z1;
 pillar_height_above_0 = 10.0;
 pillar_lw = 1.0;
+
+pillar1_x = 10.0;
+pillar1_y = 10.0;
+pillar1_z1 = 0.0;
+pillar1_z2 = 5.0;
+pillar1_height = pillar1_z2 - pillar1_z1;
+pillar1_height_above_0 = 0.0;
 
 function distance(x1, y1, x2, y2) = sqrt(pow (x2 - x1, 2) + pow(y2 - y1, 2));
 
@@ -34,16 +40,16 @@ module bridge_platform(distance)
 
 module bridge_pillar(pillar_height)
 {
-    //cube([pillar_lw, pillar_lw, pillar_height(pillar_z2, pillar_z1)], center = true);
     cube([pillar_lw, pillar_lw, pillar_height], center = true);
 }
+//bridge_pillar();
 
 module sample_bridge1()
 {
     //translate so that endpt1 of bridge is at x1, y1
     //works because we don't use center = true on the bridge_platform module
     translate([x1, y1, 0])
-    //translate so that bottom of bridge is at height of x1, y1
+    //translate so that bottom of bridge is at height of x1, y1 - bridge_height
     translate([0, 0, bridge_height_above_0])
     //rotate so that endpt2 of bridge is at x2, y2
     rotate([0, 0, atan2(y2, x2)])
@@ -52,17 +58,10 @@ module sample_bridge1()
 }
 sample_bridge1();
 
-pillar1_x = 10.0;
-pillar1_y = 10.0;
-pillar1_z1 = 0.0;
-pillar1_z2 = 5.0;
-pillar1_height = pillar1_z2 - pillar1_z1;
-pillar1_height_above_0 = 0.0;
 module sample_pillar1()
 {
     //translate so that the 'center' of the pillar is at x1, y1
     //and bottom of pillar is at pillar_height_above_0
-    //translate([pillar2_x, pillar2_y, pillar_height(pillar2_z2, pillar2_z1)/2 +pillar2_height_above_0])
     translate([pillar1_x, pillar1_y, 0])
     translate([0, 0, (pillar1_height)/2++pillar1_height_above_0-epsilon])
     bridge_pillar(pillar1_height);
@@ -79,7 +78,6 @@ module sample_pillar2()
 {
     //translate so that the 'center' of the pillar is at x1, y1
     //and bottom of pillar is at pillar_height_above_0
-    //translate([pillar2_x, pillar2_y, pillar_height(pillar2_z2, pillar2_z1)/2 +pillar2_height_above_0])
     translate([pillar2_x, pillar2_y, 0])
     translate([0, 0, (pillar2_height)/2++pillar2_height_above_0-epsilon])
     bridge_pillar(pillar2_height);
@@ -96,7 +94,6 @@ module sample_pillar3()
 {
     //translate so that the 'center' of the pillar is at x1, y1
     //and bottom of pillar is at pillar_height_above_0
-    //translate([pillar2_x, pillar2_y, pillar_height(pillar2_z2, pillar2_z1)/2 +pillar2_height_above_0])
     translate([pillar3_x, pillar3_y, 0])
     translate([0, 0, (pillar3_height)/2+pillar3_height_above_0-epsilon])
     bridge_pillar(pillar3_height);
@@ -113,7 +110,6 @@ module sample_pillar4()
 {
     //translate so that the 'center' of the pillar is at x1, y1
     //and bottom of pillar is at pillar_height_above_0
-    //translate([pillar2_x, pillar2_y, pillar_height(pillar2_z2, pillar2_z1)/2 +pillar2_height_above_0])
     translate([pillar4_x, pillar4_y, 0])
     translate([0, 0, (pillar4_height)/2+pillar4_height_above_0-epsilon])
     bridge_pillar(pillar4_height);
