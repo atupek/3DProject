@@ -105,13 +105,6 @@ Pillar make_pillar(Point point1, double height)
 	return temp;
 }
 
-/*
-double x1;
-    double y1;
-    double x2;
-    double y2;
-    double z_upper;
-    double z_lower;*/
 Cube_Primitive make_cube_primitive(Point point1, Point point2)
 {
 	cout << "making cube..." << endl;
