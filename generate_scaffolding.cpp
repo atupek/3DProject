@@ -143,6 +143,30 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pi
 	}
 }
 
+void generate_scaffolding(set<Point> pts_that_need_support)
+{
+	set<Bridge> bridges_that_need_support;
+	vector<double> directions;
+	Bridge best_bridge;
+	for(auto i = 0; i < directions.size(); i++)
+	{
+		create_anchoring_segments(pts_that_need_support, bridges_that_need_support, directions, i);
+		set<Anchoring_Segment> segments_crossing_plane_i;
+		for(auto i = segments.begin(); i != segments.end(); i++)
+		{
+			create_events(*i);
+		}
+		while(!events.empty())
+		{
+			Point e = events.top(); //get value of first item
+			events.pop(); //remove item from priority queue
+			cout << "events..." << endl;
+			//get all anchoring segments that have e as their endpoint...
+		}
+	}
+	cout << "Generating scaffolding..." << endl;
+}
+
 //set<Segment> anchoring_segments;
 //set<SweepDirections> sweep_directions;
 

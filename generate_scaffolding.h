@@ -40,4 +40,6 @@ Cube_Primitive make_cube_primitive(Point point1, Point point2);
 
 void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj);
 
+void generate_scaffolding(set<Point> pts_that_need_support);
+
 #endif //Generate_Scaffolding_Included
