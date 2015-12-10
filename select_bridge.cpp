@@ -45,7 +45,7 @@ void check_collision()
 {
 	//I HAVE NO IDEA HOW TO DO THIS
 	//checking for collisions between bridge and model?
-	
+
 }
 
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
@@ -62,7 +62,7 @@ void check_collision()
 //				get bridge gain & score for points_supported_by_bridge, i, j, z
 //				if gain>0 and score > bestScore then bestBridge = currentBridge
 //return bestBridge
-void select_bridge(set<Anchoring_Segment> segment)
+Bridge select_bridge(set<Anchoring_Segment> segment)
 {
 	set<Point> pts_supported_by_best_bridge;
 	cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
@@ -145,7 +145,7 @@ void select_bridge(set<Anchoring_Segment> segment)
 	{
 		j->print_coords_with_z(cout);
 	}
-	//return best_bridge
+	return best_bridge;
 }
 
 

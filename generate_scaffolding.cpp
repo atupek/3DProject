@@ -148,22 +148,51 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 	set<Bridge> bridges_that_need_support;
 	vector<double> directions;
 	Bridge best_bridge;
+	//for testing, create direction & add to vector
+	double test_direction = 1.0;
+	directions.push_back(test_direction);
 	for(auto i = 0; i < directions.size(); i++)
 	{
 		create_anchoring_segments(pts_that_need_support, bridges_that_need_support, directions, i);
 		set<Anchoring_Segment> segments_crossing_plane_i;
+		segments_crossing_plane_i = segments;
+		cout << "SEGEMENTS_CROSSING_PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
+		
 		for(auto i = segments.begin(); i != segments.end(); i++)
 		{
 			create_events(*i);
 		}
+		
+		//for testing, create event & add to events priority queue
+		//Point test_point(1.0, 1.0, 0.0, 1.0, true);
+		//events.push(test_point);
+		cout << "EVENTS SIZE: " << events.size() << endl;
+		
 		while(!events.empty())
 		{
 			Point e = events.top(); //get value of first item
 			events.pop(); //remove item from priority queue
-			cout << "events..." << endl;
+			//cout << "events..." << endl;
+			//Somehow...not quite sure how...
 			//get all anchoring segments that have e as their endpoint...
+			//I think I may need to create a class that has a point and a set of anchoring segments associated with that point...
+			//cout << "SEGEMENTS_CROSSING_PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
+			/*for(auto j = segments.begin(); j != segments.end(); j++)
+			{
+				segments_crossing_plane_i.insert(*j);
+				//cout << "segment inserted..." << endl;
+			}*/
+			Bridge selected = select_bridge(segments_crossing_plane_i);
+			if(selected.score > best_bridge.score)
+			{
+				best_bridge = selected;
+			}
+			//remove segments from segments_crossing_plane_i
+			cout << "events size: " << events.size() << endl;
 		}
 	}
+	//if best_bridge = null then return
+	//set<Point> = elements supported by best_bridge
 	cout << "Generating scaffolding..." << endl;
 }
 

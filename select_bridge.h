@@ -9,7 +9,7 @@
 #include <set>
 using std::set;
 
-void select_bridge(set<Anchoring_Segment> segment);
+Bridge select_bridge(set<Anchoring_Segment> segment);
 
 double calculate_lmax(double height, double length);
 double calculate_gain(double height, double length, int num_elements);
