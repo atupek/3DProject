@@ -68,12 +68,18 @@ vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segm
 void sort_segments_by_z(vector<Anchoring_Segment> &segment)
 {
 	//doing merge sort...
+	cout <<"STARTING MERGE SORT..." << endl;
+	merge_sort(segment.begin(), segment.end());
+	cout << "MERGE SORT..." << endl;
 
 }
 
 void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
 {
-	vector<Anchoring_Segment> buffer;
+	cout << "GOT TO STABLE MERGE" << endl;
+	//************************************error is in this line, something to do with distance **********************************************
+	vector<Anchoring_Segment> buffer(distance(first, last));
+	cout << "buffer size: "  << buffer.size();
 
 	auto in1 = first;
 	auto in2 = middle;
@@ -94,19 +100,20 @@ void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 
 void merge_sort(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
 {
+	cout << "Got to 1" << endl;
 	size_t size = distance(first, last);
 
 	//base case
 	if (size <=1)
 		return;
-
+	cout << "Got to 2" << endl;
 	//recursive case
 	auto middle = first;
 	advance(middle, size/2);
-
+	cout << "Got to 3" << endl;
 	merge_sort(first, middle);
 	merge_sort(middle, last);
-
+	cout << "Got to 4" << endl;
 	stable_merge(first, middle, last);
 }
 
