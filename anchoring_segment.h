@@ -35,6 +35,7 @@ public:
 
 	double height;
 
+	Anchoring_Segment();
 	//anchoring segment is created from a point and a slope
 	//the point is either from the points that need support or the endpoints of the bridges that are already in place
 	Anchoring_Segment(Point _eventpt, double _slope, bool negative);

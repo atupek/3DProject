@@ -4,6 +4,8 @@
 using std::copy;
 #include <cstdlib>
 using std::size_t;
+#include <iterator>
+using std::distance;
 
 double calculate_lmax(double height, double length)
 {
@@ -77,8 +79,11 @@ void sort_segments_by_z(vector<Anchoring_Segment> &segment)
 void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
 {
 	cout << "GOT TO STABLE MERGE" << endl;
-	//************************************error is in this line, something to do with distance **********************************************
+	//************************************error is in this line, something to do with distance? **********************************************
 	vector<Anchoring_Segment> buffer(distance(first, last));
+	//vector<Anchoring_Segment> buffer;
+	//size_t size = distance(first, last);
+	//buffer.resize(size);
 	cout << "buffer size: "  << buffer.size();
 
 	auto in1 = first;

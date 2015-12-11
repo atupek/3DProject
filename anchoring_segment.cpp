@@ -2,6 +2,11 @@
 #include "anchoring_segment.h"
 #include "math.h" //for pow & sqrt
 
+Anchoring_Segment::Anchoring_Segment()
+{
+
+}
+
 Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negative)
 {
 	slope = -1/_slope;
