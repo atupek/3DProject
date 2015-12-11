@@ -1,5 +1,9 @@
 #include "select_bridge.h"
 #include <limits> //for inf
+#include <algorithm>
+using std::copy;
+#include <cstdlib>
+using std::size_t;
 
 double calculate_lmax(double height, double length)
 {
@@ -63,9 +67,47 @@ vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segm
 
 void sort_segments_by_z(vector<Anchoring_Segment> &segment)
 {
-	//break into two segments, if size == 1 then return
-	//otherwise, swap se
+	//doing merge sort...
 
+}
+
+void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
+{
+	vector<Anchoring_Segment> buffer;
+
+	auto in1 = first;
+	auto in2 = middle;
+	auto out = buffer.begin();
+
+	while(in1 != middle && in2 != last)
+	{
+		if(in2->endpt1.z < in1->endpt1.z)
+			*out++ = *in2++;
+		else
+			*out++ = *in1++;
+	}
+
+	copy(in1, middle, out);
+	copy(in2, last, out);
+	copy(buffer.begin(), buffer.end(), first);
+}
+
+void merge_sort(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
+{
+	size_t size = distance(first, last);
+
+	//base case
+	if (size <=1)
+		return;
+
+	//recursive case
+	auto middle = first;
+	advance(middle, size/2);
+
+	merge_sort(first, middle);
+	merge_sort(middle, last);
+
+	stable_merge(first, middle, last);
 }
 
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event

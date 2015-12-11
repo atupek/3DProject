@@ -19,5 +19,8 @@ double calculate_distance(double x1, double x2, double y1, double y2);
 
 vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments);
 void sort_segments_by_z(vector<Anchoring_Segment> & segment);
+void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last);
+void merge_sort(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last);
+
 
 #endif //Select_Bridge_Included
