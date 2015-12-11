@@ -79,12 +79,9 @@ void sort_segments_by_z(vector<Anchoring_Segment> &segment)
 void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
 {
 	cout << "GOT TO STABLE MERGE" << endl;
-	//************************************error is in this line, something to do with distance? **********************************************
 	vector<Anchoring_Segment> buffer(distance(first, last));
-	//vector<Anchoring_Segment> buffer;
-	//size_t size = distance(first, last);
-	//buffer.resize(size);
-	cout << "buffer size: "  << buffer.size();
+
+	cout << "buffer size: "  << buffer.size() << endl;
 
 	auto in1 = first;
 	auto in2 = middle;
@@ -141,6 +138,12 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 	vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
 	sort_segments_by_z(test_seg);
 	for(auto i = segment.begin(); i != segment.end(); i++)
+	{
+		i->print_coords(cout);
+	}
+
+	cout << "SORTED SEGMENTS? " << endl;
+	for(auto i = test_seg.begin(); i != test_seg.end(); i++)
 	{
 		i->print_coords(cout);
 	}

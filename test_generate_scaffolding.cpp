@@ -21,8 +21,16 @@ void make_point_set()
 {
 	for(int i = 0; i<10; i++)
 	{
-		Point new_point(i, i, .8, i+10, true);
-		active_points.insert(new_point);
+		if(i%2==0)
+		{
+			Point new_point(i, i, .8*i, i+10, true);
+			active_points.insert(new_point);
+		}
+		else
+		{
+			Point new_point(i, i, .8, i+10, true);
+			active_points.insert(new_point);
+		}
 	}
 }
 
