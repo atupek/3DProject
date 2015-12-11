@@ -22,10 +22,12 @@ using std::priority_queue;
 using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 
-//creates anchoring segment
-void draw_line(Point pt, double slope);
 
-void create_anchoring_segments(set<Point> point_set, set<Bridge> bridge_set, vector<double> &sweep_direction, int i);
+void new_create_events(Point pt, double slope);
+//creates anchoring segment
+//void draw_line(Point pt, double slope);
+
+void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, vector<double> &sweep_direction, int i);
 
 void create_events(Anchoring_Segment _segment);
 
