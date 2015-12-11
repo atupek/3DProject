@@ -184,7 +184,7 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 		create_anchoring_segments(pts_that_need_support, bridges_that_need_support, directions, i);
 		set<Anchoring_Segment> segments_crossing_plane_i;
 		//segments_crossing_plane_i = segments;
-		cout << "SEGEMENTS_CROSSING_PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
+		//cout << "SEGEMENTS_CROSSING_PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
 		/*events should already be created...
 		for(auto i = segments.begin(); i != segments.end(); i++)
 		{
@@ -194,7 +194,7 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 		//for testing, create event & add to events priority queue
 		//Point test_point(1.0, 1.0, 0.0, 1.0, true);
 		//events.push(test_point);
-		cout << "EVENTS SIZE: " << events.size() << endl;
+		//cout << "EVENTS SIZE: " << events.size() << endl;
 		
 		while(!new_events.empty())
 		//while(!events.empty())
@@ -205,10 +205,11 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 			new_events.pop(); //remove item from priority queue
 			for(auto j = e.event_segments.begin(); j != e.event_segments.end(); j++)
 			{
-				cout << "events..." << endl;
+				//cout << "events..." << endl;
 				segments_crossing_plane_i.insert(*j);
 			}
-			cout << "NEXT>>>" << endl;
+			//cout << "SEGMENTS SIZE: " << segments_crossing_plane_i.size() << endl;
+			//cout << "NEXT>>>" << endl;
 			//cout << "events..." << endl;
 			//Somehow...not quite sure how...
 			//get all anchoring segments that have e as their endpoint...
