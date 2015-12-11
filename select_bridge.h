@@ -17,4 +17,7 @@ double calculate_gain_above_object(int num_elements, double height, double lengt
 double calculate_score(double gain, int num_elements, double lmax);
 double calculate_distance(double x1, double x2, double y1, double y2);
 
+vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments);
+void sort_segments_by_z(vector<Anchoring_Segment> & segment);
+
 #endif //Select_Bridge_Included

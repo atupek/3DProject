@@ -48,6 +48,26 @@ void check_collision()
 
 }
 
+vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments)
+{
+	//copy segments into vector
+	vector<Anchoring_Segment> unordered_segments;
+	for(auto i = segments.begin(); i != segments.end(); i++)
+	{
+		unordered_segments.push_back(*i);
+	}
+
+	cout << "UNORDERED SEGMENTS SIZE: " << unordered_segments.size() << endl;
+	return unordered_segments;
+}
+
+void sort_segments_by_z(vector<Anchoring_Segment> &segment)
+{
+	//break into two segments, if size == 1 then return
+	//otherwise, swap se
+
+}
+
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
 //returns bestBridge
 //Container (C) initialized with segments that intesect sweep plane
@@ -64,13 +84,19 @@ void check_collision()
 //return bestBridge
 Bridge select_bridge(set<Anchoring_Segment> segment)
 {
+	vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
+	sort_segments_by_z(test_seg);
+	for(auto i = segment.begin(); i != segment.end(); i++)
+	{
+		i->print_coords(cout);
+	}
 	set<Point> pts_supported_by_best_bridge;
-	cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
+	//cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	Bridge best_bridge;
 	double best_score = neg_inf;
-	cout << "BEST BRIDGE BEFORE: " << endl;
-	best_bridge.print_bridge_pts_height(cout);
+	//cout << "BEST BRIDGE BEFORE: " << endl;
+	//best_bridge.print_bridge_pts_height(cout);
 	double max_dist = 15.0;
 	//go through set of segments, measure distance between segments
 	//segment has intersected points vector
@@ -137,14 +163,14 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 		//best_bridge = current_bridge;
 		//cout << "yep" << endl;
 	}
-	cout << "BEST BRIDGE AFTER: " << endl;
+	//cout << "BEST BRIDGE AFTER: " << endl;
 	//best_bridge.print_bridge_pts_height(cout);
-	best_bridge.print_bridge_members(cout);
-	cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
-	for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
+	//best_bridge.print_bridge_members(cout);
+	//cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
+	/*for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
 	{
 		j->print_coords_with_z(cout);
-	}
+	}*/
 	return best_bridge;
 }
 
