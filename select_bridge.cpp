@@ -63,25 +63,18 @@ vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segm
 		unordered_segments.push_back(*i);
 	}
 
-	cout << "UNORDERED SEGMENTS SIZE: " << unordered_segments.size() << endl;
 	return unordered_segments;
 }
 
 void sort_segments_by_z(vector<Anchoring_Segment> &segment)
 {
 	//doing merge sort...
-	cout <<"STARTING MERGE SORT..." << endl;
 	merge_sort(segment.begin(), segment.end());
-	cout << "MERGE SORT..." << endl;
-
 }
 
 void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
 {
-	cout << "GOT TO STABLE MERGE" << endl;
 	vector<Anchoring_Segment> buffer(distance(first, last));
-
-	cout << "buffer size: "  << buffer.size() << endl;
 
 	auto in1 = first;
 	auto in2 = middle;
@@ -102,20 +95,20 @@ void stable_merge(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 
 void merge_sort(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
 {
-	cout << "Got to 1" << endl;
+
 	size_t size = distance(first, last);
 
 	//base case
 	if (size <=1)
 		return;
-	cout << "Got to 2" << endl;
+
 	//recursive case
 	auto middle = first;
 	advance(middle, size/2);
-	cout << "Got to 3" << endl;
+
 	merge_sort(first, middle);
 	merge_sort(middle, last);
-	cout << "Got to 4" << endl;
+
 	stable_merge(first, middle, last);
 }
 
@@ -137,6 +130,9 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 {
 	vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
 	sort_segments_by_z(test_seg);
+
+	//for debug...
+	/*
 	for(auto i = segment.begin(); i != segment.end(); i++)
 	{
 		i->print_coords(cout);
@@ -146,7 +142,8 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 	for(auto i = test_seg.begin(); i != test_seg.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
+
 	set<Point> pts_supported_by_best_bridge;
 	//cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
 	double neg_inf(-std::numeric_limits<double>::infinity());
@@ -157,13 +154,21 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 	double max_dist = 15.0;
 	//go through set of segments, measure distance between segments
 	//segment has intersected points vector
-	for(auto i = segment.begin(); i!= segment.end(); i++)
+	//for(auto i = segment.begin(); i!= segment.end(); i++)
+	cout << "SIZE OF TEST_SEG: "  << test_seg.size() << endl;
+	for(auto i = test_seg.begin(); i != test_seg.end(); i++)
 	{
+		//cout << "IN THIS FUNCTION" << endl;
 		set<Point> supported_by_bridge;
+		//cout << "INTERSECTED POINTS SIZE: " << i->intersected_points.size() << endl;
+		//i->print_coords(cout);
+		
 		for(auto k = 0; k < i->intersected_points.size(); k++)
 		{
+			//cout << "ITERATING THROUGH K" << endl;
 			for(auto m = k+1; m < i->intersected_points.size(); m++)
 			{
+				//cout << "ITERATING THROUGH M" << endl;
 				//cout  << "calculating distance between: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
 															// i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
 				double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);

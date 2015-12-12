@@ -10,7 +10,7 @@
 
 set<Anchoring_Segment> segments;
 //queue<Point> events;
-priority_queue<Point, vector<Point>, std::greater<Point> > events;
+//priority_queue<Point, vector<Point>, std::greater<Point> > events;
 priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 //for testing union_sets:
 set<Anchoring_Segment> test_seg;
@@ -26,7 +26,7 @@ event_segments = _event_segments;  */
 void new_create_events(Point pt, double slope)
 {
 	vector<Anchoring_Segment> this_points_segments;
-	cout << "new event from point..." << endl;
+	//cout << "new event from point..." << endl;
 	Anchoring_Segment new_segment(pt, slope, true);
 	this_points_segments.push_back(new_segment);
 
@@ -78,6 +78,7 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, v
 	}
 }
 
+/*
 void create_events(Anchoring_Segment _segment)
 {
 	//get intersecting points out of the anchoring segment
@@ -91,7 +92,7 @@ void create_events(Anchoring_Segment _segment)
 		events.push(i->p1);
 		events.push(i->p2);
 	}
-}
+}*/
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set)
@@ -156,7 +157,7 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pi
 		//i->print_coords(cout);
 		Pillar new_pillar = make_pillar(*i, dist_to_obj_above);
 		pillars.push_back(new_pillar);
-		new_pillar.print_all(cout);
+		//new_pillar.print_all(cout);
 	}
 
 	//for testing...
@@ -230,6 +231,7 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 			//cout << "events size: " << events.size() << endl;
 		}
 	}
+	best_bridge.print_bridge_members(cout);
 	//if best_bridge = null then return
 	//set<Point> = elements supported by best_bridge
 	cout << "Generating scaffolding..." << endl;

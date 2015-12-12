@@ -29,7 +29,7 @@ void new_create_events(Point pt, double slope);
 
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, vector<double> &sweep_direction, int i);
 
-void create_events(Anchoring_Segment _segment);
+//void create_events(Anchoring_Segment _segment);
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set);
