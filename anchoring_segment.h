@@ -39,6 +39,7 @@ public:
 	//anchoring segment is created from a point and a slope
 	//the point is either from the points that need support or the endpoints of the bridges that are already in place
 	Anchoring_Segment(Point _eventpt, double _slope, bool negative);
+	Anchoring_Segment(const Anchoring_Segment &anch);
 
 	//function for sending point to ostream for printing
     void print_coords(ostream &)const;

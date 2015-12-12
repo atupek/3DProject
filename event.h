@@ -6,6 +6,8 @@
 #include "anchoring_segment.h"
 #include <vector>
 using std::vector;
+#include <set>
+using std::set;
 
 //Bridges are represented as two endpoints & distance between them, as well as a height, and whether or not each endpoint is open or closed
 

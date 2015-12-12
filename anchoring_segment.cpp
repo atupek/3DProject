@@ -41,6 +41,15 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 
 }
 
+//copy constructor
+Anchoring_Segment::Anchoring_Segment(const Anchoring_Segment &anch)
+{
+	endpt1 = anch.endpt1;
+	endpt2 = anch.endpt2;
+	slope = anch.slope;
+	height = anch.height;
+}
+
 //overloaded << operator
 ostream & operator << (ostream & os, const Anchoring_Segment & obj)
 {
