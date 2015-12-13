@@ -11,10 +11,13 @@
 set<Anchoring_Segment> segments;
 //queue<Point> events;
 //priority_queue<Point, vector<Point>, std::greater<Point> > events;
-//priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
+priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 //for testing union_sets:
 set<Anchoring_Segment> test_seg;
 vector<Event> active_events;
+
+vector<Pillar> scad_pillars;
+vector<Cube_Primitive> scad_cubes;
 
 //vector<Event> new_events;
 
@@ -192,6 +195,7 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 	set<Bridge> bridges_that_need_support;
 	vector<double> directions;
 	Bridge best_bridge;
+	Bridge blank_bridge;
 
 	//for testing
 	double test_direction = 1.0;
@@ -199,9 +203,11 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 	directions.push_back(test_direction);
 	directions.push_back(test_direction1);
 
+	set<Point> points_with_support;
+
 	for(auto i = 0; i < directions.size(); i++)
 	{
-		//create events and put them into vector instead of set...
+		//create events and put them into vector active_events instead of set...
 		cout << "ACTIVE EVENTS SIZE AT BEGINNING: " << active_events.size() << endl;
 		cout << "POINTS NEEDING SUPPORT SIZE: " << pts_that_need_support.size() << endl;
 		for(auto j = pts_that_need_support.begin(); j != pts_that_need_support.end(); j++)
@@ -213,13 +219,63 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 		cout << "BRIDGES NEEDING SUPPORT SIZE: " << bridges_that_need_support.size() << endl;
 		for(auto j = bridges_that_need_support.begin(); j != bridges_that_need_support.end(); j++)
 		{
-			Point first_point = j->p1;
-			Point second_point = j->p2;
-			create_event_vector(first_point, directions[i]);
-			create_event_vector(second_point, directions[i]);
+			//only add anchoring segments for bridge endpoints that haven't been snapped closed yet
+			if(j->pt1_open)
+			{
+				Point first_point = j->p1;
+				create_event_vector(first_point, directions[i]);
+			}
+			if(j->pt2_open)
+			{
+				Point second_point = j->p2;
+				create_event_vector(second_point, directions[i]);
+			}
 		}
 		cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM BRIDGES: " << active_events.size() << endl;
+		//vector of anchoring segments to store segments that cross sweep plane
+		vector<Anchoring_Segment> segments_crossing_plane_i = {};
+		cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
+		for(auto j = active_events.begin(); j != active_events.end(); j++)
+		{
+			//put active_events into priority queue
+			new_events.push(*j);
+		}
+		cout << "NEW EVENTS SIZE: " << new_events.size() << endl;
+
+		while(!new_events.empty())
+		{
+			Event e = new_events.top(); //get leftmost event
+			new_events.pop(); //pop it off the queue
+			for(auto j = e.event_segments.begin(); j != e.event_segments.end(); j++)
+			{
+				//add all segments associated with event to segments vector
+				segments_crossing_plane_i.push_back(*j);
+			}
+			cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
+		}
+		Bridge selected_bridge = select_bridge(segments_crossing_plane_i, points_with_support);
+		cout << "SELECTED BRIDGE MEMBERS: " << endl;
+		selected_bridge.print_bridge_members(cout);
+		if(selected_bridge.score > best_bridge.score)
+		{
+			best_bridge = selected_bridge;
+		}
+		//clear out the segments
+		segments_crossing_plane_i.clear();
+		cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
 	}
+	if (best_bridge == blank_bridge)
+	{
+		//do nothing
+		cout << "NO GOOD BRIDGE :-( " << endl;
+		return;
+	}
+
+	//hack for testing...
+	double dist_to_obj_above = 2.0;
+	snap(best_bridge, points_with_support, scad_pillars, scad_cubes, dist_to_obj_above);
+	//remove point_with_support from points_that_need_support
+	//and then put all of those points remaining into active_elements and call again?
 }
 /*
 void generate_scaffolding(set<Point> pts_that_need_support)

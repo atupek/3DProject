@@ -53,6 +53,21 @@ bool operator > (const Bridge & lhs, const Bridge & rhs)
     return lhs.p1.x > rhs.p1.x;
 }
 
+bool operator == (const Bridge & lhs, const Bridge & rhs)
+{
+	if(lhs.p1 == rhs.p1 &&
+	lhs.p2 == rhs.p2 &&
+	lhs.length == rhs.length &&
+	lhs.height == rhs.height &&
+	lhs.pt1_open == rhs.pt1_open &&
+	lhs.pt2_open == rhs.pt2_open &&
+	lhs.score == rhs.score)
+	{
+		return true;
+	}
+	return false;
+}
+
 //print function to print point coordinates
 void Bridge::print_bridge_members(ostream & os) const
 {

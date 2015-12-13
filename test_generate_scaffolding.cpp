@@ -10,8 +10,8 @@ set<Point> active_points;
 set<Bridge> active_bridges;
 set<Bridge> bridges;
 
-vector<Pillar> scad_pillars;
-vector<Cube_Primitive> scad_cubes;
+//vector<Pillar> scad_pillars;
+//vector<Cube_Primitive> scad_cubes;
 vector<Point> active_points_vec;
 
 vector<double> slope_of_sweep;

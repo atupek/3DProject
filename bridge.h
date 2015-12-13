@@ -29,6 +29,7 @@ public:
     friend ostream & operator<<(ostream &, const Bridge &);
     friend bool operator < (const Bridge & lhs, const Bridge & rhs);
     friend bool operator > (const Bridge & lhs, const Bridge & rhs);
+    friend bool operator == (const Bridge & lhs, const Bridge & rhs);
 };
 
 #endif //Bridge_Included

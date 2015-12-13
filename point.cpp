@@ -125,6 +125,19 @@ bool operator > (const Point & lhs, const Point & rhs)
     return lhs.x > rhs.x;
 }
 
+bool operator == (const Point & lhs, const Point & rhs)
+{
+    if(rhs.x == lhs.x &&
+    rhs.y == lhs.y &&
+    rhs.extrude_amt == lhs.extrude_amt &&
+    rhs.perimeter == lhs.perimeter &&
+    rhs.z == lhs.z)
+    {
+        return true;
+    }
+    return false;
+}
+
 //print function to print point coordinates
 void Point::print_coords(ostream & os) const
 {

@@ -45,6 +45,7 @@ public:
     friend ostream & operator<<(ostream &, const Point &);
     friend bool operator < (const Point & lhs, const Point & rhs);
     friend bool operator > (const Point & lhs, const Point & rhs);
+    friend bool operator == (const Point & lhs, const Point & rhs);
 
 };
 

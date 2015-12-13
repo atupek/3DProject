@@ -7,6 +7,7 @@ using std::size_t;
 #include <iterator>
 using std::distance;
 
+
 double calculate_lmax(double height, double length)
 {
 	//1.0 + 2.0 = 3.0
@@ -126,10 +127,13 @@ void merge_sort(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segm
 //				get bridge gain & score for points_supported_by_bridge, i, j, z
 //				if gain>0 and score > bestScore then bestBridge = currentBridge
 //return bestBridge
-Bridge select_bridge(set<Anchoring_Segment> segment)
+Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_supported_by_best_bridge)
+//Bridge select_bridge(set<Anchoring_Segment> segment)
 {
-	vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
-	sort_segments_by_z(test_seg);
+	//for when using set...
+	//vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
+	//sort_segments_by_z(test_seg);
+	sort_segments_by_z(segment);
 
 	//for debug...
 	/*
@@ -144,7 +148,8 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 		i->print_coords(cout);
 	}*/
 
-	set<Point> pts_supported_by_best_bridge;
+	//passing set in instead of creating it here...
+	//set<Point> pts_supported_by_best_bridge;
 	//cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	Bridge best_bridge;
@@ -155,8 +160,11 @@ Bridge select_bridge(set<Anchoring_Segment> segment)
 	//go through set of segments, measure distance between segments
 	//segment has intersected points vector
 	//for(auto i = segment.begin(); i!= segment.end(); i++)
-	cout << "SIZE OF TEST_SEG: "  << test_seg.size() << endl;
-	for(auto i = test_seg.begin(); i != test_seg.end(); i++)
+	
+	//for when using set...
+	//cout << "SIZE OF TEST_SEG: "  << test_seg.size() << endl;
+	//for(auto i = test_seg.begin(); i != test_seg.end(); i++)
+	for(auto i = segment.begin(); i != segment.end(); i++)
 	{
 		//cout << "IN THIS FUNCTION" << endl;
 		set<Point> supported_by_bridge;
