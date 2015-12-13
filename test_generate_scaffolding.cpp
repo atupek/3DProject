@@ -12,6 +12,7 @@ set<Bridge> bridges;
 
 vector<Pillar> scad_pillars;
 vector<Cube_Primitive> scad_cubes;
+vector<Point> active_points_vec;
 
 vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
@@ -34,6 +35,23 @@ void make_point_set()
 	}
 }
 
+void make_point_vector()
+{
+	for(int i = 0; i<10; i++)
+	{
+		if(i%2==0)
+		{
+			Point new_point(i, i, .8*i, i+10, true);
+			active_points_vec.push_back(new_point);
+		}
+		else
+		{
+			Point new_point(i, i, .8, i+10, true);
+			active_points_vec.push_back(new_point);
+		}
+	}
+}
+
 void make_sweep_vector()
 {
 	slope_of_sweep.push_back(0.0); // horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
@@ -44,10 +62,14 @@ void make_sweep_vector()
 int main()
 {
 	int i = 1;
-	make_point_set();
-	make_sweep_vector();
-	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+	//make_point_set();
+	make_point_vector();
+	//make_sweep_vector();
+	//create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
 
+	generate_scaffolding1(active_points_vec);
+
+	/*
 	double height_difference = 5.0; //TODO, currently a hack
 	
 	//Point(double _x, double _y, double _z, double _extrude_amt, bool _perim);
@@ -60,8 +82,8 @@ int main()
 	snap(best_bridge, active_points, scad_pillars, scad_cubes, height_difference);
 
 	cout << "Pillar vector size: " << scad_pillars.size() << endl;
-	cout << "Cube_Primitive vector size: " << scad_cubes.size() << endl;
-	generate_scaffolding_2(active_points);
+	cout << "Cube_Primitive vector size: " << scad_cubes.size() << endl;*/
+	//generate_scaffolding(active_points);
 	
 	//for testing union & difference of sets
 	/*

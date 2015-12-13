@@ -11,9 +11,10 @@
 set<Anchoring_Segment> segments;
 //queue<Point> events;
 //priority_queue<Point, vector<Point>, std::greater<Point> > events;
-priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
+//priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 //for testing union_sets:
 set<Anchoring_Segment> test_seg;
+vector<Event> active_events;
 
 //vector<Event> new_events;
 
@@ -23,6 +24,7 @@ set<Anchoring_Segment> test_seg;
 /*Event(Point _p1, vector<Anchoring_Segment> _event_segments)
 p1 = _p1;
 event_segments = _event_segments;  */
+/*
 void new_create_events(Point pt, double slope)
 {
 	vector<Anchoring_Segment> this_points_segments;
@@ -35,6 +37,19 @@ void new_create_events(Point pt, double slope)
 
 	Event this_event(pt, this_points_segments);
 	new_events.push(this_event);
+}*/
+void create_event_vector(Point pt, double slope)
+{
+	vector<Anchoring_Segment> this_points_segments;
+	//cout << "new event from point..." << endl;
+	Anchoring_Segment new_segment(pt, slope, true);
+	this_points_segments.push_back(new_segment);
+
+	Anchoring_Segment new_segment1(pt, slope, false);
+	this_points_segments.push_back(new_segment1);
+
+	Event this_event(pt, this_points_segments);
+	active_events.push_back(this_event);
 }
 /*
 //creates anchoring segment
@@ -56,7 +71,7 @@ void draw_line(Point pt, double slope)
 	//for testing union_sets:
 	test_seg.insert(new_segment1);
 }*/
-
+/*
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, vector<double> &sweep_direction, int i)
 {
 	double plane = sweep_direction[i];
@@ -71,12 +86,12 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, v
 	{
 		//draw_line(i->p1, plane);
 		//draw_line(i->p2, plane);
-		//*****************************TODO************************************************
+		//TODO************************************************
 		//should check if endpoit is open or closed before doing this, I think...
 		new_create_events(i->p1, plane);
 		new_create_events(i->p2, plane);
 	}
-}
+}*/
 
 /*
 void create_events(Anchoring_Segment _segment)
@@ -172,6 +187,41 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pi
 	}
 }
 
+void generate_scaffolding1(vector<Point> pts_that_need_support)
+{
+	set<Bridge> bridges_that_need_support;
+	vector<double> directions;
+	Bridge best_bridge;
+
+	//for testing
+	double test_direction = 1.0;
+	double test_direction1 = 2.0;
+	directions.push_back(test_direction);
+	directions.push_back(test_direction1);
+
+	for(auto i = 0; i < directions.size(); i++)
+	{
+		//create events and put them into vector instead of set...
+		cout << "ACTIVE EVENTS SIZE AT BEGINNING: " << active_events.size() << endl;
+		cout << "POINTS NEEDING SUPPORT SIZE: " << pts_that_need_support.size() << endl;
+		for(auto j = pts_that_need_support.begin(); j != pts_that_need_support.end(); j++)
+		{
+			create_event_vector(*j, directions[i]);
+			cout << "ADDING EvENT" << endl;
+		}
+		cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM POINTS: " << active_events.size() << endl;
+		cout << "BRIDGES NEEDING SUPPORT SIZE: " << bridges_that_need_support.size() << endl;
+		for(auto j = bridges_that_need_support.begin(); j != bridges_that_need_support.end(); j++)
+		{
+			Point first_point = j->p1;
+			Point second_point = j->p2;
+			create_event_vector(first_point, directions[i]);
+			create_event_vector(second_point, directions[i]);
+		}
+		cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM BRIDGES: " << active_events.size() << endl;
+	}
+}
+/*
 void generate_scaffolding(set<Point> pts_that_need_support)
 {
 	set<Bridge> bridges_that_need_support;
@@ -180,6 +230,7 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 	//for testing, create direction & add to vector
 	double test_direction = 1.0;
 	directions.push_back(test_direction);
+	
 	for(auto i = 0; i < directions.size(); i++)
 	{
 		//this creates the events (point & associated anchoring segments in a priority queue called new_events)
@@ -187,11 +238,11 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 		set<Anchoring_Segment> segments_crossing_plane_i;
 		//segments_crossing_plane_i = segments;
 		//cout << "SEGEMENTS_CROSSING_PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
-		/*events should already be created...
-		for(auto i = segments.begin(); i != segments.end(); i++)
-		{
-			create_events(*i);
-		}*/
+		//events should already be created...
+		//for(auto i = segments.begin(); i != segments.end(); i++)
+		//{
+		//	create_events(*i);
+		//}
 		
 		//for testing, create event & add to events priority queue
 		//Point test_point(1.0, 1.0, 0.0, 1.0, true);
@@ -217,18 +268,18 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 			//get all anchoring segments that have e as their endpoint...
 			//I think I may need to create a class that has a point and a set of anchoring segments associated with that point...
 			//cout << "SEGEMENTS_CROSSING_PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
-			/*for(auto j = segments.begin(); j != segments.end(); j++)
-			{
-				segments_crossing_plane_i.insert(*j);
+			//for(auto j = segments.begin(); j != segments.end(); j++)
+			//{
+			//	segments_crossing_plane_i.insert(*j);
 				//cout << "segment inserted..." << endl;
-			}*/
+			//}
 			
 			//send all segments at current event to select_bridge function
-			Bridge selected = select_bridge(segments_crossing_plane_i);
-			if(selected.score > best_bridge.score)
-			{
-				best_bridge = selected;
-			}
+			//Bridge selected = select_bridge(segments_crossing_plane_i);
+			//if(selected.score > best_bridge.score)
+			//{
+			//	best_bridge = selected;
+			//}
 			//remove segments from segments_crossing_plane_i
 			//cout << "events size: " << events.size() << endl;
 		}
@@ -238,8 +289,9 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 	//if best_bridge = null then return
 	//set<Point> = elements supported by best_bridge
 	cout << "Generating scaffolding..." << endl;
-}
+}*/
 
+/*
 void generate_scaffolding_2(set<Point> pts_that_need_support)
 {
 	set<Bridge> bridges_that_need_support;
@@ -270,6 +322,7 @@ void generate_scaffolding_2(set<Point> pts_that_need_support)
 			{
 				best_bridge = selected; //LINE 13
 			}
+			
 			//LINE 14, REMOVE all segments that end in e from P
 			//so, need to either re-write difference_sets or make a new set from the event_segmnets
 			//copy event_segments into set
@@ -298,12 +351,15 @@ void generate_scaffolding_2(set<Point> pts_that_need_support)
 				j->print_coords(cout);
 			}
 			//cout << "SEGMENTS CROSSING PLANE I SIZE AFTER DIFFERENCE: " << segments_crossing_plane_i.size() << endl;
+			//but none of the above seems to be working, so what about just doing a clear() on the segments?
+			segments_crossing_plane_i.clear();
 		}
 	}
 	//cout << "BEST BRIDGE MEMBERS: " << endl;
 	//best_bridge.print_bridge_members(cout);
-	//cout << "Generating scaffolding..." << endl;
-}
+	cout << "Generating scaffolding..." << endl;
+}*/
+
 
 //set<Segment> anchoring_segments;
 //set<SweepDirections> sweep_directions;
