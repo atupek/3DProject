@@ -208,15 +208,15 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 	for(auto i = 0; i < directions.size(); i++)
 	{
 		//create events and put them into vector active_events instead of set...
-		cout << "ACTIVE EVENTS SIZE AT BEGINNING: " << active_events.size() << endl;
-		cout << "POINTS NEEDING SUPPORT SIZE: " << pts_that_need_support.size() << endl;
+		//cout << "ACTIVE EVENTS SIZE AT BEGINNING: " << active_events.size() << endl;
+		//cout << "POINTS NEEDING SUPPORT SIZE: " << pts_that_need_support.size() << endl;
 		for(auto j = pts_that_need_support.begin(); j != pts_that_need_support.end(); j++)
 		{
 			create_event_vector(*j, directions[i]);
-			cout << "ADDING EvENT" << endl;
+			//cout << "ADDING EvENT" << endl;
 		}
-		cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM POINTS: " << active_events.size() << endl;
-		cout << "BRIDGES NEEDING SUPPORT SIZE: " << bridges_that_need_support.size() << endl;
+		//cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM POINTS: " << active_events.size() << endl;
+		//cout << "BRIDGES NEEDING SUPPORT SIZE: " << bridges_that_need_support.size() << endl;
 		for(auto j = bridges_that_need_support.begin(); j != bridges_that_need_support.end(); j++)
 		{
 			//only add anchoring segments for bridge endpoints that haven't been snapped closed yet
@@ -231,16 +231,15 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 				create_event_vector(second_point, directions[i]);
 			}
 		}
-		cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM BRIDGES: " << active_events.size() << endl;
+		//cout << "ACTIVE EVENTS SIZE AFTER ADDING FROM BRIDGES: " << active_events.size() << endl;
 		//vector of anchoring segments to store segments that cross sweep plane
 		vector<Anchoring_Segment> segments_crossing_plane_i = {};
-		cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
+		//cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
 		for(auto j = active_events.begin(); j != active_events.end(); j++)
 		{
 			//put active_events into priority queue
 			new_events.push(*j);
 		}
-		cout << "NEW EVENTS SIZE: " << new_events.size() << endl;
 
 		while(!new_events.empty())
 		{
@@ -251,23 +250,25 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 				//add all segments associated with event to segments vector
 				segments_crossing_plane_i.push_back(*j);
 			}
-			cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
+			//cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
 		}
+		cout << "SEGMENTS CROSSING PLANE SIZE: " << segments_crossing_plane_i.size() << endl;
+		cout << "POINTS WITH SUPPORT SIZE: " << points_with_support.size() << endl;
 		Bridge selected_bridge = select_bridge(segments_crossing_plane_i, points_with_support);
-		cout << "SELECTED BRIDGE MEMBERS: " << endl;
-		selected_bridge.print_bridge_members(cout);
+		//cout << "SELECTED BRIDGE MEMBERS: " << endl;
+		//selected_bridge.print_bridge_members(cout);
 		if(selected_bridge.score > best_bridge.score)
 		{
 			best_bridge = selected_bridge;
 		}
 		//clear out the segments
 		segments_crossing_plane_i.clear();
-		cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
+		//cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
 	}
 	if (best_bridge == blank_bridge)
 	{
 		//do nothing
-		cout << "NO GOOD BRIDGE :-( " << endl;
+		//cout << "NO GOOD BRIDGE :-( " << endl;
 		return;
 	}
 

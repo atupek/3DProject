@@ -7,14 +7,17 @@ using std::endl;
 #include <vector>
 using std::vector;
 #include "point.h"
+#include "cube_primitive.h"
+#include "pillar.h"
+#include "event.h"
 
 vector<Point> point_vec;
 double test_slope = 0.5;
 
 
-Point test_point(100, 100, 0, true);
-Point test_point1(50, 50, 0, true);
-Point test_point2(25, 0, 0, true);
+Point test_point(10, 10, 0, true);
+Point test_point1(5, 5, 0, true);
+Point test_point2(3, 3, 0, true);
 
 Anchoring_Segment test_anchor(test_point, test_slope, true);
 Anchoring_Segment test_anchor1(test_point1, test_slope, true);
@@ -46,6 +49,8 @@ int main()
 	int num_elements_supported = 4;
 	double bridge_h1 = 2.0;
 	double bridge_h2 = 4.0;
+
+	set<Point> points_with_support;
 /*
 	double lmax = calculate_lmax(bridge_height, bridge_length);
 	double gain = calculate_gain(bridge_height, bridge_length, num_elements_supported);
@@ -86,10 +91,14 @@ int main()
 	test_anchor.intersected_points.push_back(test_point3);
 	//cout << test_anchor.intersected_points.size() << endl;
 
-	set<Anchoring_Segment> test_set;
-	test_set.insert(test_anchor);
-	test_set.insert(test_anchor1);
-	test_set.insert(test_anchor2);
+	//set<Anchoring_Segment> test_set;
+	//test_set.insert(test_anchor);
+	//test_set.insert(test_anchor1);
+	//test_set.insert(test_anchor2);
+	vector<Anchoring_Segment> test_set;
+	test_set.push_back(test_anchor);
+	test_set.push_back(test_anchor1);
+	test_set.push_back(test_anchor2);
 
 /*
 	cout << "Anchoring Segment test_set size: " << test_set.size() << endl;
@@ -108,7 +117,7 @@ int main()
 	{
 		cout << k->x << ", " << k->y << endl;
 	}*/
-	select_bridge(test_set);
+	select_bridge(test_set, points_with_support);
 
 
 	return 0;

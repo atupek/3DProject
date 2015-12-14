@@ -130,20 +130,26 @@ void merge_sort(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segm
 Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_supported_by_best_bridge)
 //Bridge select_bridge(set<Anchoring_Segment> segment)
 {
+	vector<Point> temp_pts;
+	cout << "SELECT BRIDGE CALLED " << endl;
 	//for when using set...
 	//vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
+
+	/*
+	cout << "UNSORTED SEGMENTS: " << endl;
+	for(auto i = segment.begin(); i != segment.end(); i++)
+	{
+		i->print_coords(cout);
+	}*/
+	
 	//sort_segments_by_z(test_seg);
 	sort_segments_by_z(segment);
 
 	//for debug...
 	/*
+	cout << "SORTED SEGMENTS: " << endl;
+	//for(auto i = test_seg.begin(); i != test_seg.end(); i++)
 	for(auto i = segment.begin(); i != segment.end(); i++)
-	{
-		i->print_coords(cout);
-	}
-
-	cout << "SORTED SEGMENTS? " << endl;
-	for(auto i = test_seg.begin(); i != test_seg.end(); i++)
 	{
 		i->print_coords(cout);
 	}*/
@@ -159,24 +165,66 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 	double max_dist = 15.0;
 	//go through set of segments, measure distance between segments
 	//segment has intersected points vector
-	//for(auto i = segment.begin(); i!= segment.end(); i++)
 	
 	//for when using set...
 	//cout << "SIZE OF TEST_SEG: "  << test_seg.size() << endl;
 	//for(auto i = test_seg.begin(); i != test_seg.end(); i++)
+
+	cout << "segment size: " << segment.size() << endl;
+	//go through different z-heights
+	for(auto i = 0; i < segment.size()-1; i++)
+	{
+		for(auto j = i+1; j < segment.size(); j++)
+		{
+			if(segment[i].endpt1.z == segment[j].endpt1.z)//line 3, compare poitns of same z-height
+			{
+				cout << "SAME Z-HEIGHT" << endl;
+				//compute distance
+				double this_distance = calculate_distance(segment[i].endpt1.x, segment[i].endpt1.y, segment[j].endpt1.x, segment[j].endpt1.y);
+				cout << "THIS DISTANCE: " << this_distance << endl;
+				//check distance, line 7
+				if(this_distance != 0 && this_distance <= max_dist)
+				{
+					//add endpt1 to set of supported points
+					temp_pts.push_back(segment[i].endpt1);
+					temp_pts.push_back(segment[j].endpt1);
+					//create bridge
+					Bridge temp_bridge(segment[i].endpt1, segment[j].endpt1, segment[i].endpt1.z);
+					//check gain & score
+					//calculate_gain(double height, double length, int num_elements)
+					double this_gain = calculate_gain(temp_bridge.height, temp_bridge.length, temp_pts.size());
+					cout << "This gain: " << this_gain << endl;
+					//calculate_score(double gain, int num_elements, double lmax)
+					double this_lmax = calculate_lmax(temp_bridge.height, temp_bridge.length);
+					cout << "This lmax: " << this_lmax << endl;
+					double this_score = calculate_score(this_gain, temp_pts.size(), this_lmax);
+					cout << "This score: " << this_score << endl;
+					cout << "TEMP BRIDGE MEMBERS: " << endl; 
+					temp_bridge.print_bridge_members(cout);
+					if(temp_bridge.score > best_bridge.score) //line 12
+					{
+						best_bridge = temp_bridge;
+					}
+				}
+			}
+		}
+	}
+	/*
 	for(auto i = segment.begin(); i != segment.end(); i++)
 	{
 		//cout << "IN THIS FUNCTION" << endl;
 		set<Point> supported_by_bridge;
+		//why am I iterating through a single segment's intersected points?
+		//shouldn't I be interating through all of the points?
 		//cout << "INTERSECTED POINTS SIZE: " << i->intersected_points.size() << endl;
 		//i->print_coords(cout);
 		
 		for(auto k = 0; k < i->intersected_points.size(); k++)
 		{
-			//cout << "ITERATING THROUGH K" << endl;
+			cout << "ITERATING THROUGH K" << endl;
 			for(auto m = k+1; m < i->intersected_points.size(); m++)
 			{
-				//cout << "ITERATING THROUGH M" << endl;
+				cout << "ITERATING THROUGH M" << endl;
 				//cout  << "calculating distance between: " << i->intersected_points[k].x << ", " << i->intersected_points[k].y << " & " <<
 															// i->intersected_points[m].x << ", " << i->intersected_points[m].y << endl;
 				double dist = calculate_distance(i->intersected_points[k].x, i->intersected_points[k].y, i->intersected_points[m].x, i->intersected_points[m].y);
@@ -204,12 +252,12 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 						//current_bridge.print_bridge_pts_height(cout);
 						//calculate_gain(double height, double length, int num_elements)
 						double this_gain = calculate_gain(current_bridge.height, current_bridge.length, supported_by_bridge.size());
-						//cout << "This gain: " << this_gain << endl;
+						cout << "This gain: " << this_gain << endl;
 						//calculate_score(double gain, int num_elements, double lmax)
 						double this_lmax = calculate_lmax(current_bridge.height, current_bridge.length);
-						//cout << "This lmax: " << this_lmax << endl;
+						cout << "This lmax: " << this_lmax << endl;
 						double this_score = calculate_score(this_gain, supported_by_bridge.size(), this_lmax);
-						//cout << "This score: " << this_score << endl; 
+						cout << "This score: " << this_score << endl; 
 						//if gain > 0 and score > best_score then
 						if(this_gain > 0 && this_score > best_score)
 						{
@@ -237,10 +285,12 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 	//best_bridge.print_bridge_pts_height(cout);
 	//best_bridge.print_bridge_members(cout);
 	//cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
-	/*for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
+	for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
 	{
 		j->print_coords_with_z(cout);
 	}*/
+		cout << "BEST BRIDGE: " << endl;
+		best_bridge.print_bridge_members(cout);
 	return best_bridge;
 }
 
