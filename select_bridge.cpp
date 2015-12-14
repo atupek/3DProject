@@ -131,7 +131,7 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 //Bridge select_bridge(set<Anchoring_Segment> segment)
 {
 	vector<Point> temp_pts;
-	cout << "SELECT BRIDGE CALLED " << endl;
+	//cout << "SELECT BRIDGE CALLED " << endl;
 	//for when using set...
 	//vector<Anchoring_Segment> test_seg = set_up_sort_segments_by_z(segment);
 
@@ -160,6 +160,7 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	Bridge best_bridge;
 	double best_score = neg_inf;
+	best_bridge.score = best_score;
 	//cout << "BEST BRIDGE BEFORE: " << endl;
 	//best_bridge.print_bridge_pts_height(cout);
 	double max_dist = 15.0;
@@ -170,7 +171,7 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 	//cout << "SIZE OF TEST_SEG: "  << test_seg.size() << endl;
 	//for(auto i = test_seg.begin(); i != test_seg.end(); i++)
 
-	cout << "segment size: " << segment.size() << endl;
+	//cout << "segment size: " << segment.size() << endl;
 	//go through different z-heights
 	for(auto i = 0; i < segment.size()-1; i++)
 	{
@@ -178,10 +179,10 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 		{
 			if(segment[i].endpt1.z == segment[j].endpt1.z)//line 3, compare poitns of same z-height
 			{
-				cout << "SAME Z-HEIGHT" << endl;
+				//cout << "SAME Z-HEIGHT" << endl;
 				//compute distance
 				double this_distance = calculate_distance(segment[i].endpt1.x, segment[i].endpt1.y, segment[j].endpt1.x, segment[j].endpt1.y);
-				cout << "THIS DISTANCE: " << this_distance << endl;
+				//cout << "THIS DISTANCE: " << this_distance << endl;
 				//check distance, line 7
 				if(this_distance != 0 && this_distance <= max_dist)
 				{
@@ -193,17 +194,28 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 					//check gain & score
 					//calculate_gain(double height, double length, int num_elements)
 					double this_gain = calculate_gain(temp_bridge.height, temp_bridge.length, temp_pts.size());
-					cout << "This gain: " << this_gain << endl;
+					//cout << "This gain: " << this_gain << endl;
 					//calculate_score(double gain, int num_elements, double lmax)
 					double this_lmax = calculate_lmax(temp_bridge.height, temp_bridge.length);
-					cout << "This lmax: " << this_lmax << endl;
+					//cout << "This lmax: " << this_lmax << endl;
 					double this_score = calculate_score(this_gain, temp_pts.size(), this_lmax);
-					cout << "This score: " << this_score << endl;
-					cout << "TEMP BRIDGE MEMBERS: " << endl; 
-					temp_bridge.print_bridge_members(cout);
+					temp_bridge.score = this_score;
+					//cout << "This score: " << this_score << endl;
+					//cout << "TEMP BRIDGE MEMBERS: " << endl; 
+					//temp_bridge.print_bridge_members(cout);
+					//cout << "TEMP BRIDGE SCORE: " << temp_bridge.score << endl;
+					//cout << "BEST BRIDGE SCORE: " << best_bridge.score << endl;
 					if(temp_bridge.score > best_bridge.score) //line 12
 					{
 						best_bridge = temp_bridge;
+						pts_supported_by_best_bridge.clear();
+						best_score = this_score;
+						best_bridge.score = this_score;
+						for(auto k = temp_pts.begin(); k != temp_pts.end(); k++)
+						{
+							pts_supported_by_best_bridge.insert(*k);
+						}
+						//cout << "Points supported by best_bridge size: " << pts_supported_by_best_bridge.size() << endl;
 					}
 				}
 			}
@@ -283,25 +295,13 @@ Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_support
 	}
 	//cout << "BEST BRIDGE AFTER: " << endl;
 	//best_bridge.print_bridge_pts_height(cout);
-	//best_bridge.print_bridge_members(cout);
-	//cout << "POINTS SUPPORTED BY BEST BRIDGE SIZE: " << pts_supported_by_best_bridge.size() << endl;
+	//best_bridge.print_bridge_members(cout);*/
+	/*
 	for(auto j = pts_supported_by_best_bridge.begin(); j != pts_supported_by_best_bridge.end(); j++)
 	{
 		j->print_coords_with_z(cout);
 	}*/
-		cout << "BEST BRIDGE: " << endl;
-		best_bridge.print_bridge_members(cout);
+	best_bridge.print_bridge_members(cout);
 	return best_bridge;
 }
-
-
-
-
-/*
-	data from test_select_bridge
-	double bridge_height = 1.0;
-	double bridge_length = 2.0;
-	int num_elements_supported = 4;
-	double bridge_h1 = 2.0;
-	double bridge_h2 = 4.0;*/
 
