@@ -7,8 +7,8 @@ using std::endl;
 #include <vector>
 using std::vector;
 #include "point.h"
-#include "cube_primitive.h"
-#include "pillar.h"
+//#include "cube_primitive.h"
+//#include "pillar.h"
 #include "event.h"
 
 vector<Point> point_vec;

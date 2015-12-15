@@ -4,8 +4,8 @@
 #include "select_bridge.h"
 #include "bridge.h"
 #include <limits> //for infinity
-#include "pillar.h"
-#include "cube_primitive.h"
+//#include "pillar.h"
+//#include "cube_primitive.h"
 #include "event.h"
 
 set<Anchoring_Segment> segments;
@@ -16,8 +16,8 @@ priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 set<Anchoring_Segment> test_seg;
 vector<Event> active_events;
 
-vector<Pillar> scad_pillars;
-vector<Cube_Primitive> scad_cubes;
+//vector<Pillar> scad_pillars;
+//vector<Cube_Primitive> scad_cubes;
 
 //vector<Event> new_events;
 
@@ -27,7 +27,7 @@ vector<Cube_Primitive> scad_cubes;
 /*Event(Point _p1, vector<Anchoring_Segment> _event_segments)
 p1 = _p1;
 event_segments = _event_segments;  */
-/*
+
 void new_create_events(Point pt, double slope)
 {
 	vector<Anchoring_Segment> this_points_segments;
@@ -40,7 +40,7 @@ void new_create_events(Point pt, double slope)
 
 	Event this_event(pt, this_points_segments);
 	new_events.push(this_event);
-}*/
+}
 void create_event_vector(Point pt, double slope)
 {
 	vector<Anchoring_Segment> this_points_segments;
@@ -74,7 +74,7 @@ void draw_line(Point pt, double slope)
 	//for testing union_sets:
 	test_seg.insert(new_segment1);
 }*/
-/*
+
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, vector<double> &sweep_direction, int i)
 {
 	double plane = sweep_direction[i];
@@ -94,7 +94,7 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, v
 		new_create_events(i->p1, plane);
 		new_create_events(i->p2, plane);
 	}
-}*/
+}
 
 /*
 void create_events(Anchoring_Segment _segment)
@@ -144,7 +144,7 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 		}
 	}
 }
-
+/*
 Pillar make_pillar(Point point1, double height)
 {
 	cout << "Making pillar..." << endl;
@@ -157,9 +157,10 @@ Cube_Primitive make_cube_primitive(Point point1, Point point2)
 	cout << "making cube..." << endl;
 	Cube_Primitive temp = Cube_Primitive(point1.x, point1.y, point2.x, point2.y, point1.z, point1.z+0.4);
 	return temp;
-}
+}*/
 
-void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
+void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge)
+//void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
 {
 	//removes points supported by bridge from active elements set
 	//puts endpoints of bridge into active elements set
@@ -173,8 +174,8 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pi
 	for(auto i = points_supported_by_bridge.begin(); i != points_supported_by_bridge.end(); i++)
 	{
 		//i->print_coords(cout);
-		Pillar new_pillar = make_pillar(*i, dist_to_obj_above);
-		pillars.push_back(new_pillar);
+		//Pillar new_pillar = make_pillar(*i, dist_to_obj_above);
+		//pillars.push_back(new_pillar);
 		//new_pillar.print_all(cout);
 	}
 
@@ -185,11 +186,11 @@ void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pi
 	//get endpoints of best_bridge & create 'cube' if both endpoints are closed
 	if(!best_bridge.pt1_open && !best_bridge.pt2_open)
 	{
-		Cube_Primitive new_cube = make_cube_primitive(best_bridge.p1, best_bridge.p2);
-		cubes.push_back(new_cube);
+		//Cube_Primitive new_cube = make_cube_primitive(best_bridge.p1, best_bridge.p2);
+		//cubes.push_back(new_cube);
 	}
 }
-
+/*
 void generate_scaffolding1(vector<Point> pts_that_need_support)
 {
 	set<Bridge> bridges_that_need_support;
@@ -257,18 +258,30 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 		Bridge selected_bridge = select_bridge(segments_crossing_plane_i, points_with_support);
 		//cout << "SELECTED BRIDGE MEMBERS: " << endl;
 		//selected_bridge.print_bridge_members(cout);
+		cout << "BEST BRIDGE BEFORE REASSIGNMENT: " << endl;
+		best_bridge.print_bridge_members(cout);
+		cout << "SELECTED BRIDGE BEFORE REASSIGNMENT: " << endl;
+		selected_bridge.print_bridge_members(cout);
 		if(selected_bridge.score > best_bridge.score)
 		{
 			best_bridge = selected_bridge;
 		}
+		cout << "BEST BRIDGE AFTER REASSIGNMENT: " << endl;
+		best_bridge.print_bridge_members(cout);
+		cout << "SELECTED BRIDGE AFTER REASSIGNMENT: " << endl;
+		selected_bridge.print_bridge_members(cout);
 		//clear out the segments
 		segments_crossing_plane_i.clear();
 		//cout << "Segments Crossing Plane Size: " << segments_crossing_plane_i.size() << endl; 
 	}
+	cout << "BEST BRIDGE MEMBERS: " << endl;
+	best_bridge.print_bridge_members(cout);
+	cout << "BLANK BRIDGE MEMBERS: " << endl;
+	blank_bridge.print_bridge_members(cout);
 	if (best_bridge == blank_bridge)
 	{
 		//do nothing
-		//cout << "NO GOOD BRIDGE :-( " << endl;
+		cout << "NO GOOD BRIDGE :-( " << endl;
 		return;
 	}
 
@@ -277,8 +290,8 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 	snap(best_bridge, points_with_support, scad_pillars, scad_cubes, dist_to_obj_above);
 	//remove point_with_support from points_that_need_support
 	//and then put all of those points remaining into active_elements and call again?
-}
-/*
+}*/
+
 void generate_scaffolding(set<Point> pts_that_need_support)
 {
 	set<Bridge> bridges_that_need_support;
@@ -346,7 +359,7 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 	//if best_bridge = null then return
 	//set<Point> = elements supported by best_bridge
 	cout << "Generating scaffolding..." << endl;
-}*/
+}
 
 /*
 void generate_scaffolding_2(set<Point> pts_that_need_support)

@@ -3,8 +3,8 @@
 #include "select_bridge.h"
 #include "bridge.h"
 #include <limits> //for infinity
-#include "pillar.h"
-#include "cube_primitive.h"
+//#include "pillar.h"
+//#include "cube_primitive.h"
 
 set<Point> active_points;
 set<Bridge> active_bridges;
@@ -62,13 +62,13 @@ void make_sweep_vector()
 int main()
 {
 	int i = 1;
-	//make_point_set();
-	make_point_vector();
-	//make_sweep_vector();
-	//create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+	make_point_set();
+	//make_point_vector();
+	make_sweep_vector();
+	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
 
-	generate_scaffolding1(active_points_vec);
-
+	//generate_scaffolding1(active_points_vec);
+	generate_scaffolding(active_points);
 	/*
 	double height_difference = 5.0; //TODO, currently a hack
 	

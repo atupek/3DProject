@@ -5,8 +5,8 @@
 #include "point.h"
 #include "bridge.h"
 #include "anchoring_segment.h"
-#include "pillar.h"
-#include "cube_primitive.h"
+//#include "pillar.h"
+//#include "cube_primitive.h"
 
 #include <iostream>
 using std::cout;
@@ -23,7 +23,7 @@ using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 
 
-//void new_create_events(Point pt, double slope);
+void new_create_events(Point pt, double slope);
 //creates anchoring segment
 //void draw_line(Point pt, double slope);
 void create_event_vector(Point pt, double slope);
@@ -37,14 +37,15 @@ void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & 
 
 void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set);
 
-Pillar make_pillar(Point point1, double height);
+//Pillar make_pillar(Point point1, double height);
 
-Cube_Primitive make_cube_primitive(Point point1, Point point2);
+//Cube_Primitive make_cube_primitive(Point point1, Point point2);
 
-void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj);
+void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge);
+//void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj);
 
-//void generate_scaffolding(set<Point> pts_that_need_support);
+void generate_scaffolding(set<Point> pts_that_need_support);
 //void generate_scaffolding_2(set<Point> pts_that_need_support);
-void generate_scaffolding1(vector<Point> pts_that_need_support);
+//void generate_scaffolding1(vector<Point> pts_that_need_support);
 
 #endif //Generate_Scaffolding_Included
