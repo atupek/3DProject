@@ -16,9 +16,6 @@ priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 set<Anchoring_Segment> test_seg;
 vector<Event> active_events;
 
-//vector<Pillar> scad_pillars;
-//vector<Cube_Primitive> scad_cubes;
-
 //vector<Event> new_events;
 
 //takes set of points and direction
