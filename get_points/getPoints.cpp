@@ -47,7 +47,7 @@ int num_pixel_rows = 400;
 int num_pixel_columns = 400;
 
 //initial model into which converted points go
-//POINTS ONLY!!!!
+//points only
 model_pixels model;
 
 //lines are drawn in this model
@@ -62,11 +62,8 @@ model_pixels fattened_pix_model;
 //compared_pix_model[n] will be the difference between processed_pix_model[n] & [n+1]
 model_pixels compared_pix_model;
 
-//
+//final pixel model, points needing support
 model_pixels final_pix_model;
-
-//these are the points that should be sent to the next algorithm that creates the bridges
-//this_layer layer_points_needing_support;
 
 //gets the file name
 void get_file_name()
@@ -75,8 +72,8 @@ void get_file_name()
 	cin.getline(gcodeFile, 256);
 }
 
-//for testing points
-//shift to the right 10mm
+//for testing
+//shifts points to the right 10mm
 //takes a vector of Points
 //and adds 10 to the x coordinate
 void shiftPoints(this_layer &pt_layer)
@@ -113,7 +110,7 @@ void getPoints()
 
 /*
 	//testing z_height
-	//points appear to be constructed okay
+	//points constructed okay
 	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
 	{
 		cout << "NEW LAYER: " << endl;
@@ -162,8 +159,6 @@ void getPoints()
 	//POPULATED BY COMPARE_PIXEL_LAYERS FUNCTION
 	//comparison between model[i+1] and fattened_pix_model[i]
 	//these points are then used in final check neighbors
-	// ****************TODO*****************************************************
-	//or are they actually used?  NOT IN THIS CODE... WHY NOT?
 	for(int i = 0; i < layer_index; i++)
 	{
 		initialize_pixel_vector(compared_pix_model, num_pixel_rows, num_pixel_columns);
@@ -189,7 +184,6 @@ void getPoints()
 /*
 	//for debug...
 	//before drawing lines...both should just be sets of points.
-	//OK, THEY PRINT CORRECTLY
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
 	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);*/
 
@@ -200,15 +194,15 @@ void getPoints()
 		//cout << "converted_model[i].size(): " << converted_model[i].size() << endl;
 		for(auto j = 0; j < converted_model[i].size()-1; j++)
 		{
-			bresenham(converted_model[i][j].x, converted_model[i][j+1].x, converted_model[i][j].y, converted_model[i][j+1].y, processed_pix_model[i]);
+			bresenham(converted_model[i][j].x, converted_model[i][j+1].x,
+						converted_model[i][j].y, converted_model[i][j+1].y, processed_pix_model[i]);
 		}
 	}
 
 	fattened_pix_model = processed_pix_model;
 	/*
 	//for debug...
-	//after drawing lines...both should have lines.
-	//OKAY, THEY PRINT CORRECTLY
+	//after drawing lines, both should have lines.
 	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
 	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);*/
 
@@ -238,16 +232,13 @@ void getPoints()
 
 /*
 	//for debug...
-	//after comparing layers...
-	//THEY PRINT OKAY
+	//after comparing layers, they print okay
 	print_bitmap(model[4], 6, num_pixel_rows, num_pixel_columns);
 	print_bitmap(fattened_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
 	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);*/
 
 	//check neighbors between model[i+1] and fattened_pix_model[i+1]
 	//if neighbors exist in layer, then point in final_pix_model doesn't need support
-	//********************CHECKING BETWEEN COMPARED & FATTENED************************
-	//there seems to be no difference....
 	for(auto i = 0; i < layer_index-1; i++)
 	{
 		check_neighbors(compared_pix_model[i+1], fattened_pix_model[i+1], final_pix_model[i], num_pixel_rows, num_pixel_columns);
@@ -255,8 +246,7 @@ void getPoints()
 
 /*
 	//for debug...
-	//after checking neighbors...
-	//PRINTS OKAY
+	//after checking neighbors, prints okay
 	print_bitmap(final_pix_model[3], 9, num_pixel_rows, num_pixel_columns);*/
 
 
@@ -268,8 +258,9 @@ void getPoints()
 		list_points(final_pix_model[i], points_needing_support, num_pixel_rows, num_pixel_columns, i);
 		all_points_needing_support.push_back(points_needing_support);
 	}
+
 	/*
-	//for debug
+	//for debug, print out the points needing support
 	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
 	{
 		cout << "NEW LAYER: " << endl;
@@ -281,6 +272,7 @@ void getPoints()
 	}*/
 }
 
+//for debug, print bmps of test data (from points shifted over)
 void print_bmps()
 {
 	print_bitmap(model[3], 1, num_pixel_rows, num_pixel_columns);
