@@ -2,7 +2,7 @@
 #ifndef Bridge_Included
 #define Bridge_Included
 
-#include "point.h"
+#include "get_points/point.h"
 
 //Bridges are represented as two endpoints & distance between them, as well as a height, and whether or not each endpoint is open or closed
 

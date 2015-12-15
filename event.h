@@ -2,7 +2,7 @@
 #ifndef Point_Event_Included
 #define Point_Event_Included
 
-#include "point.h"
+#include "get_points/point.h"
 #include "anchoring_segment.h"
 #include <vector>
 using std::vector;

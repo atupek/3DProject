@@ -2,7 +2,7 @@
 #ifndef Generate_Scaffolding_Included
 #define Generate_Scaffolding_Included
 
-#include "point.h"
+#include "get_points/point.h"
 #include "bridge.h"
 #include "anchoring_segment.h"
 //#include "pillar.h"

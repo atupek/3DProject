@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 #include <vector>
 using std::vector;
-#include "point.h"
+#include "get_points/point.h"
 //#include "cube_primitive.h"
 //#include "pillar.h"
 #include "event.h"

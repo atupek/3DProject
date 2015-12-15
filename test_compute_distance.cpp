@@ -1,5 +1,5 @@
-#include "process_layers.h"
-#include "point.h"
+#include "get_points/process_layers.h"
+#include "get_points/point.h"
 #include <iostream>
 using std::cout;
 using std::endl;

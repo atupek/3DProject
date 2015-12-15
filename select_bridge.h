@@ -4,8 +4,8 @@
 
 #include "bridge.h"
 #include "anchoring_segment.h"
-#include "process_layers.h"
-#include "point.h"
+#include "get_points/process_layers.h"
+#include "get_points/point.h"
 #include <set>
 using std::set;
 

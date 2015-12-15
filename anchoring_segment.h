@@ -3,7 +3,7 @@
 #ifndef Anchoring_Segment_Included
 #define Anchoring_Segment_Included
 
-#include "point.h"
+#include "get_points/point.h"
 #include <vector>
 using std::vector;
 #include "bridge.h"
