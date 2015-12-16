@@ -20,6 +20,7 @@ class Anchoring_Segment
 public:
 	Point endpt1;
 	Point endpt2;
+	Point intersect_pt;
 	double slope;
 	vector<Point> intersected_points;
 	vector<Bridge> intersected_bridges;

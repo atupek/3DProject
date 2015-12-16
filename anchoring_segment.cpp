@@ -39,6 +39,9 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 	endpt1.extrude_amt = 0;
 	endpt1.perimeter = true;
 
+	intersect_pt.x = 0.0;
+	intersect_pt.y = 0.0;
+	intersect_pt.z = 0.0;
 }
 
 //copy constructor
@@ -46,6 +49,7 @@ Anchoring_Segment::Anchoring_Segment(const Anchoring_Segment &anch)
 {
 	endpt1 = anch.endpt1;
 	endpt2 = anch.endpt2;
+	intersect_pt = anch.intersect_pt;
 	slope = anch.slope;
 	height = anch.height;
 }
@@ -78,4 +82,5 @@ void Anchoring_Segment::print_coords(ostream & os) const
 	{
 		os << endpt2.x << ", " << endpt2.y << " to " << endpt1.x << ", " << endpt1.y << " at z = " << endpt1.z << endl;
 	}
+	os << "intersects sweep plane at point: " << intersect_pt.x << ", " << intersect_pt.y << endl;
 }
