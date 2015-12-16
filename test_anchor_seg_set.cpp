@@ -51,8 +51,7 @@ int main()
 	}
 
 	//try to enter same points into set to see what happens
-	//duplicating points, so < operator not working correctly...
-	//let's try to fix it...
+	//hey, it doesn't enter duplicate points!  It works! Yay
 	for(auto i = 0; i < point_vec.size(); i++)
 	{
 		Anchoring_Segment new_seg(point_vec[i], 1.0, false);

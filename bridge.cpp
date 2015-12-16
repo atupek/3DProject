@@ -11,6 +11,7 @@ Bridge::Bridge()
 	pt1_open = true;
 	pt2_open = true;
 	score = 0.0;
+	supported_points = {};
 }
 
 Bridge::Bridge(Point _p1, Point _p2, double _height)
@@ -22,7 +23,8 @@ Bridge::Bridge(Point _p1, Point _p2, double _height)
 	length = compute_distance(p1.x, p1.y, p2.x, p2.y);
 	pt1_open = true;
 	pt2_open = true;
-	score = 0.0;   
+	score = 0.0;  
+	supported_points = {}; 
 }
 
 Bridge::Bridge(Point _p1, Point _p2, double _length, double _height, bool _pt1_open, bool _pt2_open)
@@ -34,6 +36,7 @@ Bridge::Bridge(Point _p1, Point _p2, double _length, double _height, bool _pt1_o
 	pt1_open = _pt1_open;
 	pt2_open = _pt2_open;
 	score = 0.0;
+	supported_points = {};
 }
 
 //overloaded << operator

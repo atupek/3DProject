@@ -44,6 +44,10 @@ void make_points_vec(int _test_slope)
 
 int main()
 {
+	Bridge the_best_bridge;
+	//just to make sure it changes...which it does
+	the_best_bridge.length = 4.0;
+
 	double bridge_height = 1.0;
 	double bridge_length = 2.0;
 	int num_elements_supported = 4;
@@ -91,14 +95,10 @@ int main()
 	test_anchor.intersected_points.push_back(test_point3);
 	//cout << test_anchor.intersected_points.size() << endl;
 
-	//set<Anchoring_Segment> test_set;
-	//test_set.insert(test_anchor);
-	//test_set.insert(test_anchor1);
-	//test_set.insert(test_anchor2);
-	vector<Anchoring_Segment> test_set;
-	test_set.push_back(test_anchor);
-	test_set.push_back(test_anchor1);
-	test_set.push_back(test_anchor2);
+	set<Anchoring_Segment> test_set;
+	test_set.insert(test_anchor);
+	test_set.insert(test_anchor1);
+	test_set.insert(test_anchor2);
 
 /*
 	cout << "Anchoring Segment test_set size: " << test_set.size() << endl;
@@ -117,8 +117,8 @@ int main()
 	{
 		cout << k->x << ", " << k->y << endl;
 	}*/
-	select_bridge(test_set, points_with_support);
-
+	the_best_bridge = select_bridge(test_set);
+	the_best_bridge.print_bridge_members(cout);
 
 	return 0;
 }

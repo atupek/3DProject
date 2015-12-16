@@ -3,8 +3,11 @@
 #define Bridge_Included
 
 #include "get_points/point.h"
+#include <set>
+using std::set;
 
 //Bridges are represented as two endpoints & distance between them, as well as a height, and whether or not each endpoint is open or closed
+//They also have a set of points that they support
 
 class Bridge
 {
@@ -16,6 +19,8 @@ public:
 	bool pt1_open;
 	bool pt2_open;
 	double score;
+
+	set<Point> supported_points;
 	
 	Bridge();
 	Bridge(Point _p1, Point _p2, double _height);

@@ -9,12 +9,10 @@
 #include <set>
 using std::set;
 
-//Bridge select_bridge(set<Anchoring_Segment> segment);
-Bridge select_bridge(vector<Anchoring_Segment> &segment, set<Point> &pts_supported_by_best_bridge);
+Bridge select_bridge(set<Anchoring_Segment> segments);
 
 double calculate_lmax(double height, double length);
 double calculate_gain(double height, double length, int num_elements);
-double calculate_gain_above_object(int num_elements, double height, double length, double h1, double h2);
 double calculate_score(double gain, int num_elements, double lmax);
 double calculate_distance(double x1, double x2, double y1, double y2);
 
