@@ -63,12 +63,20 @@ ostream & operator << (ostream & os, const Anchoring_Segment & obj)
 
 bool operator < (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
 {
-    return lhs.new_x1 < rhs.new_x1;
+	if(lhs.endpt1.x < rhs.endpt1.x && lhs.endpt1.y != rhs.endpt1.y)
+	{
+		return true;
+	}
+    return false;
 }
 
 bool operator > (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
 {
-    return lhs.new_x1 > rhs.new_x1;
+    if(lhs.endpt1.x > rhs.endpt1.x && lhs.endpt1.y != rhs.endpt1.y)
+	{
+		return true;
+	}
+    return false;
 }
 
 //print function to print point coordinates
