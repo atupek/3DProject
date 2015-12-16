@@ -6,14 +6,21 @@ using std::copy;
 using std::size_t;
 #include <iterator>
 using std::distance;
-#include <queue>
-using std::priority_queue;
 
-
-double calculate_lmax(double height, double length)
+//lmax calculates distance of heighest element being supported above the bridge
+//input: set of segments intersecting sweep plane at given event
+//output: highest z-value
+double calculate_lmax(set<Anchoring_Segment> segments)
 {
-	//1.0 + 2.0 = 3.0
-	return height + length;
+	double temp = 0.0;
+	for(auto i = segments.begin(); i != segments.end(); i++)
+	{
+		if(i->intersect_pt.z > temp)
+		{
+			temp = i->intersect_pt.z;
+		}
+	}
+	return temp;
 }
 
 //G(b) = (k-2)h(b)-w(b)
@@ -22,7 +29,6 @@ double calculate_lmax(double height, double length)
 //k = # elements supported
 double calculate_gain(double height, double length, int num_elements)
 {
-	//(4 - 2) * 1.0 - 2.0 = 0
 	return((num_elements-2)*height) - length;
 }
 
@@ -30,7 +36,6 @@ double calculate_gain(double height, double length, int num_elements)
 //lmax(b) is the max length of structure connecting an element above to the bridge
 double calculate_score(double gain, int num_elements, double lmax)
 {
-	//0 - 4 * 3 = -12.0
 	return gain - num_elements * lmax;
 }
 
@@ -203,7 +208,6 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 		i->print_coords(cout);
 	}*/
 
-	//sort segment intersections by z-coordinate
 	//put z-coordinate values into a set, sorted by increasing z
 	set<double> z_set;
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
@@ -253,7 +257,7 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 					temp_bridge.p1 = i-> intersect_pt;
 					temp_bridge.p2 = j-> intersect_pt;
 					double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());//double height, double length, int num_elements
-					double l_max = calculate_lmax(this_z, this_distance);//double height, double length
+					double l_max = calculate_lmax(segments);//double height, double length
 					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);//double gain, int num_elements, double lmax
 					//if(temp_gain > 0.0 && temp_score > best_score)
 					if(temp_score > best_score) //just until z stuff is working...
