@@ -179,11 +179,12 @@ void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 //return bestBridge
 Bridge select_bridge(set<Anchoring_Segment> segments)
 {
+	/*//for debug
 	cout << "SET BEFORE SORTING: " << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 	
 	Bridge best_bridge;
 	Bridge temp_bridge;
@@ -194,11 +195,13 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	//sort segment intersections by y-coordinate
 	vector<Anchoring_Segment> segments_by_y = set_up_sort_segments_by_y(segments);
 	sort_segments_by_y(segments_by_y);
+
+	/*//for debug
 	cout << "VECTOR AFTER SORTING BY Y: " << endl;
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 
 	//sort segment intersections by z-coordinate
 	//put z-coordinate values into a set, sorted by increasing z
@@ -208,7 +211,7 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 		z_set.insert(i->height);
 	}
 
-	//some messing around with sets...just for testing...works
+	//for debug...just for testing...works
 	/*
 	for(auto i = 0; i < 11; i++)
 	{
@@ -229,32 +232,35 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	{
 		cout << "Value in z: " << *i << endl;
 	}*/
-
-	double this_z = 2.2; //just until z stuff is working...
-
-	for(auto i = segments.begin(); i != segments.end()--; i++)
+	for(auto k = z_set.begin(); k != z_set.end(); k++)
 	{
-		//temp_bridge.supported_points.clear(); //should be cleared out?
-		for(auto j = i; j != segments.end(); j++)
+		double this_z = *k;
+		//cout << "Z value: " << this_z << endl;
+
+		for(auto i = segments.begin(); i != segments.end()--; i++)
 		{
-			//cout << "checking intersection points" << endl;
-			//compute distance between i & j intersect points
-			//if less than max_distance, add intersect poitns into temp_bridge.supported_points
-			double this_distance = compute_distance(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
-			if(this_distance < max_distance)
+			//temp_bridge.supported_points.clear(); //should be cleared out?
+			for(auto j = i; j != segments.end(); j++)
 			{
-				//cout << "less than max distance" << endl;
-				temp_bridge.supported_points.insert(j->intersect_pt);
-				temp_bridge.p1 = i-> intersect_pt;
-				temp_bridge.p2 = j-> intersect_pt;
-				double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());//double height, double length, int num_elements
-				double l_max = calculate_lmax(this_z, this_distance);//double height, double length
-				double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);//double gain, int num_elements, double lmax
-				//if(temp_gain > 0.0 && temp_score > best_score)
-				if(temp_score > best_score) //just until z stuff is working...
+				//cout << "checking intersection points" << endl;
+				//compute distance between i & j intersect points
+				//if less than max_distance, add intersect poitns into temp_bridge.supported_points
+				double this_distance = compute_distance(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
+				if(this_distance < max_distance)
 				{
-					best_bridge = temp_bridge;
-					//cout << "best bridge replaced" << endl;
+					//cout << "less than max distance" << endl;
+					temp_bridge.supported_points.insert(j->intersect_pt);
+					temp_bridge.p1 = i-> intersect_pt;
+					temp_bridge.p2 = j-> intersect_pt;
+					double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());//double height, double length, int num_elements
+					double l_max = calculate_lmax(this_z, this_distance);//double height, double length
+					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);//double gain, int num_elements, double lmax
+					//if(temp_gain > 0.0 && temp_score > best_score)
+					if(temp_score > best_score) //just until z stuff is working...
+					{
+						best_bridge = temp_bridge;
+						//cout << "best bridge replaced" << endl;
+					}
 				}
 			}
 		}
