@@ -23,6 +23,7 @@ set<Anchoring_Segment> make_toy_example()
 	segment0.endpt1 = point0;
 	segment0.endpt2 = point1;
 	segment0.intersect_pt = point2;
+	segment0.height = point0.z;
 	
 	Point point3(19, 9, 15, 0, 0);
 	Point point4(29, 9, 15, 0, 0);
@@ -31,6 +32,7 @@ set<Anchoring_Segment> make_toy_example()
 	segment1.endpt1 = point3;
 	segment1.endpt2 = point4;
 	segment1.intersect_pt = point5;
+	segment1.height = point3.z;
 
 	Point point6(11, 15, 20, 0, 0);
 	Point point7(26, 15, 20, 0, 0);
@@ -39,6 +41,7 @@ set<Anchoring_Segment> make_toy_example()
 	segment2.endpt1 = point6;
 	segment2.endpt2 = point7;
 	segment2.intersect_pt = point8;
+	segment2.height = point6.z;
 
 	Point point9(15, 20, 18, 0, 0);
 	Point point10(25, 20, 18, 0, 0);
@@ -47,6 +50,7 @@ set<Anchoring_Segment> make_toy_example()
 	segment3.endpt1 = point9;
 	segment3.endpt2 = point10;
 	segment3.intersect_pt = point11;
+	segment3.height = point9.z;
 
 	Point point12(18, 24, 17, 0, 0);
 	Point point13(29, 24, 17, 0, 0);
@@ -55,6 +59,7 @@ set<Anchoring_Segment> make_toy_example()
 	segment4.endpt1 = point12;
 	segment4.endpt2 = point13;
 	segment4.intersect_pt = point14;
+	segment4.height = point12.z;
 
 	toy_set.insert(segment0);
 	toy_set.insert(segment1);
