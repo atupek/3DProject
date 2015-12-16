@@ -184,12 +184,12 @@ void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 //return bestBridge
 Bridge select_bridge(set<Anchoring_Segment> segments)
 {
-	/*//for debug
+	//for debug
 	cout << "SET BEFORE SORTING: " << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}*/
+	}
 	
 	Bridge best_bridge;
 	Bridge temp_bridge;
@@ -201,12 +201,12 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	vector<Anchoring_Segment> segments_by_y = set_up_sort_segments_by_y(segments);
 	sort_segments_by_y(segments_by_y);
 
-	/*//for debug
+	//for debug
 	cout << "VECTOR AFTER SORTING BY Y: " << endl;
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
 		i->print_coords(cout);
-	}*/
+	}
 
 	//put z-coordinate values into a set, sorted by increasing z
 	set<double> z_set;
@@ -229,13 +229,13 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 			z_set.insert(i);
 			cout << "Added into z: " << (i) << endl;
 		}
-	}
+	}*/
 
 	cout <<"Set z_set size: " << z_set.size() << endl;
 	for(auto i = z_set.begin(); i != z_set.end(); i++)
 	{
 		cout << "Value in z: " << *i << endl;
-	}*/
+	}
 	for(auto k = z_set.begin(); k != z_set.end(); k++)
 	{
 		double this_z = *k;

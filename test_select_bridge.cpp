@@ -11,113 +11,66 @@ using std::vector;
 //#include "pillar.h"
 #include "event.h"
 
-vector<Point> point_vec;
-double test_slope = 0.5;
-
-
-Point test_point(10, 10, 0, true);
-Point test_point1(5, 5, 0, true);
-Point test_point2(3, 3, 0, true);
-
-Anchoring_Segment test_anchor(test_point, test_slope, true);
-Anchoring_Segment test_anchor1(test_point1, test_slope, true);
-Anchoring_Segment test_anchor2(test_point2, test_slope, true);
-
-void make_points_vec(int _test_slope)
+set<Anchoring_Segment> make_toy_example()
 {
-	for(int i = 0; i<10; i++)
-	{
-		Point new_point(i, i, 20.7, i+10, true);
-		point_vec.push_back(new_point);
-		//cout << "new point: ";
-		//new_point.print_all(cout);
-		if(i%2 == 0)
-		{
-			test_anchor2.intersected_points.push_back(new_point);
-		}
-		else
-		{
-			test_anchor1.intersected_points.push_back(new_point);
-		}
-	}
+	cout << "making toy example" << endl;
+	set<Anchoring_Segment> toy_set;
+
+	Point point0(9, 9, 15, 0, 0);
+	Point point1(19, 9, 15, 0, 0);
+	Point point2(19, 9, 15, 0, 0);
+	Anchoring_Segment segment0;
+	segment0.endpt1 = point0;
+	segment0.endpt2 = point1;
+	segment0.intersect_pt = point2;
+	
+	Point point3(19, 9, 15, 0, 0);
+	Point point4(29, 9, 15, 0, 0);
+	Point point5(19, 9, 15, 0, 0);
+	Anchoring_Segment segment1;
+	segment1.endpt1 = point3;
+	segment1.endpt2 = point4;
+	segment1.intersect_pt = point5;
+
+	Point point6(11, 15, 20, 0, 0);
+	Point point7(26, 15, 20, 0, 0);
+	Point point8(19, 15, 20, 0, 0);
+	Anchoring_Segment segment2;
+	segment2.endpt1 = point6;
+	segment2.endpt2 = point7;
+	segment2.intersect_pt = point8;
+
+	Point point9(15, 20, 18, 0, 0);
+	Point point10(25, 20, 18, 0, 0);
+	Point point11(19, 20, 18, 0, 0);
+	Anchoring_Segment segment3;
+	segment3.endpt1 = point9;
+	segment3.endpt2 = point10;
+	segment3.intersect_pt = point11;
+
+	Point point12(18, 24, 17, 0, 0);
+	Point point13(29, 24, 17, 0, 0);
+	Point point14(19, 24, 17, 0, 0);
+	Anchoring_Segment segment4;
+	segment4.endpt1 = point12;
+	segment4.endpt2 = point13;
+	segment4.intersect_pt = point14;
+
+	toy_set.insert(segment0);
+	toy_set.insert(segment1);
+	toy_set.insert(segment2);
+	toy_set.insert(segment3);
+	toy_set.insert(segment4);
+	return toy_set;
 }
 
 int main()
 {
 	Bridge the_best_bridge;
-	//just to make sure it changes...which it does
-	the_best_bridge.length = 4.0;
 
-	double bridge_height = 1.0;
-	double bridge_length = 2.0;
-	int num_elements_supported = 4;
-	double bridge_h1 = 2.0;
-	double bridge_h2 = 4.0;
-
-	set<Point> points_with_support;
-/*
-	double lmax = calculate_lmax(bridge_height, bridge_length);
-	double gain = calculate_gain(bridge_height, bridge_length, num_elements_supported);
-	double gain_above = calculate_gain_above_object(num_elements_supported, bridge_height, bridge_length, bridge_h1, bridge_h2);
-	double score = calculate_score(gain, num_elements_supported, lmax);*/
-/*
-	cout << "lmax: " << lmax << " expected: 3.0" << endl;
-	cout << "gain: " << gain << " expected: 0" << endl;
-	cout << "gain_above: " << gain_above << " expected: -4.0" << endl;
-	cout << "score: " << score << " expected: -12.0" << endl;*/
-
-/*
-	Point test_point(100, 100, 0, true);
-	Point test_point1(50, 50, 0, true);
-	Point test_point2(25, 0, 0, true);*/
-	/*
-	double test_slope = 0.5;
-	Anchoring_Segment test_anchor(test_point, test_slope, true);
-	Anchoring_Segment test_anchor1(test_point1, test_slope, true);
-	Anchoring_Segment test_anchor2(test_point2, test_slope, true);*/
-	//test_anchor.print_coords(cout);
-	//cout << test_anchor.intersected_points.size() << endl;
-
-	make_points_vec(test_slope);
-
-	Point test_point3(75, 75, 0, true);
-	double this_dist = calculate_distance(75, 75, 0, 0);
-	//cout << "DISTANCE: " << this_dist << endl;
-
-	double second_dist = compute_distance(75, 75, 0, 0);
-	//cout << "SECOND DISTANCE: " << second_dist << endl;
-
-	double x_squared = pow(0 - 75, 2);
-	double y_squared = pow(0 - 75, 2);
-	double final_distance = sqrt(x_squared + y_squared);
-	//cout << "FINAL DISTANCE: " << final_distance << endl;
-
-	test_anchor.intersected_points.push_back(test_point3);
-	//cout << test_anchor.intersected_points.size() << endl;
-
-	set<Anchoring_Segment> test_set;
-	test_set.insert(test_anchor);
-	test_set.insert(test_anchor1);
-	test_set.insert(test_anchor2);
-
-/*
-	cout << "Anchoring Segment test_set size: " << test_set.size() << endl;
-	cout << "test_anchor size: "  << test_anchor.intersected_points.size() << endl;
-	for(auto i = test_anchor.intersected_points.begin(); i != test_anchor.intersected_points.end(); i++)
-	{
-		cout << i->x << ", " << i->y << endl;
-	}
-	cout << "test_anchor1 size: " << test_anchor1.intersected_points.size() << endl;
-	for(auto j = test_anchor1.intersected_points.begin(); j != test_anchor1.intersected_points.end(); j++)
-	{
-		cout << j->x << ", " << j->y << endl;
-	}
-	cout << "test_anchor2 size: " << test_anchor2.intersected_points.size() << endl;
-	for(auto k = test_anchor2.intersected_points.begin(); k != test_anchor2.intersected_points.end(); k++)
-	{
-		cout << k->x << ", " << k->y << endl;
-	}*/
-	the_best_bridge = select_bridge(test_set);
+	set<Anchoring_Segment> toy_segment_set = make_toy_example();
+	the_best_bridge = select_bridge(toy_segment_set);
+	cout << "Let's see what the toy set produces: " << endl;
 	the_best_bridge.print_bridge_members(cout);
 
 	return 0;
