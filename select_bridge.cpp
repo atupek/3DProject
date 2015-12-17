@@ -258,11 +258,11 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	for(auto k = z_set.begin(); k != z_set.end(); k++)
 	{
 		double this_z = *k;
-		cout << " ********************** Z value: " << this_z << endl;
+		cout << " ***************************************************************** Z value: " << this_z << endl;
 
 		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 		{
-			//temp_bridge.supported_points.clear(); //should be cleared out?
+			temp_bridge.supported_points.clear(); //should be cleared out?
 			for(auto j = i; j != segments_by_y.end(); j++)
 			{
 				//cout << "checking intersection points" << endl;
@@ -303,9 +303,9 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 					double l_max = calculate_lmax(segments);//double height, double length
 					//cout << "l_max: " << l_max << endl;
 					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);//double gain, int num_elements, double lmax
-					//cout << "temp_score: " << temp_score << endl;
-					//if(temp_gain > 0.0 && temp_score > best_score)
-					if(temp_score > best_score) //just until z stuff is working...
+					cout << "temp_score: " << temp_score << endl;
+					if(temp_gain > 0.0 && temp_score > best_score)
+					//if(temp_score > best_score) //just until z stuff is working...
 					{
 						best_bridge = temp_bridge;
 						best_score = temp_score;

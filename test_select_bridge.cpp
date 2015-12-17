@@ -80,6 +80,10 @@ int main()
 	the_best_bridge = select_bridge(toy_segment_set);
 	cout << "Let's see what the toy set produces: " << endl;
 	the_best_bridge.print_bridge_members(cout);
+	for(auto i = the_best_bridge.supported_points.begin(); i != the_best_bridge.supported_points.end(); i++)
+	{
+		i->print_coords(cout);
+	}
 
 	return 0;
 }
