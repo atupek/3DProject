@@ -197,17 +197,17 @@ double calc_dist(double x1, double y1, double x2, double y2)
 //return bestBridge
 Bridge select_bridge(set<Anchoring_Segment> segments)
 {
-	//for debug
+	/*//for debug
 	cout << "SET BEFORE SORTING: " << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 	
 	Bridge best_bridge;
 	Bridge temp_bridge;
 
-	cout << "STARTING TEMP BRIDGE SUPPORTED POINTS SIZE: " << temp_bridge.supported_points.size() << endl;
+	//cout << "STARTING TEMP BRIDGE SUPPORTED POINTS SIZE: " << temp_bridge.supported_points.size() << endl;
 	
 	double max_distance = 30.0;
 	double neg_inf(-std::numeric_limits<double>::infinity());
@@ -217,12 +217,12 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	vector<Anchoring_Segment> segments_by_y = set_up_sort_segments_by_y(segments);
 	sort_segments_by_y(segments_by_y);
 
-	//for debug
+	/*//for debug
 	cout << "VECTOR AFTER SORTING BY Y: " << endl;
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 
 	//put z-coordinate values into a set, sorted by increasing z
 	set<double> z_set;
@@ -258,7 +258,7 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	for(auto k = z_set.begin(); k != z_set.end(); k++)
 	{
 		double this_z = *k;
-		cout << " ***************************************************************** Z value: " << this_z << endl;
+		//cout << " ***************************************************************** Z value: " << this_z << endl;
 
 		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 		{
@@ -277,17 +277,17 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 				if(this_distance < max_distance)
 				{
 					//cout << "less than max distance" << endl;
-					cout << "j->intersect_pt for inserting into point set: ";
-					j->intersect_pt.print_coords(cout);
+					//cout << "j->intersect_pt for inserting into point set: ";
+					//j->intersect_pt.print_coords(cout);
 					temp_bridge.supported_points.insert(j->intersect_pt);
 
-					//for debug...
+					/*//for debug...
 					cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
 					cout << "POINTS SUPPORTED BY TEMP BRIDGE: " << endl;
 					for(auto m = temp_bridge.supported_points.begin(); m != temp_bridge.supported_points.end(); m++)
 					{
 						m->print_coords(cout);
-					}
+					}*/
 
 					temp_bridge.p1 = i-> intersect_pt;
 					//cout << "temp bridge endpt 1: ";
@@ -299,17 +299,17 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 					//cout << endl;
 					
 					double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());//double height, double length, int num_elements
-					cout << "temp_gain: " << temp_gain << endl;
+					//cout << "temp_gain: " << temp_gain << endl;
 					double l_max = calculate_lmax(segments);//double height, double length
 					//cout << "l_max: " << l_max << endl;
 					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);//double gain, int num_elements, double lmax
-					cout << "temp_score: " << temp_score << endl;
+					//cout << "temp_score: " << temp_score << endl;
 					if(temp_gain > 0.0 && temp_score > best_score)
 					//if(temp_score > best_score) //just until z stuff is working...
 					{
 						best_bridge = temp_bridge;
 						best_score = temp_score;
-						cout << "*********************best bridge replaced************************************" << endl;
+						//cout << "*********************best bridge replaced************************************" << endl;
 					}
 				}
 			}
