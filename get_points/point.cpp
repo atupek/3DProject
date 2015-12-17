@@ -117,12 +117,24 @@ ostream & operator << (ostream & os, const Point & obj)
 
 bool operator < (const Point & lhs, const Point & rhs)
 {
-    return lhs.x < rhs.x;
+    if(lhs.x == rhs.x && lhs.y ==rhs.y)
+    {
+        return false;
+    }
+    else if(!(lhs.x > rhs.x) && lhs.y != rhs.y)
+    {
+        return true;
+    }
+    return false;
 }
 
 bool operator > (const Point & lhs, const Point & rhs)
 {
-    return lhs.x > rhs.x;
+    if(lhs.x > rhs.x && lhs.y != rhs.y)
+    {
+        return true;
+    }
+    return false;
 }
 
 bool operator == (const Point & lhs, const Point & rhs)

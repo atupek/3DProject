@@ -37,6 +37,7 @@ set<Anchoring_Segment> make_toy_example()
 	Point point6(11, 15, 20, 0, 0);
 	Point point7(26, 15, 20, 0, 0);
 	Point point8(19, 15, 20, 0, 0);
+	//Point point8(20, 15, 20, 0, 0);
 	Anchoring_Segment segment2;
 	segment2.endpt1 = point6;
 	segment2.endpt2 = point7;
@@ -46,6 +47,7 @@ set<Anchoring_Segment> make_toy_example()
 	Point point9(15, 20, 18, 0, 0);
 	Point point10(25, 20, 18, 0, 0);
 	Point point11(19, 20, 18, 0, 0);
+	//Point point11(21, 20, 18, 0, 0);
 	Anchoring_Segment segment3;
 	segment3.endpt1 = point9;
 	segment3.endpt2 = point10;
@@ -55,6 +57,7 @@ set<Anchoring_Segment> make_toy_example()
 	Point point12(18, 24, 17, 0, 0);
 	Point point13(29, 24, 17, 0, 0);
 	Point point14(19, 24, 17, 0, 0);
+	//Point point14(22, 24, 17, 0, 0);
 	Anchoring_Segment segment4;
 	segment4.endpt1 = point12;
 	segment4.endpt2 = point13;
