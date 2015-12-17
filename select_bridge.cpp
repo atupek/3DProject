@@ -263,10 +263,10 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 		double this_z = *k;
 		//cout << "Z value: " << this_z << endl;
 
-		for(auto i = segments.begin(); i != segments.end()--; i++)
+		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 		{
 			//temp_bridge.supported_points.clear(); //should be cleared out?
-			for(auto j = i; j != segments.end(); j++)
+			for(auto j = i; j != segments_by_y.end(); j++)
 			{
 				//cout << "checking intersection points" << endl;
 				//compute distance between i & j intersect points
@@ -306,6 +306,10 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 		}
 	}
 	cout << "POINT VEC SIZE: " << point_vec.size() << endl;
+	for(auto i = point_vec.begin(); i != point_vec.end(); i++)
+	{
+		i->print_coords(cout);
+	}
 	return best_bridge;
 }
 
