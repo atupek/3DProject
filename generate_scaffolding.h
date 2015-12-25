@@ -23,12 +23,13 @@ using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 
 
-void new_create_events(Point pt, double slope);
-//creates anchoring segment
-//void draw_line(Point pt, double slope);
-void create_event_vector(Point pt, double slope);
+//void new_create_events(Point pt, double slope);
+//void create_event_vector(Point pt, double slope);
 
-void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, vector<double> &sweep_direction, int i);
+//creates anchoring segment
+void draw_line(Point pt, double slope);
+
+void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, set<Anchoring_Segment> &anchor_segments,vector<double> &sweep_direction, int i);
 
 //void create_events(Anchoring_Segment _segment);
 
@@ -44,7 +45,9 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge);
 //void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj);
 
-void generate_scaffolding(set<Point> pts_that_need_support);
+void generate_scaffolding(set<Point> points_needing_support);
+
+//void generate_scaffolding(set<Point> pts_that_need_support);
 //void generate_scaffolding_2(set<Point> pts_that_need_support);
 //void generate_scaffolding1(vector<Point> pts_that_need_support);
 

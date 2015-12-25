@@ -8,13 +8,13 @@
 //#include "cube_primitive.h"
 #include "event.h"
 
-set<Anchoring_Segment> segments;
+//set<Anchoring_Segment> segments;
 //queue<Point> events;
 //priority_queue<Point, vector<Point>, std::greater<Point> > events;
 priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 //for testing union_sets:
 set<Anchoring_Segment> test_seg;
-vector<Event> active_events;
+//vector<Event> active_events;
 
 //vector<Event> new_events;
 
@@ -24,7 +24,7 @@ vector<Event> active_events;
 /*Event(Point _p1, vector<Anchoring_Segment> _event_segments)
 p1 = _p1;
 event_segments = _event_segments;  */
-
+/*
 void new_create_events(Point pt, double slope)
 {
 	vector<Anchoring_Segment> this_points_segments;
@@ -37,7 +37,8 @@ void new_create_events(Point pt, double slope)
 
 	Event this_event(pt, this_points_segments);
 	new_events.push(this_event);
-}
+}*/
+/*
 void create_event_vector(Point pt, double slope)
 {
 	vector<Anchoring_Segment> this_points_segments;
@@ -50,46 +51,54 @@ void create_event_vector(Point pt, double slope)
 
 	Event this_event(pt, this_points_segments);
 	active_events.push_back(this_event);
-}
-/*
+}*/
+
 //creates anchoring segment
-void draw_line(Point pt, double slope)
+void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
 {
 	//line should be orthogonal to the slope, of a specific given distance
 	//endpoints are the point passed, and a point at the positive distance
 	//endpoints are the point passed, and a point at the negative distance
 	//thus, creates two anchoring segments
-	cout << "A LINE:" << endl;
+	//cout << "A LINE:" << endl;
 	Anchoring_Segment new_segment(pt, slope, true);
+	anchor_segments.insert(new_segment);
 	new_segment.print_coords(cout);
-	segments.insert(new_segment);
 
 	Anchoring_Segment new_segment1(pt, slope, false);
+	anchor_segments.insert(new_segment1);
 	new_segment1.print_coords(cout);
-	segments.insert(new_segment1);
 
 	//for testing union_sets:
-	test_seg.insert(new_segment1);
-}*/
+	//test_seg.insert(new_segment1);
+}
 
-void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, vector<double> &sweep_direction, int i)
+void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, set<Anchoring_Segment> &anchor_segments, vector<double> &sweep_direction, int i)
 {
 	double plane = sweep_direction[i];
 	//for each Point in point_set, create anchor segment of length max_length orthoganl to sweep_direction, centered on Point
 	//for_each(point_set.begin(), point_set.end(), draw_line(sweep_direction[i]));
 	for(auto i = point_set.begin(); i != point_set.end(); i++)
 	{
-		//draw_line(*i, plane);
-		new_create_events(*i, plane);
+		draw_line(*i, plane, anchor_segments);
+		//new_create_events(*i, plane); //NO, NO, NO, NO, NO! get rid of new_create_events
 	}
 	for(auto i = bridge_set.begin(); i != bridge_set.end(); i++)
 	{
-		//draw_line(i->p1, plane);
-		//draw_line(i->p2, plane);
 		//TODO************************************************
 		//should check if endpoit is open or closed before doing this, I think...
-		new_create_events(i->p1, plane);
-		new_create_events(i->p2, plane);
+		if(i->pt1_open)
+		{
+			draw_line(i->p1, plane, anchor_segments);
+		}
+		if(i->pt2_open)
+		{
+			draw_line(i->p2, plane, anchor_segments);
+		}
+		//TODO************************************************
+		//should check if endpoit is open or closed before doing this, I think...
+		//new_create_events(i->p1, plane);
+		//new_create_events(i->p2, plane);
 	}
 }
 
@@ -187,6 +196,15 @@ void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge)
 		//cubes.push_back(new_cube);
 	}
 }
+
+//input: set of points that need support from getPoints
+//output: bridge structure
+void generate_scaffolding(set<Point> points_needing_support)
+{
+
+}
+
+
 /*
 void generate_scaffolding1(vector<Point> pts_that_need_support)
 {
@@ -289,6 +307,7 @@ void generate_scaffolding1(vector<Point> pts_that_need_support)
 	//and then put all of those points remaining into active_elements and call again?
 }*/
 
+/*
 void generate_scaffolding(set<Point> pts_that_need_support)
 {
 	set<Bridge> bridges_that_need_support;
@@ -356,7 +375,7 @@ void generate_scaffolding(set<Point> pts_that_need_support)
 	//if best_bridge = null then return
 	//set<Point> = elements supported by best_bridge
 	cout << "Generating scaffolding..." << endl;
-}
+}*/
 
 /*
 void generate_scaffolding_2(set<Point> pts_that_need_support)

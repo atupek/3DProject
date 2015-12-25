@@ -9,10 +9,12 @@
 set<Point> active_points;
 set<Bridge> active_bridges;
 set<Bridge> bridges;
+set<Anchoring_Segment> segments;
 
 //vector<Pillar> scad_pillars;
 //vector<Cube_Primitive> scad_cubes;
 vector<Point> active_points_vec;
+//vector<Event> active_events;
 
 vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
@@ -65,10 +67,14 @@ int main()
 	make_point_set();
 	//make_point_vector();
 	make_sweep_vector();
-	create_anchoring_segments(active_points, active_bridges, slope_of_sweep, i);
+	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
+	cout << "Anchoring segments size: "  << segments.size() << endl;
+	//create_events();
 
 	//generate_scaffolding1(active_points_vec);
-	generate_scaffolding(active_points);
+	
+	//THIS IS THE ONE THAT I'M CURRENTLY WORKING WITH...
+	//generate_scaffolding(active_points);
 	/*
 	double height_difference = 5.0; //TODO, currently a hack
 	

@@ -9,11 +9,13 @@ Anchoring_Segment::Anchoring_Segment()
 
 Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negative)
 {
+	//cout << "Point passed in: ";
+	//_eventpt.print_coords(cout);
 	slope = -1/_slope;
 	intersected_points = {_eventpt}; //vector only contains _eventpt right now.
 	intersected_bridges = {}; //empty vector for now
 	distance = 30; //max length of bridge in mm
-	endpt2 = _eventpt;
+	endpt1 = _eventpt;
 	x1 = _eventpt.x;
 	y1 = _eventpt.y;
 	height = _eventpt.z;
@@ -33,11 +35,11 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 		new_y1 = _eventpt.y+delta_y;
 	}
 
-	endpt1.x = new_x1;
-	endpt1.y = new_y1;
-	endpt1.z = _eventpt.z;
-	endpt1.extrude_amt = 0;
-	endpt1.perimeter = true;
+	endpt2.x = new_x1;
+	endpt2.y = new_y1;
+	endpt2.z = _eventpt.z;
+	endpt2.extrude_amt = 0;
+	endpt2.perimeter = true;
 
 	intersect_pt.x = 0.0;
 	intersect_pt.y = 0.0;
@@ -82,13 +84,13 @@ bool operator > (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
 //print function to print point coordinates
 void Anchoring_Segment::print_coords(ostream & os) const
 {
-	if(endpt1 < endpt2)
-	{
+	//if(endpt1 < endpt2)
+	//{
 		os << endpt1.x << ", " << endpt1.y << " to " << endpt2.x << ", " << endpt2.y << " at z = " << endpt1.z << endl;
-	}
-	else
-	{
-		os << endpt2.x << ", " << endpt2.y << " to " << endpt1.x << ", " << endpt1.y << " at z = " << endpt1.z << endl;
-	}
-	os << "intersects sweep plane at point: " << intersect_pt.x << ", " << intersect_pt.y << endl;
+	//}
+	//else
+	//{
+	//	os << endpt2.x << ", " << endpt2.y << " to " << endpt1.x << ", " << endpt1.y << " at z = " << endpt1.z << endl;
+	//}
+	//os << "intersects sweep plane at point: " << intersect_pt.x << ", " << intersect_pt.y << endl;
 }
