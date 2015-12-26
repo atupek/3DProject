@@ -65,7 +65,8 @@ ostream & operator << (ostream & os, const Anchoring_Segment & obj)
 
 bool operator < (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
 {
-	if(lhs.endpt1.x < rhs.endpt1.x && lhs.endpt1.y != rhs.endpt1.y)
+	//if((lhs.endpt1.x < rhs.endpt1.x) && (lhs.endpt1.y != rhs.endpt1.y) && (lhs.endpt2.x != rhs.endpt2.x) && (lhs.endpt2.y != rhs.endpt2.y))
+	if(!(lhs.endpt1.x > rhs.endpt1.x) && (lhs.endpt2.x != rhs.endpt2.x) && (lhs.endpt2.y != rhs.endpt2.y))
 	{
 		return true;
 	}

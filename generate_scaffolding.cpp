@@ -6,14 +6,14 @@
 #include <limits> //for infinity
 //#include "pillar.h"
 //#include "cube_primitive.h"
-#include "event.h"
+//#include "event.h"
 
 //set<Anchoring_Segment> segments;
 //queue<Point> events;
 //priority_queue<Point, vector<Point>, std::greater<Point> > events;
-priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
+//priority_queue<Event, vector<Event>, std::greater<Event> > new_events;
 //for testing union_sets:
-set<Anchoring_Segment> test_seg;
+//set<Anchoring_Segment> test_seg;
 //vector<Event> active_events;
 
 //vector<Event> new_events;
@@ -69,6 +69,8 @@ void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
 	anchor_segments.insert(new_segment1);
 	new_segment1.print_coords(cout);
 
+	cout << "(in draw line)Anchoring segment size: " << anchor_segments.size() << endl;
+
 	//for testing union_sets:
 	//test_seg.insert(new_segment1);
 }
@@ -102,21 +104,26 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 	}
 }
 
-/*
-void create_events(Anchoring_Segment _segment)
+
+void create_events(Anchoring_Segment _segment, set<Event> & events)
 {
+	cout << "CREATE EVENTS CALLED" << endl;
 	//get intersecting points out of the anchoring segment
 	for(auto i = _segment.intersected_points.begin(); i != _segment.intersected_points.end(); i++)
 	{
-		events.push(*i);
+		//events.push(*i);
+		events.insert(*i);
+		cout << "Event inserted" << endl;
 	}
 	//get intersecting bridge points out of the anchoring segment
 	for(auto i = _segment.intersected_bridges.begin(); i != _segment.intersected_bridges.end(); i++)
 	{
-		events.push(i->p1);
-		events.push(i->p2);
+		//events.push(i->p1);
+		//events.push(i->p2);
+		events.insert(i->p1);
+		events.insert(i->p2);
 	}
-}*/
+}
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set)

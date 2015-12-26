@@ -21,6 +21,7 @@ using std::priority_queue;
 #include <vector>
 using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
+#include "event.h"
 
 
 //void new_create_events(Point pt, double slope);
@@ -31,7 +32,7 @@ void draw_line(Point pt, double slope);
 
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, set<Anchoring_Segment> &anchor_segments,vector<double> &sweep_direction, int i);
 
-//void create_events(Anchoring_Segment _segment);
+void create_events(Anchoring_Segment _segment, set<Event> & events);
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set);

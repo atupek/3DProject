@@ -3,6 +3,7 @@
 #include "select_bridge.h"
 #include "bridge.h"
 #include <limits> //for infinity
+#include "event.h"
 //#include "pillar.h"
 //#include "cube_primitive.h"
 
@@ -14,7 +15,7 @@ set<Anchoring_Segment> segments;
 //vector<Pillar> scad_pillars;
 //vector<Cube_Primitive> scad_cubes;
 vector<Point> active_points_vec;
-//vector<Event> active_events;
+set<Event> active_events;
 
 vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
@@ -69,7 +70,11 @@ int main()
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
 	cout << "Anchoring segments size: "  << segments.size() << endl;
-	//create_events();
+	for(auto i = segments.begin(); i != segments.end(); i++)
+	{
+		create_events(*i, active_events);
+	}
+	cout << "Events size: " << active_events.size() << endl;
 
 	//generate_scaffolding1(active_points_vec);
 	
