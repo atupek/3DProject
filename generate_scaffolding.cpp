@@ -63,13 +63,13 @@ void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
 	//cout << "A LINE:" << endl;
 	Anchoring_Segment new_segment(pt, slope, true);
 	anchor_segments.insert(new_segment);
-	new_segment.print_coords(cout);
+	//new_segment.print_coords(cout);
 
 	Anchoring_Segment new_segment1(pt, slope, false);
 	anchor_segments.insert(new_segment1);
-	new_segment1.print_coords(cout);
+	//new_segment1.print_coords(cout);
 
-	cout << "(in draw line)Anchoring segment size: " << anchor_segments.size() << endl;
+	//cout << "(in draw line)Anchoring segment size: " << anchor_segments.size() << endl;
 
 	//for testing union_sets:
 	//test_seg.insert(new_segment1);
@@ -105,10 +105,43 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 }
 
 
-void create_events(Anchoring_Segment _segment, set<Event> & events)
+void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 {
 	cout << "CREATE EVENTS CALLED" << endl;
+
+	for(auto i = _segments.begin(); i != _segments.end(); i++)
+	{
+		Event new_event(i->endpt1);
+		new_event.event_segments.push_back(*i);
+		auto set_it = events.find(new_event);
+		if(set_it != events.end()) // if it's already in event set, add segment to its vector of segments
+		{
+			cout << "event found" << endl;
+			//*set_it->event_segments.push_back(*i); //WHY THIS NO WORK?!?!?
+		}
+		else // if it's not already in event set, then add it
+		{
+			events.insert(new_event);
+		}
+	}
+	//Event new_event(_segment.endpt1);
+	//new_event.event_segments.push_back(_segment);
+	//events.insert(new_event);
+	/*for(auto i = _segments.begin(); i != _segments.end(); i++)
+	{
+		for(auto j = i++; j!= _segments.end(); j++)
+		{
+			if(i->endpt1 == j->endpt1)
+			{
+				//cout << "***************MATCH*****************" << endl;
+				//i->endpt1.print_coords(cout);
+				//j->endpt1.print_coords(cout);
+			}
+		}
+
+	}*/
 	//get intersecting points out of the anchoring segment
+	/*cout << "Size of intersected points: " << _segment.intersected_points.size() << endl;
 	for(auto i = _segment.intersected_points.begin(); i != _segment.intersected_points.end(); i++)
 	{
 		//events.push(*i);
@@ -122,8 +155,35 @@ void create_events(Anchoring_Segment _segment, set<Event> & events)
 		//events.push(i->p2);
 		events.insert(i->p1);
 		events.insert(i->p2);
-	}
+	}*/
 }
+
+/*
+void condense_events(set<Event> &events, set<Event> &condensed_events)
+{
+	cout << "IN CONDENSE EVENTS" << endl;
+	for(auto i = events.begin(); i != events.end()--; i++)
+	{
+		for(auto j = i++; j != events.end(); j++)
+		{
+			//TODO: DO I ALSO NEED TO CHECK FOR Z HERE?
+			if(i->p1.x == j->p1.x && i->p1.y == j->p1.y)
+			{
+				cout << "MATCH" << endl;
+				cout << "i point: " << i->p1.x << ", " << i->p1.y << endl;
+				cout << "j point: " << j->p1.x << ", " << j->p1.y << endl;
+				for(auto k = j->event_segments.begin(); k != j->event_segments.end(); k++)
+				{
+					cout << "CONDENSING EVENTS ... " << endl;
+					Anchoring_Segment new_seg(*k);
+					//i->event_segments.push_back(new_seg);//WHY THIS NO WORK?!?!?!
+				}
+				//events.erase(j);
+				//condensed_events.insert(*i);
+			}
+		}
+	}
+}*/
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set)

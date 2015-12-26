@@ -31,7 +31,12 @@ ostream & operator << (ostream & os, const Event & obj)
 
 bool operator < (const Event & lhs, const Event & rhs)
 {
-    return lhs.p1.x < rhs.p1.x;
+	return (lhs.p1.x < rhs.p1.x);
+	/*if(!(lhs.p1.x > rhs.p1.x))
+	{
+		return true;
+	}
+    return false;*/
 }
 
 bool operator > (const Event & lhs, const Event & rhs)
