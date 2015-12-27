@@ -65,6 +65,7 @@ void make_sweep_vector()
 
 int main()
 {
+	set<Point> points_for_alg3;
 	int i = 1;
 	make_point_set();
 	//make_point_vector();
@@ -76,6 +77,15 @@ int main()
 	create_events(segments, active_events);
 	
 	cout << "Events size: " << active_events.size() << endl;
+
+	//find intersections between sweep plane and anchoring segments at each event(which is a point)
+	//these intersections are the points sent to select bridge
+
+	cout << "points for alg3 size: " << points_for_alg3.size() << endl;
+
+	find_intersections(active_events, slope_of_sweep, i, points_for_alg3);
+
+	cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
 
 	/*for(auto i = active_events.begin(); i != active_events.end(); i++)
 	{

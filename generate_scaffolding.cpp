@@ -117,6 +117,7 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 		if(set_it != events.end()) // if it's already in event set, add segment to its vector of segments
 		{
 			cout << "event found" << endl;
+			cout << "Event segment size: " << set_it->event_segments.size() << endl;
 			//*set_it->event_segments.push_back(*i); //WHY THIS NO WORK?!?!?
 		}
 		else // if it's not already in event set, then add it
@@ -124,66 +125,75 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 			events.insert(new_event);
 		}
 	}
-	//Event new_event(_segment.endpt1);
-	//new_event.event_segments.push_back(_segment);
-	//events.insert(new_event);
-	/*for(auto i = _segments.begin(); i != _segments.end(); i++)
-	{
-		for(auto j = i++; j!= _segments.end(); j++)
-		{
-			if(i->endpt1 == j->endpt1)
-			{
-				//cout << "***************MATCH*****************" << endl;
-				//i->endpt1.print_coords(cout);
-				//j->endpt1.print_coords(cout);
-			}
-		}
-
-	}*/
-	//get intersecting points out of the anchoring segment
-	/*cout << "Size of intersected points: " << _segment.intersected_points.size() << endl;
-	for(auto i = _segment.intersected_points.begin(); i != _segment.intersected_points.end(); i++)
-	{
-		//events.push(*i);
-		events.insert(*i);
-		cout << "Event inserted" << endl;
-	}
-	//get intersecting bridge points out of the anchoring segment
-	for(auto i = _segment.intersected_bridges.begin(); i != _segment.intersected_bridges.end(); i++)
-	{
-		//events.push(i->p1);
-		//events.push(i->p2);
-		events.insert(i->p1);
-		events.insert(i->p2);
-	}*/
 }
 
-/*
-void condense_events(set<Event> &events, set<Event> &condensed_events)
+double calculate_x_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
-	cout << "IN CONDENSE EVENTS" << endl;
-	for(auto i = events.begin(); i != events.end()--; i++)
+	double numerator = y_intercept2 - y_intercept1;
+	double denominator = slope1 - slope2;
+	return numerator/denominator;
+}
+
+double calculate_y_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
+{
+	double numerator = (y_intercept1 * slope2) - (y_intercept2 * slope1);
+	double denominator = slope2 - slope1;
+	return numerator/denominator;
+
+}
+
+void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> intersect_pts)
+{
+	double sweep_slope = sweep_directions[sweep_index];
+	//find y-intercept of line at point of event
+	//then find y-intercept of anchoring segment line
+	//then find intersection of both lines
+	//if that intersection point is between endpoint of the anchoring segments
+	//then add that intersection point to the list of points sent to algorithm 3
+	for(auto i = events.begin(); i != events.end(); i++)
 	{
-		for(auto j = i++; j != events.end(); j++)
+		//line 0
+		double point_x = i->p1.x;
+		double point_y = i->p1.y;
+		double y_intercept = point_y - sweep_slope * point_x;
+		//equation of line at the event point:
+		// y = sweep_slope * x + y_intercept
+		//now go through each anchoring segment in the set of events and find out if they intersect
+		for(auto j = events.begin(); j != events.end(); j++)
 		{
-			//TODO: DO I ALSO NEED TO CHECK FOR Z HERE?
-			if(i->p1.x == j->p1.x && i->p1.y == j->p1.y)
+			for(auto k = j->event_segments.begin(); k != j->event_segments.end(); k++)
 			{
-				cout << "MATCH" << endl;
-				cout << "i point: " << i->p1.x << ", " << i->p1.y << endl;
-				cout << "j point: " << j->p1.x << ", " << j->p1.y << endl;
-				for(auto k = j->event_segments.begin(); k != j->event_segments.end(); k++)
+				//line 1
+				double segment_x = k->endpt1.x;
+				double segment_y = k->endpt1.y;
+				double segment_slope = k->slope;
+				double segment_y_intercept = segment_y - segment_slope * segment_x;
+				double x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+				double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+
+				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
+				//check that it is within the endpoints of the anchoring segment
+				//shit, first need to check if endpt1 < endpt2
+				if(k->endpt1.x && k->endpt2.x)
 				{
-					cout << "CONDENSING EVENTS ... " << endl;
-					Anchoring_Segment new_seg(*k);
-					//i->event_segments.push_back(new_seg);//WHY THIS NO WORK?!?!?!
+					if((x_int > k->endpt1.x) && (x_int < k->endpt2.x) && (y_int > k->endpt1.y) && (y_int < k->endpt2.y))
+					{
+						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
+						intersect_pts.insert(new_point);
+					}
 				}
-				//events.erase(j);
-				//condensed_events.insert(*i);
+				else
+				{
+					if((x_int < k->endpt1.x) && (x_int > k->endpt2.x) && (y_int < k->endpt1.y) && (y_int > k->endpt2.y))
+					{
+						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
+						intersect_pts.insert(new_point);
+					}
+				}
 			}
 		}
 	}
-}*/
+}
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set)
