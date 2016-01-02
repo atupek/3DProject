@@ -105,6 +105,7 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 }
 
 
+//TODO: figure out why can't push_back to vector of segments when event already exists
 void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 {
 	//cout << "CREATE EVENTS CALLED" << endl;
@@ -158,6 +159,11 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 		double y_intercept = point_y - sweep_slope * point_x;
 		//equation of line at the event point:
 		// y = sweep_slope * x + y_intercept
+		
+		//for debug
+		cout << "****************************EQUATION OF LINE: " << endl;
+		cout << "y = " << sweep_slope << " * x + " << y_intercept << endl;	
+
 		//now go through each anchoring segment in the set of events and find out if they intersect
 		for(auto j = events.begin(); j != events.end(); j++)
 		{
@@ -171,7 +177,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				double x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 				double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 
-				//cout << "Intersection at: " << x_int << ", " << y_int << endl;
+				cout << "Intersection at: " << x_int << ", " << y_int << endl;
 
 				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 				//check that it is within the endpoints of the anchoring segment
@@ -186,7 +192,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					//for debug...
 					//Point temp_point(0, 0, 0, 0, false);
 					//intersect_pts.insert(temp_point);
-					cout << "GOT HERE" << endl;
+					//cout << "GOT HERE" << endl;
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int >= k->endpt1.y) && (y_int <= k->endpt2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
@@ -196,7 +202,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				}
 				else
 				{
-					cout << "GOT HERE, TOO" << endl;
+					//cout << "GOT HERE, TOO" << endl;
 					//for debug...
 					//Point temp_point(0, 0, 0, 0, false);
 					//intersect_pts.insert(temp_point);
@@ -207,10 +213,13 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					//cout << "y_int: " << y_int << "\tk->endpt2.y: " << k->endpt2.y << endl << endl;
 
 					//swap endpoints 1 and 2...
+					//since I don't want to write swap for the Point class
+					//we'll do it using temps...
 					Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z, 0, false);
 					Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z, 0, false);
 					
 					//if((x_int <= k->endpt1.x) && (x_int >= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
+					//using the one below for now
 					if((x_int <= temp_1.x) && (x_int >= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z, 0, false);

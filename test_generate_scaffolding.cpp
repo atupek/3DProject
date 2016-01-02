@@ -21,7 +21,7 @@ set<Event> condensed_events;
 vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
 
-//for testing...
+/*//for testing...
 void make_point_set()
 {
 	for(int i = 0; i<10; i++)
@@ -37,6 +37,18 @@ void make_point_set()
 			active_points.insert(new_point);
 		}
 	}
+}*/
+
+void make_point_set()
+{
+	Point p1(19, 9, 15, 0, false);
+	Point p2(11, 15, 20, 0, false);
+	Point p3(25, 20, 18, 0, false);
+	Point p4(18, 24, 17, 0, false);
+	active_points.insert(p1);
+	active_points.insert(p2);
+	active_points.insert(p3);
+	active_points.insert(p4);
 }
 
 void make_point_vector()
@@ -60,13 +72,14 @@ void make_sweep_vector()
 {
 	slope_of_sweep.push_back(0.0); // horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
 	slope_of_sweep.push_back(1.0); //45 degrees
+	slope_of_sweep.push_back(2.0);
 	slope_of_sweep.push_back(inf); // vertical
 }
 
 int main()
 {
 	set<Point> points_for_alg3;
-	int i = 1;
+	int i = 2;
 	make_point_set();
 	//make_point_vector();
 	make_sweep_vector();
@@ -86,6 +99,13 @@ int main()
 	find_intersections(active_events, slope_of_sweep, i, points_for_alg3);
 
 	cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
+
+	/*//for debug
+	cout << "points being sent to alg3: " << endl;
+	for(auto i = points_for_alg3.begin(); i != points_for_alg3.end(); i++)
+	{
+		i->print_coords(cout);
+	}*/
 
 	/*for(auto i = active_events.begin(); i != active_events.end(); i++)
 	{
