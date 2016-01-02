@@ -107,7 +107,7 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 
 void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 {
-	cout << "CREATE EVENTS CALLED" << endl;
+	//cout << "CREATE EVENTS CALLED" << endl;
 
 	for(auto i = _segments.begin(); i != _segments.end(); i++)
 	{
@@ -116,8 +116,8 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 		auto set_it = events.find(new_event);
 		if(set_it != events.end()) // if it's already in event set, add segment to its vector of segments
 		{
-			cout << "event found" << endl;
-			cout << "Event segment size: " << set_it->event_segments.size() << endl;
+			//cout << "event found" << endl;
+			//cout << "Event segment size: " << set_it->event_segments.size() << endl;
 			//*set_it->event_segments.push_back(*i); //WHY THIS NO WORK?!?!?
 		}
 		else // if it's not already in event set, then add it
@@ -142,13 +142,13 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 
 }
 
-void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> intersect_pts)
+void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> &intersect_pts)
 {
 	double sweep_slope = sweep_directions[sweep_index];
 	//find y-intercept of line at point of event
 	//then find y-intercept of anchoring segment line
 	//then find intersection of both lines
-	//if that intersection point is between endpoint of the anchoring segments
+	//if that intersection point is between endpoints of the anchoring segments
 	//then add that intersection point to the list of points sent to algorithm 3
 	for(auto i = events.begin(); i != events.end(); i++)
 	{
@@ -171,23 +171,51 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				double x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 				double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 
+				//cout << "Intersection at: " << x_int << ", " << y_int << endl;
+
 				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 				//check that it is within the endpoints of the anchoring segment
-				//shit, first need to check if endpt1 < endpt2
-				if(k->endpt1.x && k->endpt2.x)
+				//first need to check if endpt1 < endpt2
+				if(k->endpt1.x < k->endpt2.x && k->endpt1.y < k->endpt2.y)
 				{
-					if((x_int > k->endpt1.x) && (x_int < k->endpt2.x) && (y_int > k->endpt1.y) && (y_int < k->endpt2.y))
+					//cout << "x_int: " << x_int << "\tk->endpt1.x: " << k->endpt1.x << endl;
+					//cout << "x_int: " << x_int << "\tk->endpt2.x: " << k->endpt2.x << endl;
+					//cout << "y_int: " << y_int << "\tk->endpt1.y: " << k->endpt1.y << endl;
+					//cout << "y_int: " << y_int << "\tk->endpt2.y: " << k->endpt2.y << endl << endl;
+
+					//for debug...
+					//Point temp_point(0, 0, 0, 0, false);
+					//intersect_pts.insert(temp_point);
+					cout << "GOT HERE" << endl;
+					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int >= k->endpt1.y) && (y_int <= k->endpt2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
 						intersect_pts.insert(new_point);
+						cout << "Point added in" << endl;
 					}
 				}
 				else
 				{
-					if((x_int < k->endpt1.x) && (x_int > k->endpt2.x) && (y_int < k->endpt1.y) && (y_int > k->endpt2.y))
+					cout << "GOT HERE, TOO" << endl;
+					//for debug...
+					//Point temp_point(0, 0, 0, 0, false);
+					//intersect_pts.insert(temp_point);
+
+					//cout << "x_int: " << x_int << "\tk->endpt1.x: " << k->endpt1.x << endl;
+					//cout << "x_int: " << x_int << "\tk->endpt2.x: " << k->endpt2.x << endl;
+					//cout << "y_int: " << y_int << "\tk->endpt1.y: " << k->endpt1.y << endl;
+					//cout << "y_int: " << y_int << "\tk->endpt2.y: " << k->endpt2.y << endl << endl;
+
+					//swap endpoints 1 and 2...
+					Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z, 0, false);
+					Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z, 0, false);
+					
+					//if((x_int <= k->endpt1.x) && (x_int >= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
+					if((x_int <= temp_1.x) && (x_int >= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
 						intersect_pts.insert(new_point);
+						cout << "Another point added in" << endl;
 					}
 				}
 			}
