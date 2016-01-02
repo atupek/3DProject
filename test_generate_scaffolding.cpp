@@ -76,14 +76,29 @@ void make_sweep_vector()
 	slope_of_sweep.push_back(inf); // vertical
 }
 
+
 int main()
 {
+	/*//for bitmap debug
+	bitmap_image test_image(200, 200);
+	test_image.set_all_channels(255,255,255); //set background to white
+	image_drawer draw(test_image);*/
+
 	set<Point> points_for_alg3;
-	int i = 2;
+	int i = 1;
 	make_point_set();
+
 	//make_point_vector();
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
+
+	/*//for debug: print members of anchoring segments:
+	cout << "SEGMENT MEMBERS: " << endl;
+	for(auto i = segments.begin(); i != segments.end(); i++)
+	{
+		i->print_coords(cout);
+	}*/
+
 	//cout << "Anchoring segments size: "  << segments.size() << endl;
 	//create events from anchoring segments
 
@@ -94,18 +109,25 @@ int main()
 	//find intersections between sweep plane and anchoring segments at each event(which is a point)
 	//these intersections are the points sent to select bridge
 
+	/*//for debug, print event info:
+	cout << "EVENT MEMBERS: " << endl;
+	for(auto i = active_events.begin(); i != active_events.end(); i++)
+	{
+		i->print_event_members(cout);
+	}*/
+
 	cout << "points for alg3 size: " << points_for_alg3.size() << endl;
 
 	find_intersections(active_events, slope_of_sweep, i, points_for_alg3);
 
 	cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
 
-	/*//for debug
+	//for debug
 	cout << "points being sent to alg3: " << endl;
 	for(auto i = points_for_alg3.begin(); i != points_for_alg3.end(); i++)
 	{
 		i->print_coords(cout);
-	}*/
+	}
 
 	/*for(auto i = active_events.begin(); i != active_events.end(); i++)
 	{
@@ -158,5 +180,6 @@ int main()
 	cout << "test_seg size after union: " << test_seg.size() << endl;
 	difference_sets(test_seg, segments);
 	cout << "test_seg size after difference: " << test_seg.size() << endl;*/
+
 	return 0;
 }
