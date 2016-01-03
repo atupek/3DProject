@@ -21,13 +21,13 @@ Point::Point(double _x, double _y)
     z=0.0;
 }
 
-Point::Point(double _x, double _y, double _extrude_amt)
+Point::Point(double _x, double _y, double _z)
 {
     x = _x;
     y = _y;
-    extrude_amt = _extrude_amt;
+    z = _z;
+    extrude_amt = 0.0;
     perimeter = false;
-    z=0.0;
 }
 
 Point::Point(double _x, double _y, double _extrude_amt, bool _perim)
