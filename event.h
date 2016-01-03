@@ -22,7 +22,7 @@ public:
     Event(Point _p1, vector<Anchoring_Segment> _event_segments);
 
     //function for sending bridge to ostream for printing
-    void print_event_members(ostream &)const;
+    void print_event_members(ostream &) const;
 
     friend ostream & operator<<(ostream &, const Event &);
     friend bool operator < (const Event & lhs, const Event & rhs);
