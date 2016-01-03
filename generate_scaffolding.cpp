@@ -37,7 +37,6 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 	for(auto i = point_set.begin(); i != point_set.end(); i++)
 	{
 		draw_line(*i, plane, anchor_segments);
-		//new_create_events(*i, plane); //NO, NO, NO, NO, NO! get rid of new_create_events
 	}
 	for(auto i = bridge_set.begin(); i != bridge_set.end(); i++)
 	{
@@ -67,12 +66,25 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 		auto set_it = events.find(new_event);
 		if(set_it != events.end()) // if it's already in event set, add segment to its vector of segments
 		{
-			//cout << "event found" << endl;
-			//cout << "Event segment size: " << set_it->event_segments.size() << endl;
-			//*set_it->event_segments.push_back(*i); //WHY THIS NO WORK?!?!?
+			cout << "event found" << endl;
+			
+			//can't change items in a set, so have to create a new one
+			Event changed_event(*set_it); //added this line
+			
+			//and then erase the old one
+			events.erase(*set_it);//added this line
+			cout << "Event segment size before adding new segment: " << changed_event.event_segments.size() << endl;
+			
+			//and add the segment to the new one
+			changed_event.event_segments.push_back(*i);//added this line
+			cout << "Event segment size after adding new segment: " << changed_event.event_segments.size() << endl;
+			
+			//and then insert the new one into the set
+			events.insert(changed_event);//added this line
 		}
 		else // if it's not already in event set, then add it
 		{
+			cout << "new event added" << endl;
 			events.insert(new_event);
 		}
 	}

@@ -56,18 +56,19 @@ int main()
 	}
 
 	//weird.  so when I iterate through, it doesn't work, but when I just add it, it does work
-	for(auto i = test_events.begin(); i != test_events.end(); i++)
+	/*for(auto i = test_events.begin(); i != test_events.end(); i++)
 	{
 		Anchoring_Segment test_seg;
 		i->event_segments.push_back(test_seg);
-	}
+	}*/
 
 	//weird.  so when I iterate through, it doesn't work, but when I just add it, it does work
 	Anchoring_Segment test_seg3;
 	test_event.event_segments.push_back(test_seg3);
 	cout << "Test event size after: " << test_event.event_segments.size() << endl;
 
-	/*
+
+	cout << "Event size before loop: " << events.size() << endl;
 	//this is create_events from generate_scaffolding.cpp
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
@@ -75,25 +76,33 @@ int main()
 		new_event.event_segments.push_back(*i);
 		
 		//trying to figure out why stuff doesn't work...
-		Anchoring_Segment this_seg;
-		new_event.event_segments.push_back(this_seg);
+		//Anchoring_Segment this_seg;
+		//new_event.event_segments.push_back(this_seg);
 		
 		auto set_it = events.find(new_event);
 		if(set_it != events.end()) // if it's already in event set, add segment to its vector of segments
 		{
 			cout << "event found" << endl;
-			cout << "Event segment size: " << set_it->event_segments.size() << endl;
-			//Anchoring_Segment new_seg;
-			//*set_it->event_segments.push_back(new_seg);
-			//*set_it->event_segments.push_back(*i); //WHY THIS NO WORK?!?!?
+			//cout << "Event segment size: " << set_it->event_segments.size() << endl;
+			//can't change items in a set, so have to create a new one
+			Event changed_event(*set_it); //added this line
+			//and then erase the old one
+			events.erase(*set_it);//added this line
+			cout << "Event segment size before adding new segment: " << changed_event.event_segments.size() << endl;
+			//and add the segment to the new one
+			changed_event.event_segments.push_back(*i);//added this line
+			cout << "Event segment size after adding new segment: " << changed_event.event_segments.size() << endl;
+			//and then insert the new one into the set
+			events.insert(changed_event);//added this line
 		}
 		else // if it's not already in event set, then add it
 		{
 			cout << "new event added" << endl;
 			events.insert(new_event);
 		}
-	}*/
+	}
 
+	cout << "Event size after loop: " << events.size() << endl;
 	cout << "done with test" << endl;
 	return 0;
 }
