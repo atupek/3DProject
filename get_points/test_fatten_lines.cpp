@@ -36,52 +36,52 @@ void populate_test_model(pixel_layer &layer)
 //okay, this is some ugly hard-coding...
 void populate_point_vec()
 {
-	Point p1(0.0, 0.0, 0.0, true);
+	Point p1(0.0, 0.0, 0.0);
 	test_point_vec.push_back(p1);
-	Point p2(5.0, 5.0, 0.0, true);
+	Point p2(5.0, 5.0, 0.0);
 	test_point_vec.push_back(p2);
-	Point p3(5.0, 7.0, 0.0, true);
+	Point p3(5.0, 7.0, 0.0);
 	test_point_vec.push_back(p3);
-	Point p4(9.0, 7.0, 0.0, true);
+	Point p4(9.0, 7.0, 0.0);
 	test_point_vec.push_back(p4);
-	Point p5(9.0, 10.0, 0.0, true);
+	Point p5(9.0, 10.0, 0.0);
 	test_point_vec.push_back(p5);
-	Point p6(11.0, 15.0, 0.0, true);
+	Point p6(11.0, 15.0, 0.0);
 	test_point_vec.push_back(p6);
-	Point p7(12.0, 8.0, 0.0, true);
+	Point p7(12.0, 8.0, 0.0);
 	test_point_vec.push_back(p7);
-	Point p8(16.0, 16.0, 0.0, true);
+	Point p8(16.0, 16.0, 0.0);
 	test_point_vec.push_back(p8);
-	Point p9(20.0, 2.0, 0.0, true);
+	Point p9(20.0, 2.0, 0.0);
 	test_point_vec.push_back(p9);
-	Point p10(29.0, 29.0, 0.0, true);
+	Point p10(29.0, 29.0, 0.0);
 	test_point_vec.push_back(p10);
 }
 
 void populate_point_vec_1()
 {
-	Point p11(0.0, 0.0, 0.0, true);
+	Point p11(0.0, 0.0, 0.0);
 	test_point_vec.push_back(p11);
-	Point p12(1.0, 0.0, 0.0, true);
+	Point p12(1.0, 0.0, 0.0);
 	test_point_vec.push_back(p12);
-	Point p13(0.0, 1.0, 0.0, true);
+	Point p13(0.0, 1.0, 0.0);
 	test_point_vec.push_back(p13);
-	Point p14(1.0, 1.0, 0.0, true);
+	Point p14(1.0, 1.0, 0.0);
 	test_point_vec.push_back(p14);
 
-	Point p15(10.0, 10.0, 0.0, true);
+	Point p15(10.0, 10.0, 0.0);
 	test_point_vec.push_back(p15);
-	Point p16(10.0, 11.0, 0.0, true);
+	Point p16(10.0, 11.0, 0.0);
 	test_point_vec.push_back(p16);
-	Point p17(11.0, 10.0, 0.0, true);
+	Point p17(11.0, 10.0, 0.0);
 	test_point_vec.push_back(p17);
-	Point p18(11.0, 11.0, 0.0, true);
+	Point p18(11.0, 11.0, 0.0);
 	test_point_vec.push_back(p18);
 
-	Point p19(2.0, 2.0, 0.0, true);
+	Point p19(2.0, 2.0, 0.0);
 	test_point_vec.push_back(p19);
 
-	Point p20(12.0, 12.0, 0.0, true);
+	Point p20(12.0, 12.0, 0.0);
 	test_point_vec.push_back(p20);
 }
 

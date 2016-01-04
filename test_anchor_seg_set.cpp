@@ -13,12 +13,12 @@ void create_points(int num_pts, vector<Point> & pt_vec)
 	{
 		if(i%2==0)
 		{
-			Point new_pt(i, i, i*.2, 0, 0);
+			Point new_pt(i, i, i*.2);
 			pt_vec.push_back(new_pt);
 		}
 		else
 		{
-			Point new_pt(i, i, .4, 0, 0);
+			Point new_pt(i, i, .4);
 			pt_vec.push_back(new_pt);
 		}
 	}

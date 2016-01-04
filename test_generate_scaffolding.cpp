@@ -28,12 +28,12 @@ void make_point_set()
 	{
 		if(i%2==0)
 		{
-			Point new_point(i, i, .8*i, i+10, true);
+			Point new_point(i, i, .8*i);
 			active_points.insert(new_point);
 		}
 		else
 		{
-			Point new_point(i, i, .8, i+10, true);
+			Point new_point(i, i, .8);
 			active_points.insert(new_point);
 		}
 	}
@@ -41,10 +41,10 @@ void make_point_set()
 
 void make_point_set()
 {
-	Point p1(19, 9, 15, 0, false);
-	Point p2(11, 15, 20, 0, false);
-	Point p3(25, 20, 18, 0, false);
-	Point p4(18, 24, 17, 0, false);
+	Point p1(19, 9, 15);
+	Point p2(11, 15, 20);
+	Point p3(25, 20, 18);
+	Point p4(18, 24, 17);
 	active_points.insert(p1);
 	active_points.insert(p2);
 	active_points.insert(p3);
@@ -57,12 +57,12 @@ void make_point_vector()
 	{
 		if(i%2==0)
 		{
-			Point new_point(i, i, .8*i, i+10, true);
+			Point new_point(i, i, .8*i);
 			active_points_vec.push_back(new_point);
 		}
 		else
 		{
-			Point new_point(i, i, .8, i+10, true);
+			Point new_point(i, i, .8);
 			active_points_vec.push_back(new_point);
 		}
 	}

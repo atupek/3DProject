@@ -17,7 +17,7 @@ void make_points_vec()
 {
 	for(int i = 0; i<10; i++)
 	{
-		Point new_point(i, i, i+10, true);
+		Point new_point(i, i, i+10);
 		point_vec.push_back(new_point);
 		cout << "new point: ";
 		new_point.print_all(cout);
@@ -37,7 +37,7 @@ void make_points_queue()
 {
 	for(int i = 0; i<10; i++)
 	{
-		Point new_point(i, i, i+10, true);
+		Point new_point(i, i, i+10);
 		point_q.emplace(new_point);
 		cout << "new point in queue: ";
 		new_point.print_all(cout);

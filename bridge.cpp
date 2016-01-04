@@ -3,7 +3,7 @@
 
 Bridge::Bridge()
 {
-	Point this_point(0.0, 0.0, 0.0, true);
+	Point this_point(0.0, 0.0, 0.0);
 	p1 = this_point;
 	p2 = this_point;
 	height = 0;

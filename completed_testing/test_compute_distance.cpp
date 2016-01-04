@@ -12,7 +12,7 @@ void populate_point_vector()
 {
 	for(int i = 0; i <10; i++)
 	{
-		Point new_point(i, i*10, 0, true);
+		Point new_point(i, i*10, 0);
 		point_vec.push_back(new_point);
 	}
 }

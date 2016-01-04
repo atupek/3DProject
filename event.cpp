@@ -3,7 +3,7 @@
 
 Event::Event()
 {
-	Point this_point(0.0, 0.0, 0.0, 0.0, true);
+	Point this_point(0.0, 0.0, 0.0);
 	p1 = this_point;
 	event_segments = {};
 

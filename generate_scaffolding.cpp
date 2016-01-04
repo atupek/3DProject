@@ -161,7 +161,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 					{
-						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
+						Point new_point(x_int, y_int, k->endpt1.z);
 						intersect_pts.insert(new_point);
 						cout << "Point added in" << endl;
 					}
@@ -178,14 +178,14 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					//swap endpoints 1 and 2...
 					//since I don't want to write swap for the Point class
 					//we'll do it using temps...
-					Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z, 0, false);
-					Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z, 0, false);
+					Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
+					Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
 					
 					//if((x_int <= k->endpt1.x) && (x_int >= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 					//using the one below for now
 					if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
 					{
-						Point new_point(x_int, y_int, k->endpt1.z, 0, false);
+						Point new_point(x_int, y_int, k->endpt1.z);
 						intersect_pts.insert(new_point);
 						cout << "Another point added in" << endl;
 					}

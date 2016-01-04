@@ -16,48 +16,45 @@ set<Anchoring_Segment> make_toy_example()
 	cout << "making toy example" << endl;
 	set<Anchoring_Segment> toy_set;
 
-	Point point0(9, 9, 15, 0, 0);
-	Point point1(19, 9, 15, 0, 0);
-	Point point2(19, 9, 15, 0, 0);
+	Point point0(9, 9, 15);
+	Point point1(19, 9, 15);
+	Point point2(19, 9, 15);
 	Anchoring_Segment segment0;
 	segment0.endpt1 = point0;
 	segment0.endpt2 = point1;
 	segment0.intersect_pt = point2;
 	segment0.height = point0.z;
 	
-	Point point3(19, 9, 15, 0, 0);
-	Point point4(29, 9, 15, 0, 0);
-	Point point5(19, 9, 15, 0, 0);
+	Point point3(19, 9, 15);
+	Point point4(29, 9, 15);
+	Point point5(19, 9, 15);
 	Anchoring_Segment segment1;
 	segment1.endpt1 = point3;
 	segment1.endpt2 = point4;
 	segment1.intersect_pt = point5;
 	segment1.height = point3.z;
 
-	Point point6(11, 15, 20, 0, 0);
-	Point point7(26, 15, 20, 0, 0);
-	Point point8(19, 15, 20, 0, 0);
-	//Point point8(20, 15, 20, 0, 0);
+	Point point6(11, 15, 20);
+	Point point7(26, 15, 20);
+	Point point8(19, 15, 20);
 	Anchoring_Segment segment2;
 	segment2.endpt1 = point6;
 	segment2.endpt2 = point7;
 	segment2.intersect_pt = point8;
 	segment2.height = point6.z;
 
-	Point point9(15, 20, 18, 0, 0);
-	Point point10(25, 20, 18, 0, 0);
-	Point point11(19, 20, 18, 0, 0);
-	//Point point11(21, 20, 18, 0, 0);
+	Point point9(15, 20, 18);
+	Point point10(25, 20, 18);
+	Point point11(19, 20, 18);
 	Anchoring_Segment segment3;
 	segment3.endpt1 = point9;
 	segment3.endpt2 = point10;
 	segment3.intersect_pt = point11;
 	segment3.height = point9.z;
 
-	Point point12(18, 24, 17, 0, 0);
-	Point point13(29, 24, 17, 0, 0);
-	Point point14(19, 24, 17, 0, 0);
-	//Point point14(22, 24, 17, 0, 0);
+	Point point12(18, 24, 17);
+	Point point13(29, 24, 17);
+	Point point14(19, 24, 17);
 	Anchoring_Segment segment4;
 	segment4.endpt1 = point12;
 	segment4.endpt2 = point13;

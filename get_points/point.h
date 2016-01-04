@@ -25,11 +25,7 @@ public:
 
     Point(double _x, double _y, double _z);
 
-    //test_fatten_lines uses this constructor to create test points
-    //testBresenham uses this construtor to create test points
-    //testPoint uses this construtor to create test points
-    //test_compute_distance uses this constructor to create test points
-    //bridge.cpp bridge constructor uses this constructor
+    //several files use this constructor...
     Point(double _x, double _y, double _extrude_amt, bool _perim);
 
     //DO NOT CHANGE THIS ONE TO FIX TECHNICAL DEBT, ALMOST ALL USE THIS CONSTRUCTOR
