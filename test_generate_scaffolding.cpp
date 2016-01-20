@@ -129,6 +129,16 @@ int main()
 		i->print_coords(cout);
 	}
 
+	//*******************************WHERE I AM NOW:
+	//algorithm3 takes set of anchoring segments, not set of points, so need to adjust
+	//find intersections function to return set of anchoring segments, not set of points
+	//algorithm 3 then returns a Bridge
+	//then that bridge's score is compared to the best bridge's score
+	//if it's better, then remove the anchoring segments from the set of active elements
+	//then take the set of elements supported by the best bridge
+	//and snap them to the bridge
+	//then union those elements with the set of active elements
+
 	/*for(auto i = active_events.begin(); i != active_events.end(); i++)
 	{
 		cout << "**************************NEW EVENT:" << endl;

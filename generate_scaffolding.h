@@ -44,7 +44,7 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 
 //Cube_Primitive make_cube_primitive(Point point1, Point point2);
 
-void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge);
+void snap(Bridge & best_bridge, set<Event> & _active_events);
 
 void generate_scaffolding(set<Point> points_needing_support);
 

@@ -77,9 +77,17 @@ int main()
 	the_best_bridge = select_bridge(toy_segment_set);
 	cout << "Let's see what the toy set produces: " << endl;
 	the_best_bridge.print_bridge_members(cout);
+	cout << endl;
+	cout << "Point 1 with z: " << endl;
+	the_best_bridge.p1.print_coords_with_z(cout);
+	cout << endl;
+	cout << "Point 2 with z: " << endl;
+	the_best_bridge.p2.print_coords_with_z(cout);
+	cout << endl;
+
 	for(auto i = the_best_bridge.supported_points.begin(); i != the_best_bridge.supported_points.end(); i++)
 	{
-		i->print_coords(cout);
+		i->print_coords_with_z(cout);
 	}
 
 	return 0;
