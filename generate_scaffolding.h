@@ -33,7 +33,8 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events);
 double calculate_x_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2);
 double calculate_y_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2);
 
-void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> &intersect_pts);
+//void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> &intersect_pts);
+void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, vector<Anchoring_Segment> &intersect_segments);
 
 //sets of segements crossing sweep plane with anchoring segments(?)
 void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & new_set);

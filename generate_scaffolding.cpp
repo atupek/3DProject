@@ -106,7 +106,8 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 }
 
 //instead of putting points into set of points, need to put them into appropriate anchoring segment's intersected points vector?
-void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> &intersect_pts)
+//void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> &intersect_pts)
+void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, vector<Anchoring_Segment> &intersect_segments)
 {
 	double sweep_slope = sweep_directions[sweep_index];
 	//find y-intercept of line at point of event
@@ -153,7 +154,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				
 				if(k->endpt1.x < k->endpt2.x)
 				{
-					cout << "IN HERE...." << endl;
+					//cout << "IN HERE...." << endl;
 					/*//for debug
 					cout << "x_int: " << x_int << "\tk->endpt1.x: " << k->endpt1.x << endl;
 					cout << "x_int: " << x_int << "\tk->endpt2.x: " << k->endpt2.x << endl;
@@ -163,16 +164,25 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z);
-						intersect_pts.insert(new_point);
-						cout << "Point added in" << endl;
-						cout << "Number of segment k's intersected points: " << k->intersected_points.size() << endl;
+						//intersect_pts.insert(new_point);
+						//cout << "Point added in" << endl;
+						Anchoring_Segment new_seg(*k);
+						cout << "New seg coords: ";
+						new_seg.print_coords(cout);
+						cout << "New point coods:";
+						new_point.print_coords(cout);
+						new_seg.intersected_points.push_back(new_point);
+						cout << "New seg interset pts: ";
+						new_seg.print_intersect_pts(cout);
+						//cout << "Number of segment k's intersected points: " << k->intersected_points.size() << endl;
 						//insert new point into segment k's vector of intersected points
 						//k->intersected_points.push_back(new_point);
+						intersect_segments.push_back(new_seg);
 					}
 				}
 				else
 				{
-					cout << "IN HERE, INSTEAD...." << endl;
+					//cout << "IN HERE, INSTEAD...." << endl;
 					/*//for debug...
 					//cout << "x_int: " << x_int << "\tk->endpt1.x: " << k->endpt1.x << endl;
 					//cout << "x_int: " << x_int << "\tk->endpt2.x: " << k->endpt2.x << endl;
@@ -190,11 +200,20 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z);
-						intersect_pts.insert(new_point);
-						cout << "Another point added in" << endl;
+						//intersect_pts.insert(new_point);
+						//cout << "Another point added in" << endl;
 						//insert new point into segment k's vector of intersected points
-						cout << "Number of segment k's intersected points: " << k->intersected_points.size() << endl;
+						//cout << "Number of segment k's intersected points: " << k->intersected_points.size() << endl;
 						//k->intersected_points.push_back(new_point);
+						Anchoring_Segment new_seg(*k);
+						cout << "New seg coords: ";
+						new_seg.print_coords(cout);
+						cout << "New point coods:";
+						new_point.print_coords(cout);
+						new_seg.intersected_points.push_back(new_point);
+						cout << "New seg interset pts: ";
+						new_seg.print_intersect_pts(cout);
+						intersect_segments.push_back(new_seg);
 					}
 				}
 			}
@@ -292,36 +311,6 @@ void snap(Bridge & best_bridge, set<Event> & _active_events)
 	_active_events.insert(new_event1);
 	_active_events.insert(new_event2);*/
 
-
-	//IGNORE ALL THIS...
-	//removes points supported by bridge from active elements set
-	//puts endpoints of bridge into active elements set
-	//but these do not get anchoring segments because the bridge is as long as it's going to be(?)
-	//which can be taken care of with an if stmt in create_anchoring_segments as to
-	//whether or not the endpt is open, if it is, then it gets anchoring segment, if not, then no anchoring segment
-	//also creates pillars to points above that are supported h(pt) to h(bridge)
-	//once both ends of bridge are snapped, creates 'cube primitive' scad primitive 
-
-	/*
-	//get points supported by bridge & create pillars
-	for(auto i = points_supported_by_bridge.begin(); i != points_supported_by_bridge.end(); i++)
-	{
-		//i->print_coords(cout);
-		//Pillar new_pillar = make_pillar(*i, dist_to_obj_above);
-		//pillars.push_back(new_pillar);
-		//new_pillar.print_all(cout);
-	}
-
-	//for testing...
-	best_bridge.pt1_open = false;
-	best_bridge.pt2_open = false;
-
-	//get endpoints of best_bridge & create 'cube' if both endpoints are closed
-	if(!best_bridge.pt1_open && !best_bridge.pt2_open)
-	{
-		//Cube_Primitive new_cube = make_cube_primitive(best_bridge.p1, best_bridge.p2);
-		//cubes.push_back(new_cube);
-	}*/
 }
 
 //input: set of points that need support from getPoints
@@ -331,82 +320,3 @@ void generate_scaffolding(set<Point> points_needing_support)
 
 }
 
-
-//set<Segment> anchoring_segments;
-//set<SweepDirections> sweep_directions;
-
-//structures needed: //ALL DONE, I THINK
-//set_of_active_elements --DONE set<Point> active_points
-//set_of_anchoring_segments --DONE set<Anchring_Segments> segments
-//queue_of_events, which is a queue_of_points  --DONE queue<Point> events
-//events needs to be refactored as a PRIORITY_QUEUE --DONE priority_queue<Point> events
-//set_of_bridges --DONE set<Bridges> bridges
-//set_of_sweep_directions (equations of sweep plane?) --DONE vector<double> slope_of_sweep
-
-//functions needed:
-//create_anchoring_segments --DONE
-//create_events --DONE
-//union_sets --DONE
-//select_bridge ******************************TODO******************************
-//difference_sets --DONE
-//snap_element_and_bridge *******************************TODO**********************************
-//check_collisions ***********************************TODO****************************
-//input: model, bridge, each connector to the elements above it
-//A, i, j, z
-//A is points (above) supported by bridge
-//i is P[i] anchoring segment
-//j is P[j] anchoring segment
-//z is layer
-//calculate_gain_and_score ********************************TODO**************************
-//input: bridge created from A, i, j, z
-//A is points (above) supported by bridge, use size() of function
-//i is P[i] anchoring segment
-//j is P[j] anchoring segment
-//z is layer
-//call calculate_score, call calculate_gain
-//add_supported *******************************TODO********************************
-//move P[j] into supported_elements container
-
-//input: a set of points that require supports AND d, the number of sweep directions
-//output: a valid bridge structure
-
-//initialize set of active elements with set of points that require supports
-
-//EVENTS ARE END POINTS & INTERSECTIONS OF ALL ANCHORING SEGMENTS - THE INTERSECTION BEING COMPUTED AFTER PROJECTION ONTO THE XY-PLANE
-//THAT IS, THEY *****IGNORE***** THE Z COORDINATE
-
-/*
-while(true)
-{
-	best_bridge = 0;  //bestBridge is null
-	for(i = 0; i < d-1; i++) //for each sweep plane
-	{
-		set_of_anchoring_segments (S) = create_anchoring_segments(active_elements (E), i_direction(i))
-		set of segments_crossing_sweep_plane (P) = 0; //empty set
-		queue_of_events (Q) = events_from_create_anchoring_segments events(S), sorted by increasing X
-		while(queue_of_events is not empty)
-		{
-			e = pop_queue //leftmost event
-			for each anchoring_segment in set_of_anchoring_segments
-				starting in e do
-				segements_crossing_sweep_plane = segments_crossing_sweep_plane union with s
-			selected = selectBridge(segments_crossing_sweep_plane)
-			if(score_of_selected_bridge > score_of_best_bridge)
-			{
-				bestBridge = selected;
-			}
-			for each anchoring_segment in set_of_anchoring_segments
-				do segments_crossing_sweep_plane = segments_crossing_sweep_plane less anchoring_segment
-		}
-	}
-	if(best_bridge = 0)
-	{
-		return;
-	}
-	C = set of elements supported by bestBridge
-	for each c in C
-	{
-		snap(c, bestBridge)
-	}
-	active_elements = active_elements unioned with bestBridge
-}*/
