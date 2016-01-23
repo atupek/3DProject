@@ -95,3 +95,14 @@ void Anchoring_Segment::print_coords(ostream & os) const
 	//}
 	//os << "intersects sweep plane at point: " << intersect_pt.x << ", " << intersect_pt.y << endl;
 }
+
+//print intersecting points
+void Anchoring_Segment::print_intersect_pts(ostream & os)const
+{
+	os << "Segment intersects sweep plane at: " << endl;
+	os << "Size of intersect point vector: " << intersected_points.size() << endl;
+	for(auto i = intersected_points.begin(); i != intersected_points.end(); i++)
+	{
+		os << i->x << ", " << i->y << ", at z= " << i->z << endl;
+	}
+}

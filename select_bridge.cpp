@@ -268,10 +268,10 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 				//cout << "checking intersection points" << endl;
 				//compute distance between i & j intersect points
 				//if less than max_distance, add intersect poitns into temp_bridge.supported_points
-				/*cout << "Points being distance checked: " << endl;
-				cout << i->intersect_pt.x << ", " << i->intersect_pt.y << endl;
-				cout << j->intersect_pt.x << ", " << j->intersect_pt.y << endl;
-				cout << "		at height z = " << this_z << endl;*/
+				//cout << "Points being distance checked: " << endl;
+				//cout << i->intersect_pt.x << ", " << i->intersect_pt.y << endl;
+				//cout << j->intersect_pt.x << ", " << j->intersect_pt.y << endl;
+				//cout << "		at height z = " << this_z << endl;
 				double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
 				//cout << "THIS DISTANCE: " << this_distance << endl;
 				if(this_distance < max_distance)

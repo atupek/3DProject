@@ -120,6 +120,7 @@ int main()
 
 	find_intersections(active_events, slope_of_sweep, i, points_for_alg3);
 
+	/*
 	cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
 
 	//for debug
@@ -127,11 +128,23 @@ int main()
 	for(auto i = points_for_alg3.begin(); i != points_for_alg3.end(); i++)
 	{
 		i->print_coords(cout);
+	}*/
+
+	cout << "segments for alg3:" << endl;
+	for(auto i = active_events.begin(); i != active_events.end(); i++)
+	{
+		for(auto j = i->event_segments.begin(); j!= i->event_segments.end(); j++)
+		{
+			j->print_coords(cout);
+			j->print_intersect_pts(cout);
+		}
 	}
 
 	//*******************************WHERE I AM NOW:
 	//algorithm3 takes set of anchoring segments, not set of points, so need to adjust
 	//find intersections function to return set of anchoring segments, not set of points
+	//HA! find_intersections returns void, but it does create a points_for_alg3 set of points
+	//let's also create a segments_for_alg3 set of anchoring_segments **************WORKING ON THIS
 	//algorithm 3 then returns a Bridge
 	//then that bridge's score is compared to the best bridge's score
 	//if it's better, then remove the anchoring segments from the set of active elements

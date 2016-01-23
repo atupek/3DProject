@@ -105,6 +105,7 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 
 }
 
+//instead of putting points into set of points, need to put them into appropriate anchoring segment's intersected points vector?
 void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Point> &intersect_pts)
 {
 	double sweep_slope = sweep_directions[sweep_index];
@@ -164,6 +165,9 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 						Point new_point(x_int, y_int, k->endpt1.z);
 						intersect_pts.insert(new_point);
 						cout << "Point added in" << endl;
+						cout << "Number of segment k's intersected points: " << k->intersected_points.size() << endl;
+						//insert new point into segment k's vector of intersected points
+						//k->intersected_points.push_back(new_point);
 					}
 				}
 				else
@@ -188,6 +192,9 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 						Point new_point(x_int, y_int, k->endpt1.z);
 						intersect_pts.insert(new_point);
 						cout << "Another point added in" << endl;
+						//insert new point into segment k's vector of intersected points
+						cout << "Number of segment k's intersected points: " << k->intersected_points.size() << endl;
+						//k->intersected_points.push_back(new_point);
 					}
 				}
 			}
@@ -253,7 +260,7 @@ void snap(Bridge & best_bridge, set<Event> & _active_events)
 	//this code below is not going to work because can't compare a point to an event...damn.
 	//so I'll need to take the point, make an event out of it, and then do the removal,
 	//but that means that I need to rewrite the < comparitor for the event class.  Damn.
-	for(auto i = 0; i < best_bridge.supported_points.size(); i++)
+	/*for(auto i = 0; i < best_bridge.supported_points.size(); i++)
 	{
 		std::set<Event>::iterator it;
 		it = _active_events.find(*i);
@@ -261,29 +268,29 @@ void snap(Bridge & best_bridge, set<Event> & _active_events)
 		{
 			_active_events.erase(it);
 		}
-	}
+	}*/
 
 	//generate pillar from supported point (x, y, z1) to point on bridge (x, y, z2)
 	//however we're going to do that...
 
 	//higher bridge endpoint needs to be brought down to z-height of lower endpoint
 	//and pillar producted to upper z-height
-	if(best_bridge.p1.z > best_bridge.p2.z) //if z of p1 > z of p2, z of p1 = z of p2
+	/*if(best_bridge.p1.z > best_bridge.p2.z) //if z of p1 > z of p2, z of p1 = z of p2
 	{
 		best_bridge.p1.z = best_bridge.p2.z;
 	}
 	else
 	{
 		best_bridge.p2.z = best_bridge.p1.z; //otherwise z of p2 >= z of p1 and z p2 should be changed to reflect that
-	}
+	}*/
 	//and now produce pillar, however we're going to do that...
 
 	//Okay, once that is done we need to add the endpoints of the bridge into the set of active events
 	//so we need to create a new event
-	Event new_event1(best_bridge.p1);
+	/*Event new_event1(best_bridge.p1);
 	Event new_event2(best_bridge.p2);
 	_active_events.insert(new_event1);
-	_active_events.insert(new_event2);
+	_active_events.insert(new_event2);*/
 
 
 	//IGNORE ALL THIS...

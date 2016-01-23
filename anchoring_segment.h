@@ -40,6 +40,7 @@ public:
 
 	//function for sending point to ostream for printing
     void print_coords(ostream &)const;
+    void print_intersect_pts(ostream &)const;
 
 	friend ostream & operator<<(ostream &, const Anchoring_Segment &);
     friend bool operator < (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs);
