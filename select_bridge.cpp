@@ -258,27 +258,18 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 	for(auto k = z_set.begin(); k != z_set.end(); k++)
 	{
 		double this_z = *k;
-		//cout << " ***************************************************************** Z value: " << this_z << endl;
 
 		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 		{
-			temp_bridge.supported_points.clear(); //should be cleared out?
+			temp_bridge.supported_points.clear(); //should be cleared out
 			for(auto j = i; j != segments_by_y.end(); j++)
 			{
-				//cout << "checking intersection points" << endl;
 				//compute distance between i & j intersect points
-				//if less than max_distance, add intersect poitns into temp_bridge.supported_points
-				//cout << "Points being distance checked: " << endl;
-				//cout << i->intersect_pt.x << ", " << i->intersect_pt.y << endl;
-				//cout << j->intersect_pt.x << ", " << j->intersect_pt.y << endl;
-				//cout << "		at height z = " << this_z << endl;
+				//if less than max_distance, add intersect points into temp_bridge.supported_points
 				double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
 				//cout << "THIS DISTANCE: " << this_distance << endl;
 				if(this_distance < max_distance)
 				{
-					//cout << "less than max distance" << endl;
-					//cout << "j->intersect_pt for inserting into point set: ";
-					//j->intersect_pt.print_coords(cout);
 					temp_bridge.supported_points.insert(j->intersect_pt);
 
 					/*//for debug...
@@ -290,26 +281,19 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 					}*/
 
 					temp_bridge.p1 = i-> intersect_pt;
-					//cout << "temp bridge endpt 1: ";
-					//i->intersect_pt.print_coords(cout);
 					
 					temp_bridge.p2 = j-> intersect_pt;
-					//cout << "temp bridge endpt 2: ";
-					//j->intersect_pt.print_coords(cout);
-					//cout << endl;
 					
-					double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());//double height, double length, int num_elements
-					//cout << "temp_gain: " << temp_gain << endl;
-					double l_max = calculate_lmax(segments);//double height, double length
-					//cout << "l_max: " << l_max << endl;
-					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);//double gain, int num_elements, double lmax
-					//cout << "temp_score: " << temp_score << endl;
+					double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
+
+					double l_max = calculate_lmax(segments);
+
+					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
+
 					if(temp_gain > 0.0 && temp_score > best_score)
-					//if(temp_score > best_score) //just until z stuff is working...
 					{
 						best_bridge = temp_bridge;
 						best_score = temp_score;
-						//cout << "*********************best bridge replaced************************************" << endl;
 					}
 				}
 			}

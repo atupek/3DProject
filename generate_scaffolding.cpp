@@ -136,39 +136,23 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				
 				if(k->endpt1.x < k->endpt2.x)
 				{
-					//cout << "IN HERE...." << endl;
-					/*//for debug
-					cout << "x_int: " << x_int << "\tk->endpt1.x: " << k->endpt1.x << endl;
-					cout << "x_int: " << x_int << "\tk->endpt2.x: " << k->endpt2.x << endl;
-					cout << "y_int: " << y_int << "\tk->endpt1.y: " << k->endpt1.y << endl;
-					cout << "y_int: " << y_int << "\tk->endpt2.y: " << k->endpt2.y << endl << endl;*/
-
+					//and check that the intersection point is between the endpoints
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z);
-						//intersect_pts.insert(new_point);
-						//cout << "Point added in" << endl;
 						Anchoring_Segment new_seg(*k);
-						/*cout << "New seg coords: ";
-						new_seg.print_coords(cout);
-						cout << "New point coods:";
-						new_point.print_coords(cout);
-						cout << "New seg intersect pts: ";
-						new_seg.print_intersect_pts(cout);
-						cout << endl;*/
 
-						//new_seg.intersected_points.push_back(new_point);
+						//check if anchoring segment is already in the set
 						auto set_it = intersect_segments.find(new_seg);
 						if(set_it != intersect_segments.end()) // if it's already in intersect_segments set
-							//add new point to its vector of intersected_points
 						{	
 							//can't change items in a set, so have to create a new one
-							Anchoring_Segment changed_segment(*set_it); //added this line
+							Anchoring_Segment changed_segment(*set_it);
 							
 							//and then erase the old one
 							intersect_segments.erase(*set_it);//added this line
 							
-							//and add the point to the new one if it's not already there
+							//and add the point to the new one's point vector if it's not already there
 							int point_already_in_vec = 0;
 							for(auto m = changed_segment.intersected_points.begin(); m != changed_segment.intersected_points.end(); m++)
 							{
@@ -177,63 +161,47 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 									point_already_in_vec++;
 								}
 							}
+							//if the point is not found, then add it in
 							if(point_already_in_vec == 0)
 							{
 								changed_segment.intersected_points.push_back(new_point);
 							}
 							
-							//and then insert the new one into the set
+							//and then insert the new segment into the set of segments
 							intersect_segments.insert(changed_segment);
 						}
-						else // if it's not already in event set, then add it
+						else // if it's not already in segment set, then add it
 						{
 							intersect_segments.insert(new_seg);
 						}
 					}
 				}
+				//this is incase endpt1 > endpt2
 				else
 				{
-					//cout << "IN HERE, INSTEAD...." << endl;
-					/*//for debug...
-					//cout << "x_int: " << x_int << "\tk->endpt1.x: " << k->endpt1.x << endl;
-					//cout << "x_int: " << x_int << "\tk->endpt2.x: " << k->endpt2.x << endl;
-					//cout << "y_int: " << y_int << "\tk->endpt1.y: " << k->endpt1.y << endl;
-					//cout << "y_int: " << y_int << "\tk->endpt2.y: " << k->endpt2.y << endl << endl;*/
-
-					//swap endpoints 1 and 2...
+					//if it is, we swap endpoints 1 and 2...
 					//since I don't want to write swap for the Point class
 					//we'll do it using temps...
 					Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
 					Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
-					
-					//if((x_int <= k->endpt1.x) && (x_int >= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
-					//using the one below for now
+
+					//and check that the intersection point is between the endpoints
 					if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
 					{
 						Point new_point(x_int, y_int, k->endpt1.z);
-						//intersect_pts.insert(new_point);
-						//cout << "Point added in" << endl;
 						Anchoring_Segment new_seg(*k);
-						/*cout << "New seg coords: ";
-						new_seg.print_coords(cout);
-						cout << "New point coods:";
-						new_point.print_coords(cout);
-						cout << "New seg intersect pts: ";
-						new_seg.print_intersect_pts(cout);
-						cout << endl;*/
 
-						//new_seg.intersected_points.push_back(new_point);
+						//check if anchoring segment is already in the set
 						auto set_it = intersect_segments.find(new_seg);
 						if(set_it != intersect_segments.end()) // if it's already in intersect_segments set
-							//add new point to its vector of intersected_points
 						{	
 							//can't change items in a set, so have to create a new one
-							Anchoring_Segment changed_segment(*set_it); //added this line
+							Anchoring_Segment changed_segment(*set_it);
 							
 							//and then erase the old one
-							intersect_segments.erase(*set_it);//added this line
+							intersect_segments.erase(*set_it);
 							
-							//and add the point to the new one if it's not already there
+							//and add the point to the new one's point vector if it's not already there
 							int point_already_in_vec = 0;
 							for(auto m = changed_segment.intersected_points.begin(); m != changed_segment.intersected_points.end(); m++)
 							{
@@ -242,15 +210,16 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 									point_already_in_vec++;
 								}
 							}
+							//if the point is not found, then add it in
 							if(point_already_in_vec == 0)
 							{
 								changed_segment.intersected_points.push_back(new_point);
 							}
 							
-							//and then insert the new one into the set
+							//and then insert the new segment into the set of segments
 							intersect_segments.insert(changed_segment);
 						}
-						else // if it's not already in event set, then add it
+						else // if it's not already in segment set, then add it in
 						{
 							intersect_segments.insert(new_seg);
 						}
@@ -259,13 +228,15 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 			}
 		}
 	}
+	/*
+	//for debug:
 	cout << "Intersect Segments size: " << intersect_segments.size() << endl;
 	int j=0;
 	for(auto i = intersect_segments.begin(); i != intersect_segments.end(); i++)
 	{
 		cout << "Number of intersect points for segment " << j << ": " << i->intersected_points.size() << endl;
 		j++;
-	}
+	}*/
 }
 
 //sets of segements crossing sweep plane with anchoring segments(?)
