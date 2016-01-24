@@ -85,7 +85,7 @@ int main()
 	image_drawer draw(test_image);*/
 
 	set<Point> points_for_alg3;
-	vector<Anchoring_Segment> segments_for_alg3;
+	set<Anchoring_Segment> segments_for_alg3;
 	int i = 1;
 	make_point_set();
 
@@ -136,6 +136,7 @@ int main()
 	for(auto i = segments_for_alg3.begin(); i != segments_for_alg3.end(); i++)
 	{
 		i->print_coords(cout);
+		cout << "Of size: " << i->intersected_points.size() << endl;
 		i->print_intersect_pts(cout);
 	}
 

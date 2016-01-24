@@ -54,6 +54,7 @@ Anchoring_Segment::Anchoring_Segment(const Anchoring_Segment &anch)
 	intersect_pt = anch.intersect_pt;
 	slope = anch.slope;
 	height = anch.height;
+	intersected_points = anch.intersected_points;
 }
 
 //overloaded << operator
