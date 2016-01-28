@@ -75,6 +75,10 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 
 double calculate_x_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
+	if(slope1 == slope2) //check for parallel lines
+	{
+		return 0;
+	}
 	double numerator = y_intercept2 - y_intercept1;
 	double denominator = slope1 - slope2;
 	return numerator/denominator;
@@ -82,6 +86,10 @@ double calculate_x_intersection(double y_intercept1, double y_intercept2, double
 
 double calculate_y_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
+	if(slope1 == slope2) //check for parallel lines
+	{
+		return 0;
+	}
 	double numerator = (y_intercept1 * slope2) - (y_intercept2 * slope1);
 	double denominator = slope2 - slope1;
 	return numerator/denominator;
