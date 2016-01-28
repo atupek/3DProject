@@ -1,6 +1,7 @@
 //anchoring_segment.cpp
 #include "anchoring_segment.h"
 #include "math.h" //for pow & sqrt
+#include <limits> //for infinity
 
 Anchoring_Segment::Anchoring_Segment()
 {
@@ -11,7 +12,19 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 {
 	//cout << "Point passed in: ";
 	//_eventpt.print_coords(cout);
-	slope = -1/_slope;
+	if(_slope == 0)
+	{
+		slope = std::numeric_limits<double>::infinity();
+	}
+	else if(_slope == std::numeric_limits<double>::infinity())
+	{
+		slope = 0;
+	}
+	else
+	{
+		slope = -1/_slope;
+	}
+	//slope = -1/_slope;
 	intersected_points = {_eventpt}; //vector only contains _eventpt right now.
 	intersected_bridges = {}; //empty vector for now
 	distance = 30; //max length of bridge in mm
