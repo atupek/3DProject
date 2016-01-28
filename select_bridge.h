@@ -14,7 +14,7 @@ Bridge select_bridge(set<Anchoring_Segment> segments);
 double calculate_lmax(set<Anchoring_Segment> segments);
 double calculate_gain(double height, double length, int num_elements);
 double calculate_score(double gain, int num_elements, double lmax);
-double calculate_distance(double x1, double x2, double y1, double y2);
+double calc_dist(double x1, double y1, double x2, double y2);
 
 vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments);
 void sort_segments_by_z(vector<Anchoring_Segment> & segment);

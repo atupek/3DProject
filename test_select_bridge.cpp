@@ -90,5 +90,15 @@ int main()
 		i->print_coords_with_z(cout);
 	}
 
+	cout << "***************************Testing calc_dist************************" << endl;
+	double dist0 = calc_dist(0, 0, 0, 5);
+	cout << "dist 0: " << dist0 << " expected 5" << endl;
+	double dist1 = calc_dist(0, 0, 5, 0);
+	cout << "dist 1: " << dist1 << " expected 5" << endl;
+	double dist2 = calc_dist(0, 5, 0, 0);
+	cout << "dist 2: " << dist2 << " expected 5" << endl;
+	double dist3 = calc_dist(5, 0, 0, 0);
+	cout << "dist 3: " << dist3 << " expected 5" << endl;
+
 	return 0;
 }
