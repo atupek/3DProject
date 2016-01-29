@@ -23,5 +23,11 @@ int main()
 	test_anchor0.intersected_points.push_back(intersect_1);
 	cout << "test_anchor0.intersected_points.size() after adding two: " << test_anchor0.intersected_points.size() << endl;
 	test_anchor0.print_intersect_pts(cout);
+
+	//test create anchoring_segment with slope passed in as zero
+	Anchoring_Segment test_anchor2(test_point, 0, true);
+	cout << "New anchoring segment stuff: " << endl;
+	test_anchor2.print_coords(cout);
+	cout << "Anchor 2 slope: " << test_anchor2.slope << endl;
 	return 0;
 }

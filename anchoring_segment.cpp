@@ -10,32 +10,42 @@ Anchoring_Segment::Anchoring_Segment()
 
 Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negative)
 {
+	distance = 30; //max length of bridge in mm
 	//cout << "Point passed in: ";
 	//_eventpt.print_coords(cout);
 	if(_slope == 0)
 	{
 		slope = std::numeric_limits<double>::infinity();
+		slope_squared = std::numeric_limits<double>::infinity();
+		delta_x = 0;
+		delta_y = distance;
 	}
 	else if(_slope == std::numeric_limits<double>::infinity())
 	{
 		slope = 0;
+		slope_squared = 0;
+		delta_x = distance;
+		delta_y = 0;
 	}
 	else
 	{
 		slope = -1/_slope;
+		slope_squared = pow(slope, 2);
+		delta_x = distance/sqrt(1+slope_squared);
+		delta_y = (distance * slope)/sqrt(1+slope_squared);
 	}
 	//slope = -1/_slope;
 	intersected_points = {_eventpt}; //vector only contains _eventpt right now.
 	intersected_bridges = {}; //empty vector for now
-	distance = 30; //max length of bridge in mm
+
 	endpt1 = _eventpt;
 	x1 = _eventpt.x;
 	y1 = _eventpt.y;
 	height = _eventpt.z;
 
-	slope_squared = pow(slope, 2);
-	delta_x = distance/sqrt(1+slope_squared);
-	delta_y = (distance * slope)/sqrt(1+slope_squared);
+	//slope_squared = pow(slope, 2);
+	//delta_x = distance/sqrt(1+slope_squared);
+	//delta_y = (distance * slope)/sqrt(1+slope_squared);
 
 	if(negative)
 	{
