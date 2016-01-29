@@ -3,6 +3,7 @@
 #include <iostream>
 using std::cout;
 using std::endl;
+#include <limits> //for infinity
 
 int main()
 {
@@ -29,5 +30,12 @@ int main()
 	cout << "New anchoring segment stuff: " << endl;
 	test_anchor2.print_coords(cout);
 	cout << "Anchor 2 slope: " << test_anchor2.slope << endl;
+
+	double infinity = std::numeric_limits<double>::infinity();
+	//test create anchoring_segment with slope passed in as infinity
+	Anchoring_Segment test_anchor3(test_point, infinity, true);
+	cout << "New anchoring segment stuff: " << endl;
+	test_anchor3.print_coords(cout);
+	cout << "Anchor 3 slope: " << test_anchor2.slope << endl;
 	return 0;
 }
