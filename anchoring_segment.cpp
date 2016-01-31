@@ -19,6 +19,32 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 		slope_squared = std::numeric_limits<double>::infinity();
 		delta_x = 0;
 		delta_y = distance;
+
+		endpt1 = _eventpt;
+		x1 = _eventpt.x;
+		y1 = _eventpt.y;
+		height = _eventpt.z;
+
+		if(negative)
+		{
+			new_x1 = _eventpt.x-delta_x;
+			//cout << "negative, new_x1: " << new_x1 << endl;
+			new_y1 = _eventpt.y-delta_y;
+			//cout << "negative, new_y1: " << new_y1 << endl;
+		}
+		else
+		{
+			new_x1 = _eventpt.x+delta_x;
+			//cout << "positive, new_x1: " << new_x1 << endl;
+			new_y1 = _eventpt.y+delta_y;
+			//cout << "positive, new_y1: " << new_x1 << endl;
+		}
+
+		endpt2.x = new_x1;
+		endpt2.y = new_y1;
+		endpt2.z = _eventpt.z;
+		endpt2.extrude_amt = 0;
+		endpt2.perimeter = true;
 	}
 	else if(_slope == std::numeric_limits<double>::infinity())
 	{
@@ -26,6 +52,32 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 		slope_squared = 0;
 		delta_x = distance;
 		delta_y = 0;
+
+		endpt1 = _eventpt;
+		x1 = _eventpt.x;
+		y1 = _eventpt.y;
+		height = _eventpt.z;
+
+		if(negative)
+		{
+			new_x1 = _eventpt.x-delta_x;
+			//cout << "negative, new_x1: " << new_x1 << endl;
+			new_y1 = _eventpt.y-delta_y;
+			//cout << "negative, new_y1: " << new_y1 << endl;
+		}
+		else
+		{
+			new_x1 = _eventpt.x+delta_x;
+			//cout << "positive, new_x1: " << new_x1 << endl;
+			new_y1 = _eventpt.y+delta_y;
+			//cout << "positive, new_y1: " << new_x1 << endl;
+		}
+
+		endpt2.x = new_x1;
+		endpt2.y = new_y1;
+		endpt2.z = _eventpt.z;
+		endpt2.extrude_amt = 0;
+		endpt2.perimeter = true;
 	}
 	else
 	{
@@ -33,36 +85,67 @@ Anchoring_Segment::Anchoring_Segment(Point _eventpt, double _slope, bool negativ
 		slope_squared = pow(slope, 2);
 		delta_x = distance/sqrt(1+slope_squared);
 		delta_y = (distance * slope)/sqrt(1+slope_squared);
+
+		endpt1 = _eventpt;
+		x1 = _eventpt.x;
+		y1 = _eventpt.y;
+		height = _eventpt.z;
+
+		if(negative)
+		{
+			new_x1 = _eventpt.x-delta_x;
+			//cout << "negative, new_x1: " << new_x1 << endl;
+			new_y1 = _eventpt.y-delta_y;
+			//cout << "negative, new_y1: " << new_y1 << endl;
+		}
+		else
+		{
+			new_x1 = _eventpt.x+delta_x;
+			//cout << "positive, new_x1: " << new_x1 << endl;
+			new_y1 = _eventpt.y+delta_y;
+			//cout << "positive, new_y1: " << new_x1 << endl;
+		}
+
+		endpt2.x = new_x1;
+		endpt2.y = new_y1;
+		endpt2.z = _eventpt.z;
+		endpt2.extrude_amt = 0;
+		endpt2.perimeter = true;
 	}
 	//slope = -1/_slope;
 	intersected_points = {_eventpt}; //vector only contains _eventpt right now.
 	intersected_bridges = {}; //empty vector for now
-
+/*
 	endpt1 = _eventpt;
 	x1 = _eventpt.x;
 	y1 = _eventpt.y;
-	height = _eventpt.z;
+	height = _eventpt.z;*/
 
 	//slope_squared = pow(slope, 2);
 	//delta_x = distance/sqrt(1+slope_squared);
 	//delta_y = (distance * slope)/sqrt(1+slope_squared);
 
+/*
 	if(negative)
 	{
 		new_x1 = _eventpt.x-delta_x;
+		//cout << "negative, new_x1: " << new_x1 << endl;
 		new_y1 = _eventpt.y-delta_y;
+		//cout << "negative, new_y1: " << new_y1 << endl;
 	}
 	else
 	{
 		new_x1 = _eventpt.x+delta_x;
+		//cout << "positive, new_x1: " << new_x1 << endl;
 		new_y1 = _eventpt.y+delta_y;
-	}
-
+		//cout << "positive, new_y1: " << new_x1 << endl;
+	}*/
+/*
 	endpt2.x = new_x1;
 	endpt2.y = new_y1;
 	endpt2.z = _eventpt.z;
 	endpt2.extrude_amt = 0;
-	endpt2.perimeter = true;
+	endpt2.perimeter = true;*/
 
 	intersect_pt.x = 0.0;
 	intersect_pt.y = 0.0;
@@ -90,7 +173,29 @@ ostream & operator << (ostream & os, const Anchoring_Segment & obj)
 bool operator < (const Anchoring_Segment & lhs, const Anchoring_Segment & rhs)
 {
 	//if((lhs.endpt1.x < rhs.endpt1.x) && (lhs.endpt1.y != rhs.endpt1.y) && (lhs.endpt2.x != rhs.endpt2.x) && (lhs.endpt2.y != rhs.endpt2.y))
-	if(!(lhs.endpt1.x > rhs.endpt1.x) && (lhs.endpt2.x != rhs.endpt2.x) && (lhs.endpt2.y != rhs.endpt2.y))
+	if(lhs.slope == std::numeric_limits<double>::infinity() && rhs.slope == std::numeric_limits<double>::infinity())
+	{
+		if(lhs.endpt2.y > rhs.endpt2.y)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else if(lhs.slope == 0 && rhs.slope == 0)
+	{
+		if(lhs.endpt2.x > rhs.endpt2.x)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else if(!(lhs.endpt1.x > rhs.endpt1.x) && (lhs.endpt2.x != rhs.endpt2.x) && (lhs.endpt2.y != rhs.endpt2.y))
 	{
 		return true;
 	}

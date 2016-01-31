@@ -17,29 +17,53 @@ void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
 	//cout << "A LINE:" << endl;
 	Anchoring_Segment new_segment(pt, slope, true);
 	anchor_segments.insert(new_segment);
+	cout << "TRUE SEGMENT: " << endl;
+	cout << "true, new_x1: " << new_segment.new_x1 << endl;
+	cout << "true, new_y1: " << new_segment.new_y1 << endl;
+	new_segment.print_coords(cout);
 
 	Anchoring_Segment new_segment1(pt, slope, false);
 	anchor_segments.insert(new_segment1);
+	cout << "FALSE SEGMENT: " << endl;
+	cout << "false, new_x1: " << new_segment1.new_x1 << endl;
+	cout << "false, new_y1: " << new_segment1.new_y1 << endl;
+	new_segment1.print_coords(cout);
 }
+/*
+void draw_false_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
+{
+	Anchoring_Segment new_segment1(pt, slope, false);
+	anchor_segments.insert(new_segment1);
+	cout << "FALSE SEGMENT: " << endl;
+	cout << "false, new_x1: " << new_segment1.new_x1 << endl;
+	cout << "false, new_y1: " << new_segment1.new_y1 << endl;
+	new_segment1.print_coords(cout);
+}*/
 
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, set<Anchoring_Segment> &anchor_segments, vector<double> &sweep_direction, int i)
 {
 	double plane = sweep_direction[i];
 	//for each Point in point_set, create anchor segment of length max_length orthoganl to sweep_direction, centered on Point
-	for(auto i = point_set.begin(); i != point_set.end(); i++)
+	for(auto j = point_set.begin(); j != point_set.end(); j++)
 	{
-		draw_line(*i, plane, anchor_segments);
+		draw_line(*j, plane, anchor_segments);
+		//draw_false_line(*j, plane, anchor_segments);
+		//draw_line(*j, plane, anchor_segments);
 	}
-	for(auto i = bridge_set.begin(); i != bridge_set.end(); i++)
+	for(auto j = bridge_set.begin(); j != bridge_set.end(); j++)
 	{
 		//Check if endpoint is open before creating anchoring segment
-		if(i->pt1_open)
+		if(j->pt1_open)
 		{
-			draw_line(i->p1, plane, anchor_segments);
+			draw_line(j->p1, plane, anchor_segments);
+			//draw_false_line(j->p1, plane, anchor_segments);
+			//draw_line(*j, plane, anchor_segments);
 		}
-		if(i->pt2_open)
+		if(j->pt2_open)
 		{
-			draw_line(i->p2, plane, anchor_segments);
+			draw_line(j->p2, plane, anchor_segments);
+			//draw_false_line(j->p2, plane, anchor_segments);
+			//draw_line(*j, plane, anchor_segments);
 		}
 	}
 }

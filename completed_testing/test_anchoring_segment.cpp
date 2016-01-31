@@ -27,15 +27,25 @@ int main()
 
 	//test create anchoring_segment with slope passed in as zero
 	Anchoring_Segment test_anchor2(test_point, 0, true);
-	cout << "New anchoring segment stuff: " << endl;
+	cout << "New anchoring segment stuff (true): " << endl;
 	test_anchor2.print_coords(cout);
 	cout << "Anchor 2 slope: " << test_anchor2.slope << endl;
 
+	Anchoring_Segment test_anchor3(test_point, 0, false);
+	cout << "New anchoring segment stuff (false): " << endl;
+	test_anchor3.print_coords(cout);
+	cout << "Anchor 3 slope: " << test_anchor3.slope << endl;
+
 	double infinity = std::numeric_limits<double>::infinity();
 	//test create anchoring_segment with slope passed in as infinity
-	Anchoring_Segment test_anchor3(test_point, infinity, true);
-	cout << "New anchoring segment stuff: " << endl;
-	test_anchor3.print_coords(cout);
-	cout << "Anchor 3 slope: " << test_anchor2.slope << endl;
+	Anchoring_Segment test_anchor4(test_point, infinity, true);
+	cout << "New anchoring segment stuff (true): " << endl;
+	test_anchor4.print_coords(cout);
+	cout << "Anchor 4 slope: " << test_anchor4.slope << endl;
+
+	Anchoring_Segment test_anchor5(test_point, infinity, false);
+	cout << "New anchoring segment stuff (false): " << endl;
+	test_anchor5.print_coords(cout);
+	cout << "Anchor 5 slope: " << test_anchor5.slope << endl;
 	return 0;
 }

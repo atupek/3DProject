@@ -37,7 +37,9 @@ void make_sweep_vector()
 	slope_of_sweep.push_back(0.0); // horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
 	slope_of_sweep.push_back(1.0); //45 degrees
 	slope_of_sweep.push_back(2.0);
+	slope_of_sweep.push_back(3.0);
 	slope_of_sweep.push_back(inf); // vertical...net a condition for this TODO
+	//think I've taken care of the two TODO's above...
 }
 
 
@@ -50,18 +52,18 @@ int main()
 
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
-	int i = 1;
+	int i = 4;
 	make_point_set();
 
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
 
-	/*//for debug: print members of anchoring segments:
-	cout << "SEGMENT MEMBERS: " << endl;
+	//for debug: print members of anchoring segments:
+	cout << "ANCHORING SEGMENTS: " << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}*/
+	}
 
 	//cout << "Anchoring segments size: "  << segments.size() << endl;
 	//create events from anchoring segments
@@ -95,7 +97,7 @@ int main()
 		i->print_coords(cout);
 	}*/
 
-	//for debug
+	/*//for debug
 	cout << "segments for al3 size: " << segments_for_alg3.size() << endl;
 	cout << "segments for alg3:" << endl;
 	for(auto i = segments_for_alg3.begin(); i != segments_for_alg3.end(); i++)
@@ -103,7 +105,7 @@ int main()
 		i->print_coords(cout);
 		cout << "Of size: " << i->intersected_points.size() << endl;
 		i->print_intersect_pts(cout);
-	}
+	}*/
 
 	Bridge the_best_bridge;
 	the_best_bridge = select_bridge(segments_for_alg3);
