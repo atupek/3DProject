@@ -90,21 +90,13 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 //THINK: DO I NEED THE CONDITIONAL ELSEWHERE, LIKE BEFORE I CALL THE FUNCTION?
 //if slope = 0, x-intersection DNE unless y = 0;  y = b
 //if slope = inf, x-intersection = x; x = b
+//DONE>>>>>>think I fixed it!
 double calculate_x_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
 	if(slope1 == slope2) //check for parallel lines
 	{
 		return 0;
 	}
-	/*if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
-	{
-		//TODO: FIGURE OUT
-		return 
-	}
-	if(slope1 == std::numeric_limits<double>::infinity() && slope2 == 0)
-	{
-		//TODO: FIGURE OUT
-	}*/
 	double numerator = y_intercept2 - y_intercept1;
 	double denominator = slope1 - slope2;
 	return numerator/denominator;
@@ -118,14 +110,6 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 	{
 		return 0;
 	}
-	/*if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
-	{
-		//TODO: FIGURE OUT
-	}
-	if(slope1 == std::numeric_limits<double>::infinity() && slope2 == 0)
-	{
-		//TODO: FIGURE OUT
-	}*/
 	double numerator = (y_intercept1 * slope2) - (y_intercept2 * slope1);
 	double denominator = slope2 - slope1;
 	return numerator/denominator;

@@ -85,6 +85,7 @@ int main()
 	//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
 
 	//find_intersections(active_events, slope_of_sweep, i, points_for_alg3);
+	//TODO: FIGURE OUT WHY INTERSECTIONS NOT BEING FOUND...SEE GRAPH PAPER...
 	find_intersections(active_events, slope_of_sweep, i, segments_for_alg3);
 
 	/*
