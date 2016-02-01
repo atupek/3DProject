@@ -188,7 +188,7 @@ double calc_dist(double x1, double y1, double x2, double y2)
 //				get bridge gain & score for points_supported_by_bridge, i, j, z
 //				if gain>0 and score > bestScore then bestBridge = currentBridge
 //return bestBridge
-Bridge select_bridge(set<Anchoring_Segment> segments)
+Bridge select_bridge(set<Anchoring_Segment> &segments)
 {
 	/*//for debug
 	cout << "SET BEFORE SORTING: " << endl;
@@ -240,8 +240,8 @@ Bridge select_bridge(set<Anchoring_Segment> segments)
 			cout << "Added into z: " << (i) << endl;
 		}
 	}*/
-	/*
-	//for debug...
+	
+	/*//for debug...
 	cout <<"Set z_set size: " << z_set.size() << endl;
 	for(auto i = z_set.begin(); i != z_set.end(); i++)
 	{

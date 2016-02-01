@@ -24,9 +24,7 @@ using std::vector; //vector of sweep directions
 #include "event.h"
 
 //creates anchoring segment
-//void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments);
 void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments);
-//void draw_false_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments);
 
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, set<Anchoring_Segment> &anchor_segments,vector<double> &sweep_direction, int i);
 

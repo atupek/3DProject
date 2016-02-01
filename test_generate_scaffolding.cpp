@@ -52,14 +52,14 @@ int main()
 
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
-	int i = 4;
+	int i = 0;
 	make_point_set();
 
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
 
 	//for debug: print members of anchoring segments:
-	cout << "ANCHORING SEGMENTS: " << endl;
+	cout << "***********************ANCHORING SEGMENTS: **************************" << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
@@ -75,12 +75,12 @@ int main()
 	//find intersections between sweep plane and anchoring segments at each event(which is a point)
 	//these intersections are the points sent to select bridge
 
-	/*//for debug, print event info:
-	cout << "EVENT MEMBERS: " << endl;
+	//for debug, print event info:
+	cout << "*******************************EVENT MEMBERS: ***************************" << endl;
 	for(auto i = active_events.begin(); i != active_events.end(); i++)
 	{
 		i->print_event_members(cout);
-	}*/
+	}
 
 	//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
 
@@ -97,7 +97,8 @@ int main()
 		i->print_coords(cout);
 	}*/
 
-	/*//for debug
+	//for debug
+	cout << "*****************************SEGMENT MEMBERS: ******************************" << endl;
 	cout << "segments for al3 size: " << segments_for_alg3.size() << endl;
 	cout << "segments for alg3:" << endl;
 	for(auto i = segments_for_alg3.begin(); i != segments_for_alg3.end(); i++)
@@ -105,12 +106,12 @@ int main()
 		i->print_coords(cout);
 		cout << "Of size: " << i->intersected_points.size() << endl;
 		i->print_intersect_pts(cout);
-	}*/
+	}
 
 	Bridge the_best_bridge;
 	the_best_bridge = select_bridge(segments_for_alg3);
 
-	/*//for debug
+	//for debug
 	cout << "*******************RESULTS*********************" <<endl;
 	cout << "Let's see what the segment set produced: " << endl;
 	the_best_bridge.print_bridge_members(cout);
@@ -125,7 +126,7 @@ int main()
 	for(auto i = the_best_bridge.supported_points.begin(); i != the_best_bridge.supported_points.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}*/
+	}
 
 	//*******************************WHERE I AM NOW:
 	//algorithm3 takes set of anchoring segments, not set of points, so need to adjust

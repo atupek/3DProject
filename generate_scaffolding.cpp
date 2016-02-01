@@ -17,28 +17,18 @@ void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
 	//cout << "A LINE:" << endl;
 	Anchoring_Segment new_segment(pt, slope, true);
 	anchor_segments.insert(new_segment);
-	cout << "TRUE SEGMENT: " << endl;
+	/*cout << "TRUE SEGMENT: " << endl;
 	cout << "true, new_x1: " << new_segment.new_x1 << endl;
 	cout << "true, new_y1: " << new_segment.new_y1 << endl;
-	new_segment.print_coords(cout);
+	new_segment.print_coords(cout);*/
 
 	Anchoring_Segment new_segment1(pt, slope, false);
 	anchor_segments.insert(new_segment1);
-	cout << "FALSE SEGMENT: " << endl;
+	/*cout << "FALSE SEGMENT: " << endl;
 	cout << "false, new_x1: " << new_segment1.new_x1 << endl;
 	cout << "false, new_y1: " << new_segment1.new_y1 << endl;
-	new_segment1.print_coords(cout);
+	new_segment1.print_coords(cout);*/
 }
-/*
-void draw_false_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
-{
-	Anchoring_Segment new_segment1(pt, slope, false);
-	anchor_segments.insert(new_segment1);
-	cout << "FALSE SEGMENT: " << endl;
-	cout << "false, new_x1: " << new_segment1.new_x1 << endl;
-	cout << "false, new_y1: " << new_segment1.new_y1 << endl;
-	new_segment1.print_coords(cout);
-}*/
 
 void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, set<Anchoring_Segment> &anchor_segments, vector<double> &sweep_direction, int i)
 {
@@ -47,8 +37,6 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 	for(auto j = point_set.begin(); j != point_set.end(); j++)
 	{
 		draw_line(*j, plane, anchor_segments);
-		//draw_false_line(*j, plane, anchor_segments);
-		//draw_line(*j, plane, anchor_segments);
 	}
 	for(auto j = bridge_set.begin(); j != bridge_set.end(); j++)
 	{
@@ -56,14 +44,10 @@ void create_anchoring_segments(set<Point> &point_set, set<Bridge> &bridge_set, s
 		if(j->pt1_open)
 		{
 			draw_line(j->p1, plane, anchor_segments);
-			//draw_false_line(j->p1, plane, anchor_segments);
-			//draw_line(*j, plane, anchor_segments);
 		}
 		if(j->pt2_open)
 		{
 			draw_line(j->p2, plane, anchor_segments);
-			//draw_false_line(j->p2, plane, anchor_segments);
-			//draw_line(*j, plane, anchor_segments);
 		}
 	}
 }
@@ -97,22 +81,50 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 	}
 }
 
+//calculate intersections between anchoring segments and sweep plane
+//slope1 is sweep plane slope
+//slope2 is anchoring_segment slope
+//TODO: ISSUES WITH SLOPE == 0 and SLOPE == INF
+//NOT TAKEN CARE OF BY if(slope1 == slope2)
+//NEED TO FIX IN BOTH X and Y intersection
+//THINK: DO I NEED THE CONDITIONAL ELSEWHERE, LIKE BEFORE I CALL THE FUNCTION?
+//if slope = 0, x-intersection DNE unless y = 0;  y = b
+//if slope = inf, x-intersection = x; x = b
 double calculate_x_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
 	if(slope1 == slope2) //check for parallel lines
 	{
 		return 0;
 	}
+	if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
+	{
+		//TODO: FIGURE OUT
+		return 
+	}
+	if(slope1 == std::numeric_limits<double>::infinity() && slope2 == 0)
+	{
+		//TODO: FIGURE OUT
+	}
 	double numerator = y_intercept2 - y_intercept1;
 	double denominator = slope1 - slope2;
 	return numerator/denominator;
 }
 
+//if slope = 0, y-intersection = b; y = b
+//if slope = inf, y-intersection DNE unless x = 0; x = b
 double calculate_y_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
 	if(slope1 == slope2) //check for parallel lines
 	{
 		return 0;
+	}
+	if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
+	{
+		//TODO: FIGURE OUT
+	}
+	if(slope1 == std::numeric_limits<double>::infinity() && slope2 == 0)
+	{
+		//TODO: FIGURE OUT
 	}
 	double numerator = (y_intercept1 * slope2) - (y_intercept2 * slope1);
 	double denominator = slope2 - slope1;
@@ -123,6 +135,7 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 //instead of putting points into set of points, need to put them into appropriate anchoring segment's intersected points vector
 void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Anchoring_Segment> &intersect_segments)
 {
+	cout << "FINDING INTERSECTIONS" << endl;
 	double sweep_slope = sweep_directions[sweep_index];
 	//find y-intercept of line at point of event
 	//then find y-intercept of anchoring segment line
@@ -138,9 +151,9 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 		//equation of line at the event point:
 		// y = sweep_slope * x + y_intercept
 		
-		/*//for debug
-		cout << "****************************EQUATION OF LINE: " << endl;
-		cout << "y = " << sweep_slope << " * x + " << y_intercept << endl;*/	
+		//for debug
+		/*cout << "****************************EQUATION OF LINE: " << endl;
+		cout << "y = " << sweep_slope << " * x + " << y_intercept << endl;*/
 
 		//now go through each anchoring segment in the set of events and find out if they intersect
 		for(auto j = events.begin(); j != events.end(); j++)
@@ -156,7 +169,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 
 				//for debug
-				//cout << "Intersection at: " << x_int << ", " << y_int << endl;
+				cout << "Intersection at: " << x_int << ", " << y_int << endl;
 
 				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 				//check that it is within the endpoints of the anchoring segment
