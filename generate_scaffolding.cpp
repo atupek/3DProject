@@ -96,7 +96,7 @@ double calculate_x_intersection(double y_intercept1, double y_intercept2, double
 	{
 		return 0;
 	}
-	if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
+	/*if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
 	{
 		//TODO: FIGURE OUT
 		return 
@@ -104,7 +104,7 @@ double calculate_x_intersection(double y_intercept1, double y_intercept2, double
 	if(slope1 == std::numeric_limits<double>::infinity() && slope2 == 0)
 	{
 		//TODO: FIGURE OUT
-	}
+	}*/
 	double numerator = y_intercept2 - y_intercept1;
 	double denominator = slope1 - slope2;
 	return numerator/denominator;
@@ -118,14 +118,14 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 	{
 		return 0;
 	}
-	if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
+	/*if(slope1 == 0 && slope2 == std::numeric_limits<double>::infinity())
 	{
 		//TODO: FIGURE OUT
 	}
 	if(slope1 == std::numeric_limits<double>::infinity() && slope2 == 0)
 	{
 		//TODO: FIGURE OUT
-	}
+	}*/
 	double numerator = (y_intercept1 * slope2) - (y_intercept2 * slope1);
 	double denominator = slope2 - slope1;
 	return numerator/denominator;
@@ -165,8 +165,25 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				double segment_y = k->endpt1.y;
 				double segment_slope = k->slope;
 				double segment_y_intercept = segment_y - segment_slope * segment_x;
-				double x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
-				double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+				//double x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+				//double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+				double x_int;
+				double y_int;
+				if(segment_slope == 0)
+				{
+					x_int = point_x;
+					y_int = segment_y;
+				}
+				else if(segment_slope == std::numeric_limits<double>::infinity())
+				{
+					x_int = segment_x;
+					y_int = point_y;
+				}
+				else
+				{
+					x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+				}
 
 				//for debug
 				cout << "Intersection at: " << x_int << ", " << y_int << endl;
