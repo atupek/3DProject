@@ -216,29 +216,49 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							if(point_already_in_vec == 0)
 							{
 								changed_segment.intersected_points.push_back(new_point);
-								cout << "Added point to segment's intersected points: ";
-								new_point.print_coords(cout);
+								//FOR DEBUG
+								/*cout << "Added point to segment's intersected points: ";
+								new_point.print_coords(cout);*/
 							}
 							
 							//and then insert the new segment into the set of segments
 							intersect_segments.insert(changed_segment);
-							cout << "Added changed segment: " << endl;
+							//FOR DEBUG
+							/*cout << "Added changed segment: " << endl;
 							cout << "\t";
 							changed_segment.print_coords(cout);
 							cout << "Segment intersected points: " << endl;
 							changed_segment.print_intersect_pts(cout);
-							cout << endl;
+							cout << endl;*/
 						}
 						else // if it's not already in segment set, then add it
 						{
-							new_seg.intersected_points.push_back(new_point); //added this line...
+							//and add the point to the new one's point vector if it's not already there
+							int point_already_in_vec = 0;
+							for(auto m = new_seg.intersected_points.begin(); m != new_seg.intersected_points.end(); m++)
+							{
+								if(*m == new_point)
+								{
+									point_already_in_vec++;
+								}
+							}
+							//if the point is not found, then add it in
+							if(point_already_in_vec == 0)
+							{
+								new_seg.intersected_points.push_back(new_point);
+								//FOR DEBUG
+								/*cout << "Added point to segment's intersected points: ";
+								new_point.print_coords(cout);*/
+							}
+							//new_seg.intersected_points.push_back(new_point); //added this line...but moved up to check if already there
 							intersect_segments.insert(new_seg);
-							cout << "Added new segment: " << endl;
+							//FOR DEBUG
+							/*cout << "Added new segment: " << endl;
 							cout << "\t";
 							new_seg.print_coords(cout);
 							cout << "Segment intersected points: " << endl;
 							new_seg.print_intersect_pts(cout);
-							cout << endl;
+							cout << endl;*/
 						}
 					}
 				}
@@ -281,29 +301,48 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							if(point_already_in_vec == 0)
 							{
 								changed_segment.intersected_points.push_back(new_point);
-								cout << "Added point to segment's intersected points: ";
-								new_point.print_coords(cout);
+								//FOR DEBUG
+								/*cout << "Added point to segment's intersected points: ";
+								new_point.print_coords(cout);*/
 							}
 							
 							//and then insert the new segment into the set of segments
 							intersect_segments.insert(changed_segment);
-							cout << "Added changed segment: " << endl;
+							//FOR DEBUG
+							/*cout << "Added changed segment: " << endl;
 							cout << "\t";
 							changed_segment.print_coords(cout);
 							cout << "Segment intersected points: " << endl;
 							changed_segment.print_intersect_pts(cout);
-							cout << endl;
+							cout << endl;*/
 						}
 						else // if it's not already in segment set, then add it in
 						{
-							new_seg.intersected_points.push_back(new_point); //added this line...
+							int point_already_in_vec = 0;
+							for(auto m = new_seg.intersected_points.begin(); m != new_seg.intersected_points.end(); m++)
+							{
+								if(*m == new_point)
+								{
+									point_already_in_vec++;
+								}
+							}
+							//if the point is not found, then add it in
+							if(point_already_in_vec == 0)
+							{
+								new_seg.intersected_points.push_back(new_point);
+								//FOR DEBUG
+								/*cout << "Added point to segment's intersected points: ";
+								new_point.print_coords(cout);*/
+							}
+							//new_seg.intersected_points.push_back(new_point); //added this line...but moved up to check if already there
 							intersect_segments.insert(new_seg);
-							cout << "Added new segment: " << endl;
+							//FOR DEBUG
+							/*cout << "Added new segment: " << endl;
 							cout << "\t";
 							new_seg.print_coords(cout);
 							cout << "Segment intersected points: " << endl;
 							new_seg.print_intersect_pts(cout);
-							cout << endl;
+							cout << endl;*/
 						}
 					}
 				}
