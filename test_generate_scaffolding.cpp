@@ -22,10 +22,12 @@ double inf = std::numeric_limits<double>::infinity();
 
 void make_point_set()
 {
+	//Point p0(1, 1, 1);
 	Point p1(19, 9, 15);
 	Point p2(11, 15, 20);
 	Point p3(25, 20, 18);
 	Point p4(18, 24, 17);
+	//active_points.insert(p0);
 	active_points.insert(p1);
 	active_points.insert(p2);
 	active_points.insert(p3);

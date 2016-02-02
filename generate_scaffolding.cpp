@@ -128,6 +128,10 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 	//then add that intersection point to the anchoring segment's vector of intersection points
 	for(auto i = events.begin(); i != events.end(); i++)
 	{
+		//for debug
+		cout << "****************EVENT INFO:*********************" << endl;
+		i->print_event_members(cout);
+
 		//line 0
 		double point_x = i->p1.x;
 		double point_y = i->p1.y;
@@ -169,19 +173,20 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 				}
 
-				//for debug
-				cout << "Intersection at: " << x_int << ", " << y_int << endl;
+				//for debug //OKAY THROUGH THIS POINT...
+				//cout << "Intersection at: " << x_int << ", " << y_int << endl;
 
 				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 				//check that it is within the endpoints of the anchoring segment
 				//first need to check if endpt1 < endpt2
-				/*//for debug:
-				cout << "CHECKING ENDPOINTS: " << endl;
+				//for debug:
+				/*cout << "CHECKING ENDPOINTS: " << endl;
 				cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
 				cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;*/
 				
 				if(k->endpt1.x < k->endpt2.x)
 				{
+					cout << endl << "TRUE, IN LOOP" << endl;
 					//and check that the intersection point is between the endpoints
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 					{
@@ -211,20 +216,36 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							if(point_already_in_vec == 0)
 							{
 								changed_segment.intersected_points.push_back(new_point);
+								cout << "Added point to segment's intersected points: ";
+								new_point.print_coords(cout);
 							}
 							
 							//and then insert the new segment into the set of segments
 							intersect_segments.insert(changed_segment);
+							cout << "Added changed segment: " << endl;
+							cout << "\t";
+							changed_segment.print_coords(cout);
+							cout << "Segment intersected points: " << endl;
+							changed_segment.print_intersect_pts(cout);
+							cout << endl;
 						}
 						else // if it's not already in segment set, then add it
 						{
+							new_seg.intersected_points.push_back(new_point); //added this line...
 							intersect_segments.insert(new_seg);
+							cout << "Added new segment: " << endl;
+							cout << "\t";
+							new_seg.print_coords(cout);
+							cout << "Segment intersected points: " << endl;
+							new_seg.print_intersect_pts(cout);
+							cout << endl;
 						}
 					}
 				}
-				//this is incase endpt1 > endpt2
+				//this is in case endpt1 > endpt2
 				else
 				{
+					cout << endl << "FALSE, IN SECOND LOOP" << endl;
 					//if it is, we swap endpoints 1 and 2...
 					//since I don't want to write swap for the Point class
 					//we'll do it using temps...
@@ -260,14 +281,29 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							if(point_already_in_vec == 0)
 							{
 								changed_segment.intersected_points.push_back(new_point);
+								cout << "Added point to segment's intersected points: ";
+								new_point.print_coords(cout);
 							}
 							
 							//and then insert the new segment into the set of segments
 							intersect_segments.insert(changed_segment);
+							cout << "Added changed segment: " << endl;
+							cout << "\t";
+							changed_segment.print_coords(cout);
+							cout << "Segment intersected points: " << endl;
+							changed_segment.print_intersect_pts(cout);
+							cout << endl;
 						}
 						else // if it's not already in segment set, then add it in
 						{
+							new_seg.intersected_points.push_back(new_point); //added this line...
 							intersect_segments.insert(new_seg);
+							cout << "Added new segment: " << endl;
+							cout << "\t";
+							new_seg.print_coords(cout);
+							cout << "Segment intersected points: " << endl;
+							new_seg.print_intersect_pts(cout);
+							cout << endl;
 						}
 					}
 				}
