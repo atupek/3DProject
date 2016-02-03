@@ -17,14 +17,18 @@ void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
 	//cout << "A LINE:" << endl;
 	Anchoring_Segment new_segment(pt, slope, true);
 	anchor_segments.insert(new_segment);
-	/*cout << "TRUE SEGMENT: " << endl;
+
+	/*//for debug
+	cout << "TRUE SEGMENT: " << endl;
 	cout << "true, new_x1: " << new_segment.new_x1 << endl;
 	cout << "true, new_y1: " << new_segment.new_y1 << endl;
 	new_segment.print_coords(cout);*/
 
 	Anchoring_Segment new_segment1(pt, slope, false);
 	anchor_segments.insert(new_segment1);
-	/*cout << "FALSE SEGMENT: " << endl;
+
+	/*//for debug
+	cout << "FALSE SEGMENT: " << endl;
 	cout << "false, new_x1: " << new_segment1.new_x1 << endl;
 	cout << "false, new_y1: " << new_segment1.new_y1 << endl;
 	new_segment1.print_coords(cout);*/
@@ -63,13 +67,13 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 		if(set_it != events.end()) // if it's already in event set, add segment to its vector of segments
 		{	
 			//can't change items in a set, so have to create a new one
-			Event changed_event(*set_it); //added this line
+			Event changed_event(*set_it);
 			
 			//and then erase the old one
-			events.erase(*set_it);//added this line
+			events.erase(*set_it);
 			
 			//and add the segment to the new one
-			changed_event.event_segments.push_back(*i);//added this line
+			changed_event.event_segments.push_back(*i);
 			
 			//and then insert the new one into the set
 			events.insert(changed_event);
@@ -84,13 +88,8 @@ void create_events(set<Anchoring_Segment> &_segments, set<Event> & events)
 //calculate intersections between anchoring segments and sweep plane
 //slope1 is sweep plane slope
 //slope2 is anchoring_segment slope
-//TODO: ISSUES WITH SLOPE == 0 and SLOPE == INF
-//NOT TAKEN CARE OF BY if(slope1 == slope2)
-//NEED TO FIX IN BOTH X and Y intersection
-//THINK: DO I NEED THE CONDITIONAL ELSEWHERE, LIKE BEFORE I CALL THE FUNCTION?
 //if slope = 0, x-intersection DNE unless y = 0;  y = b
 //if slope = inf, x-intersection = x; x = b
-//DONE>>>>>>think I fixed it!
 double calculate_x_intersection(double y_intercept1, double y_intercept2, double slope1, double slope2)
 {
 	if(slope1 == slope2) //check for parallel lines
@@ -116,7 +115,7 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 
 }
 
-//instead of putting points into set of points, need to put them into appropriate anchoring segment's intersected points vector
+//put intersected points into appropriate anchoring segment's intersected points vector
 void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Anchoring_Segment> &intersect_segments)
 {
 	double sweep_slope = sweep_directions[sweep_index];
@@ -152,16 +151,15 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				double segment_y = k->endpt1.y;
 				double segment_slope = k->slope;
 				double segment_y_intercept = segment_y - segment_slope * segment_x;
-				//double x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
-				//double y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+
 				double x_int;
 				double y_int;
-				if(segment_slope == 0)
+				if(segment_slope == 0) //check for horizontal line
 				{
 					x_int = point_x;
 					y_int = segment_y;
 				}
-				else if(segment_slope == std::numeric_limits<double>::infinity())
+				else if(segment_slope == std::numeric_limits<double>::infinity()) //check for vertical line
 				{
 					x_int = segment_x;
 					y_int = point_y;
@@ -172,7 +170,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 				}
 
-				//for debug //OKAY THROUGH THIS POINT...
+				//for debug
 				//cout << "Intersection at: " << x_int << ", " << y_int << endl;
 
 				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
@@ -199,7 +197,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							Anchoring_Segment changed_segment(*set_it);
 							
 							//and then erase the old one
-							intersect_segments.erase(*set_it);//added this line
+							intersect_segments.erase(*set_it);
 							
 							//and add the point to the new one's point vector if it's not already there
 							int point_already_in_vec = 0;
