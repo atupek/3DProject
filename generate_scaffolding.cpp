@@ -119,7 +119,6 @@ double calculate_y_intersection(double y_intercept1, double y_intercept2, double
 //instead of putting points into set of points, need to put them into appropriate anchoring segment's intersected points vector
 void find_intersections(set<Event> & events, vector<double> sweep_directions, int sweep_index, set<Anchoring_Segment> &intersect_segments)
 {
-	cout << "FINDING INTERSECTIONS" << endl;
 	double sweep_slope = sweep_directions[sweep_index];
 	//find y-intercept of line at point of event
 	//then find y-intercept of anchoring segment line
@@ -129,8 +128,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 	for(auto i = events.begin(); i != events.end(); i++)
 	{
 		//for debug
-		cout << "****************EVENT INFO:*********************" << endl;
-		i->print_event_members(cout);
+		/*cout << "****************EVENT INFO:*********************" << endl;
+		i->print_event_members(cout);*/
 
 		//line 0
 		double point_x = i->p1.x;
@@ -186,7 +185,6 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				
 				if(k->endpt1.x < k->endpt2.x)
 				{
-					cout << endl << "TRUE, IN LOOP" << endl;
 					//and check that the intersection point is between the endpoints
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 					{
@@ -234,6 +232,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 						else // if it's not already in segment set, then add it
 						{
 							//and add the point to the new one's point vector if it's not already there
+							//basically checking to see if the new_point is the anchoring_segment's point1
+							//(If it is, we don't want to add it in)
 							int point_already_in_vec = 0;
 							for(auto m = new_seg.intersected_points.begin(); m != new_seg.intersected_points.end(); m++)
 							{
@@ -250,7 +250,6 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 								/*cout << "Added point to segment's intersected points: ";
 								new_point.print_coords(cout);*/
 							}
-							//new_seg.intersected_points.push_back(new_point); //added this line...but moved up to check if already there
 							intersect_segments.insert(new_seg);
 							//FOR DEBUG
 							/*cout << "Added new segment: " << endl;
@@ -265,7 +264,6 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				//this is in case endpt1 > endpt2
 				else
 				{
-					cout << endl << "FALSE, IN SECOND LOOP" << endl;
 					//if it is, we swap endpoints 1 and 2...
 					//since I don't want to write swap for the Point class
 					//we'll do it using temps...
@@ -318,6 +316,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 						}
 						else // if it's not already in segment set, then add it in
 						{
+							//basically checking to see if the new_point is the anchoring_segment's point1
+							//(If it is, we don't want to add it in)
 							int point_already_in_vec = 0;
 							for(auto m = new_seg.intersected_points.begin(); m != new_seg.intersected_points.end(); m++)
 							{
@@ -334,7 +334,6 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 								/*cout << "Added point to segment's intersected points: ";
 								new_point.print_coords(cout);*/
 							}
-							//new_seg.intersected_points.push_back(new_point); //added this line...but moved up to check if already there
 							intersect_segments.insert(new_seg);
 							//FOR DEBUG
 							/*cout << "Added new segment: " << endl;

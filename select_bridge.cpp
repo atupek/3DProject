@@ -106,10 +106,14 @@ void merge_sort_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 vector<Anchoring_Segment> set_up_sort_segments_by_y(set<Anchoring_Segment> &segments)
 {
 	//copy segments into vector
+	//cout << "COPYING SEGMENTS INTO A VECTOR" << endl;
 	vector<Anchoring_Segment> unordered_segments;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		unordered_segments.push_back(*i);
+		//cout << "Added segment: " << endl;
+		//i->print_coords(cout);
+		//i->print_intersect_pts(cout);
 	}
 
 	return unordered_segments;
@@ -208,6 +212,16 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 	
 	//sort segment intersections by y-coordinate
 	vector<Anchoring_Segment> segments_by_y = set_up_sort_segments_by_y(segments);
+	
+	/*//for debug
+	cout << "SEGMENTS BY Y:" << endl;
+	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+	{
+		cout << "segment: ";
+		i->print_coords(cout);
+		i->print_intersect_pts(cout);
+	}*/
+	
 	sort_segments_by_y(segments_by_y);
 
 	/*//for debug
@@ -215,6 +229,7 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
 		i->print_coords(cout);
+		i->print_intersect_pts(cout);
 	}*/
 
 	//put z-coordinate values into a set, sorted by increasing z
@@ -254,19 +269,31 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 
 		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 		{
+			/*//for debug
+			cout << "********************CURRENT 'i' SEGMENT:";
+			i->print_coords(cout);
+			i->print_intersect_pts(cout);
+			cout << endl;*/
+
 			temp_bridge.supported_points.clear(); //should be cleared out
 			for(auto j = i; j != segments_by_y.end(); j++)
 			{
 				//compute distance between i & j intersect points
 				//if less than max_distance, add intersect points into temp_bridge.supported_points
+				//TODO: PROBLEM IS HERE!!!! NEED TO ITERATE OVER VECTOR OF INTERSECT POINTS, NOT THE DEFINED INTERSECT POINT!!!!
 				double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
-				//cout << "THIS DISTANCE: " << this_distance << endl;
+				
+				/*//for debug
+				cout << "*********************************************THIS DISTANCE: " << this_distance << endl;
+				cout << "X1, Y1: " << i->intersect_pt.x << ", " << i->intersect_pt.y << endl;
+				cout << "X2, Y2: " << j->intersect_pt.x << ", " << j->intersect_pt.y << endl;*/
+				
 				if(this_distance < max_distance)
 				{
 					temp_bridge.supported_points.insert(j->intersect_pt);
 
-					/*//for debug...
-					cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
+					//for debug...
+					/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
 					cout << "POINTS SUPPORTED BY TEMP BRIDGE: " << endl;
 					for(auto m = temp_bridge.supported_points.begin(); m != temp_bridge.supported_points.end(); m++)
 					{
@@ -276,12 +303,21 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 					temp_bridge.p1 = i-> intersect_pt;
 					
 					temp_bridge.p2 = j-> intersect_pt;
+
+					/*//for debug
+					cout << "Sent to gain: " << endl;
+					cout << "\tthis_z: " << this_z << endl;
+					cout << "\tthis_distance: " << this_distance << endl;
+					cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;*/
 					
 					double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
-
 					double l_max = calculate_lmax(segments);
-
 					double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
+
+					/*//for debug
+					cout << "Temp Gain: " << temp_gain << endl;
+					cout << "l_max: " << l_max << endl;
+					cout << "Temp Score: " << temp_score << endl << endl;*/
 
 					if(temp_gain > 0.0 && temp_score > best_score)
 					{

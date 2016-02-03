@@ -60,12 +60,12 @@ int main()
 	make_sweep_vector();
 	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
 
-	//for debug: print members of anchoring segments:
+	/*//for debug: print members of anchoring segments:
 	cout << "***********************ANCHORING SEGMENTS: **************************" << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 
 	//cout << "Anchoring segments size: "  << segments.size() << endl;
 	//create events from anchoring segments
@@ -77,17 +77,15 @@ int main()
 	//find intersections between sweep plane and anchoring segments at each event(which is a point)
 	//these intersections are the points sent to select bridge
 
-	//for debug, print event info:
+	/*//for debug, print event info:
 	cout << "*******************************EVENT MEMBERS: ***************************" << endl;
 	for(auto i = active_events.begin(); i != active_events.end(); i++)
 	{
 		i->print_event_members(cout);
-	}
+	}*/
 
 	//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
 
-	//find_intersections(active_events, slope_of_sweep, i, points_for_alg3);
-	//TODO: FIGURE OUT WHY INTERSECTIONS NOT BEING FOUND...SEE GRAPH PAPER...
 	find_intersections(active_events, slope_of_sweep, i, segments_for_alg3);
 
 	/*
@@ -100,7 +98,7 @@ int main()
 		i->print_coords(cout);
 	}*/
 
-	//for debug
+	/*//for debug
 	cout << "*****************************SEGMENT MEMBERS: ******************************" << endl;
 	cout << "segments for al3 size: " << segments_for_alg3.size() << endl;
 	cout << "segments for alg3:" << endl;
@@ -109,7 +107,7 @@ int main()
 		i->print_coords(cout);
 		cout << "Of size: " << i->intersected_points.size() << endl;
 		i->print_intersect_pts(cout);
-	}
+	}*/
 
 	Bridge the_best_bridge;
 	the_best_bridge = select_bridge(segments_for_alg3);
