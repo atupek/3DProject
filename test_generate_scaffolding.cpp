@@ -98,7 +98,7 @@ int main()
 		i->print_coords(cout);
 	}*/
 
-	/*//for debug
+	//for debug
 	cout << "*****************************SEGMENT MEMBERS: ******************************" << endl;
 	cout << "segments for al3 size: " << segments_for_alg3.size() << endl;
 	cout << "segments for alg3:" << endl;
@@ -107,7 +107,7 @@ int main()
 		i->print_coords(cout);
 		cout << "Of size: " << i->intersected_points.size() << endl;
 		i->print_intersect_pts(cout);
-	}*/
+	}
 
 	Bridge the_best_bridge;
 	the_best_bridge = select_bridge(segments_for_alg3);
