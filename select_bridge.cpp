@@ -199,12 +199,12 @@ double calc_dist(double x1, double y1, double x2, double y2)
 //return bestBridge
 Bridge select_bridge(set<Anchoring_Segment> &segments)
 {
-	//for debug
+	/*//for debug
 	cout << "SET BEFORE SORTING: " << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}
+	}*/
 	
 	Bridge best_bridge;
 	Bridge temp_bridge;
@@ -218,8 +218,8 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 	//sort segment intersections by y-coordinate
 	vector<Anchoring_Segment> segments_by_y = set_up_sort_segments_by_y(segments);
 	
-	/*//for debug
-	cout << "SEGMENTS BY Y:" << endl;
+	/*//for debug OKAY
+	cout << "SEGMENTS BY Y SETUP:" << endl;
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
 		cout << "segment: ";
@@ -229,12 +229,12 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 	
 	sort_segments_by_y(segments_by_y);
 
-	/*//for debug
-	cout << "VECTOR AFTER SORTING BY Y: " << endl;
+	//for debug OKAY
+	/*cout << "VECTOR AFTER SORTING BY Y: " << endl;
 	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
 		i->print_coords(cout);
-		i->print_intersect_pts(cout);
+		//i->print_intersect_pts(cout);
 	}*/
 
 	//put z-coordinate values into a set, sorted by increasing z
@@ -245,23 +245,15 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 		//cout << "i->height: " << i->height << endl;
 	}
 
-	//for debug...just for testing...works
-	/*
-	for(auto i = 0; i < 11; i++)
+	/*//for debug STILL OKAY
+	cout << "VECTOR AFTER GETTING Z Values: " << endl;
+	for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 	{
-		if(i%2==0)
-		{
-			z_set.insert(-i * 3);
-			cout << "Added into z: " << (-i * 3) << endl;
-		}
-		else
-		{
-			z_set.insert(i);
-			cout << "Added into z: " << (i) << endl;
-		}
+		i->print_coords(cout);
+		//i->print_intersect_pts(cout);
 	}*/
 	
-	/*//for debug...
+	/*//for debug...OKAY
 	cout <<"Set z_set size: " << z_set.size() << endl;
 	for(auto i = z_set.begin(); i != z_set.end(); i++)
 	{
@@ -270,19 +262,34 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 
 	for(auto k = z_set.begin(); k != z_set.end(); k++)
 	{
+		/*//for debug OKAY
+		cout << "VECTOR AT TOP OF Z - LOOP: " << endl;
+		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+		{
+			i->print_coords(cout);
+			//i->print_intersect_pts(cout);
+		}*/
+
 		double this_z = *k;
+		//cout << "This z: " << *k << endl; //OKAY
 
 		for(auto i = segments_by_y.begin(); i != segments_by_y.end()--; i++)
 		{
-			/*//for debug
+			//for debug --WHY ARE WE LOSING THE NEGATIVE SEGMENTS? AND WHERE?!?!
 			cout << "********************CURRENT 'i' SEGMENT:";
 			i->print_coords(cout);
-			i->print_intersect_pts(cout);
-			cout << endl;*/
+			//i->print_intersect_pts(cout);
+			cout << endl;
 
 			temp_bridge.supported_points.clear(); //should be cleared out
 			for(auto j = i++; j != segments_by_y.end(); j++)
 			{
+				//for debug
+				cout << "CURRENT 'j' SEGMENT:";
+				j->print_coords(cout);
+				//j->print_intersect_pts(cout);
+				cout << endl;
+				
 				//compute distance between i & j intersect points
 				//if less than max_distance, add intersect points into temp_bridge.supported_points
 				for(auto m = i->intersected_points.begin(); m != i->intersected_points.end(); m++)
@@ -336,10 +343,45 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 								best_score = temp_score;
 							}
 						}
+						//for debug OKAY
+						/*cout << "Inside inner intersected points loop " << endl;
+						for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+						{
+							i->print_coords(cout);
+							//i->print_intersect_pts(cout);
+						}*/
 					}
+					//for debug OKAY
+					/*cout << "Inside outer intersected points loop " << endl;
+					for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+					{
+						i->print_coords(cout);
+						//i->print_intersect_pts(cout);
+					}*/
 				}
+				//for debug OKAY
+				/*cout << "OUTSIDE OF INNER SEGMENT LOOP" << endl;
+				for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+				{
+					i->print_coords(cout);
+					//i->print_intersect_pts(cout);
+				}*/
 			}
+			/*//for debug OKAY
+			cout << "OUTSIDE OF OUTER SEGMENT LOOP" << endl;
+			for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+			{
+				i->print_coords(cout);
+				//i->print_intersect_pts(cout);
+			}*/
 		}
+		//for debug OKAY
+		/*cout << "OUTSIDE OF Z-LOOP" << endl;
+		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+		{
+			i->print_coords(cout);
+			//i->print_intersect_pts(cout);
+		}*/
 	}
 	return best_bridge;
 }
