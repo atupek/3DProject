@@ -199,12 +199,12 @@ double calc_dist(double x1, double y1, double x2, double y2)
 //return bestBridge
 Bridge select_bridge(set<Anchoring_Segment> &segments)
 {
-	/*//for debug
+	//for debug
 	cout << "SET BEFORE SORTING: " << endl;
 	for(auto i = segments.begin(); i != segments.end(); i++)
 	{
 		i->print_coords(cout);
-	}*/
+	}
 	
 	Bridge best_bridge;
 	Bridge temp_bridge;
