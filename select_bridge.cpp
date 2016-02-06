@@ -207,7 +207,7 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 	}*/
 	
 	Bridge best_bridge;
-	Bridge temp_bridge;
+	//Bridge temp_bridge; should declare temp_bridge later, I think
 
 	//cout << "STARTING TEMP BRIDGE SUPPORTED POINTS SIZE: " << temp_bridge.supported_points.size() << endl;
 	
@@ -281,7 +281,7 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 			//i->print_intersect_pts(cout);
 			cout << endl;*/
 
-			temp_bridge.supported_points.clear(); //should be cleared out
+			//temp_bridge.supported_points.clear(); //should be cleared out...temp_bridge should be declared later...
 			for(auto j = i; j != segments_by_y.end(); j++) //removed i++
 			{
 				/*//for debug -- Getting the negative segments here
@@ -309,7 +309,11 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 							
 							if(this_distance < max_distance)
 							{
-								temp_bridge.supported_points.insert(*n);
+								Point new_p1(*n);
+								Point new_p2(*m);
+								Bridge temp_bridge(new_p1, new_p2, this_z);
+								//TODO: ISSUE IS SOMEWHERE WITH THIS LINE...or perhaps the declaration location of temp_bridge
+								temp_bridge.supported_points.insert(*n); 
 
 								//for debug...
 								/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
@@ -320,16 +324,16 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 								}*/
 
 								//TODO: really should write = operator for Point class at some time...
-								Point new_p1(*n);
-								Point new_p2(*m);
-								temp_bridge.p1 = new_p1;
-								temp_bridge.p2 = new_p2;
+								//Point new_p1(*n); //moved this & next line up..
+								//Point new_p2(*m);
+								//temp_bridge.p1 = new_p1;
+								//temp_bridge.p2 = new_p2;
 
 								/*//for debug
 								cout << "Sent to gain: " << endl;
 								cout << "\tthis_z: " << this_z << endl;
-								cout << "\tthis_distance: " << this_distance << endl;
-								cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;*/
+								cout << "\tthis_distance: " << this_distance << endl;*/
+								cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;
 								
 								double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
 								double l_max = calculate_lmax(segments);
