@@ -297,6 +297,12 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 					//if less than max_distance, add intersect points into temp_bridge.supported_points
 					for(auto m = i->intersected_points.begin(); m != i->intersected_points.end(); m++)
 					{
+						//create a temp_bridge with m as its endpt 1 at height of this_z
+						Point new_p1(*m);
+						Bridge temp_bridge;
+						temp_bridge.p1 = new_p1;
+						//and insert p1 into the points supported by the bridge
+						temp_bridge.supported_points.insert(new_p1);
 						for(auto n = j->intersected_points.begin(); n != j->intersected_points.end(); n++)
 						{
 							//double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
@@ -306,14 +312,22 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 							cout << "*********************************************THIS DISTANCE: " << this_distance << endl;
 							cout << "X1, Y1: " << m->x << ", " << m->y << endl;
 							cout << "X2, Y2: " << n->.x << ", " << n->.y << endl;*/
+							//Point new_p1(*n);
+							//Point new_p2(*m);
+							//Bridge temp_bridge(new_p1, new_p2, this_z);
 							
 							if(this_distance < max_distance)
 							{
-								Point new_p1(*n);
+								//if the distance is less than the max distance, make n the new p2 of temp_bridge
+								Point new_p2(*n);
+								temp_bridge.p1 = new_p2;
+								//and insert p2 into the points supported by the bridge
+
+								/*Point new_p1(*n); //moved it up outside of the if distance stmt
 								Point new_p2(*m);
-								Bridge temp_bridge(new_p1, new_p2, this_z);
+								Bridge temp_bridge(new_p1, new_p2, this_z);*/
 								//TODO: ISSUE IS SOMEWHERE WITH THIS LINE...or perhaps the declaration location of temp_bridge
-								temp_bridge.supported_points.insert(*n); 
+								temp_bridge.supported_points.insert(new_p2); 
 
 								//for debug...
 								/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
