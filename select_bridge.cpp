@@ -273,91 +273,96 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 		double this_z = *k;
 		//cout << "This z: " << *k << endl; //OKAY
 
-		for(auto i = segments_by_y.begin(); i != segments_by_y.end()--; i++)
+		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++) //removed -- from .end()
 		{
-			//for debug --WHY ARE WE LOSING THE NEGATIVE SEGMENTS? AND WHERE?!?!
+			/*//for debug --WHY ARE WE LOSING THE NEGATIVE SEGMENTS? AND WHERE?!?!
 			cout << "********************CURRENT 'i' SEGMENT:";
 			i->print_coords(cout);
 			//i->print_intersect_pts(cout);
-			cout << endl;
+			cout << endl;*/
 
 			temp_bridge.supported_points.clear(); //should be cleared out
-			for(auto j = i++; j != segments_by_y.end(); j++)
+			for(auto j = i; j != segments_by_y.end(); j++) //removed i++
 			{
-				//for debug
+				/*//for debug -- Getting the negative segments here
 				cout << "CURRENT 'j' SEGMENT:";
 				j->print_coords(cout);
 				//j->print_intersect_pts(cout);
-				cout << endl;
+				cout << endl;*/
 				
-				//compute distance between i & j intersect points
-				//if less than max_distance, add intersect points into temp_bridge.supported_points
-				for(auto m = i->intersected_points.begin(); m != i->intersected_points.end(); m++)
+				//need to check to make sure segments' endpts are not equal, I think
+				if(i->endpt1.x != j->endpt1.x && i->endpt1.y != j->endpt1.y)
 				{
-					for(auto n = j->intersected_points.begin(); n != j->intersected_points.end(); n++)
+					cout << "NOT EQUAL" << endl;
+					//compute distance between i & j intersect points
+					//if less than max_distance, add intersect points into temp_bridge.supported_points
+					for(auto m = i->intersected_points.begin(); m != i->intersected_points.end(); m++)
 					{
-						//double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
-						double this_distance = calc_dist(m->x, m->y, n->x, n->y);
-
-						/*//for debug
-						cout << "*********************************************THIS DISTANCE: " << this_distance << endl;
-						cout << "X1, Y1: " << m->x << ", " << m->y << endl;
-						cout << "X2, Y2: " << n->.x << ", " << n->.y << endl;*/
-						
-						if(this_distance < max_distance)
+						for(auto n = j->intersected_points.begin(); n != j->intersected_points.end(); n++)
 						{
-							temp_bridge.supported_points.insert(*n);
-
-							//for debug...
-							/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
-							cout << "POINTS SUPPORTED BY TEMP BRIDGE: " << endl;
-							for(auto m = temp_bridge.supported_points.begin(); m != temp_bridge.supported_points.end(); m++)
-							{
-								m->print_coords(cout);
-							}*/
-
-							//TODO: really should write = operator for Point class at some time...
-							Point new_p1(*n);
-							Point new_p2(*m);
-							temp_bridge.p1 = new_p1;
-							temp_bridge.p2 = new_p2;
+							//double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
+							double this_distance = calc_dist(m->x, m->y, n->x, n->y);
 
 							/*//for debug
-							cout << "Sent to gain: " << endl;
-							cout << "\tthis_z: " << this_z << endl;
-							cout << "\tthis_distance: " << this_distance << endl;
-							cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;*/
+							cout << "*********************************************THIS DISTANCE: " << this_distance << endl;
+							cout << "X1, Y1: " << m->x << ", " << m->y << endl;
+							cout << "X2, Y2: " << n->.x << ", " << n->.y << endl;*/
 							
-							double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
-							double l_max = calculate_lmax(segments);
-							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
-
-							/*//for debug
-							cout << "Temp Gain: " << temp_gain << endl;
-							cout << "l_max: " << l_max << endl;
-							cout << "Temp Score: " << temp_score << endl << endl;*/
-
-							if(temp_gain > 0.0 && temp_score > best_score)
+							if(this_distance < max_distance)
 							{
-								best_bridge = temp_bridge;
-								best_score = temp_score;
+								temp_bridge.supported_points.insert(*n);
+
+								//for debug...
+								/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
+								cout << "POINTS SUPPORTED BY TEMP BRIDGE: " << endl;
+								for(auto m = temp_bridge.supported_points.begin(); m != temp_bridge.supported_points.end(); m++)
+								{
+									m->print_coords(cout);
+								}*/
+
+								//TODO: really should write = operator for Point class at some time...
+								Point new_p1(*n);
+								Point new_p2(*m);
+								temp_bridge.p1 = new_p1;
+								temp_bridge.p2 = new_p2;
+
+								/*//for debug
+								cout << "Sent to gain: " << endl;
+								cout << "\tthis_z: " << this_z << endl;
+								cout << "\tthis_distance: " << this_distance << endl;
+								cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;*/
+								
+								double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
+								double l_max = calculate_lmax(segments);
+								double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
+
+								/*//for debug
+								cout << "Temp Gain: " << temp_gain << endl;
+								cout << "l_max: " << l_max << endl;
+								cout << "Temp Score: " << temp_score << endl << endl;*/
+
+								if(temp_gain > 0.0 && temp_score > best_score)
+								{
+									best_bridge = temp_bridge;
+									best_score = temp_score;
+								}
 							}
+							//for debug OKAY
+							/*cout << "Inside inner intersected points loop " << endl;
+							for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
+							{
+								i->print_coords(cout);
+								//i->print_intersect_pts(cout);
+							}*/
 						}
 						//for debug OKAY
-						/*cout << "Inside inner intersected points loop " << endl;
+						/*cout << "Inside outer intersected points loop " << endl;
 						for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
 						{
 							i->print_coords(cout);
 							//i->print_intersect_pts(cout);
 						}*/
 					}
-					//for debug OKAY
-					/*cout << "Inside outer intersected points loop " << endl;
-					for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
-					{
-						i->print_coords(cout);
-						//i->print_intersect_pts(cout);
-					}*/
 				}
 				//for debug OKAY
 				/*cout << "OUTSIDE OF INNER SEGMENT LOOP" << endl;
