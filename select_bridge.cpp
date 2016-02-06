@@ -281,7 +281,6 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 			//i->print_intersect_pts(cout);
 			cout << endl;*/
 
-			//temp_bridge.supported_points.clear(); //should be cleared out...temp_bridge should be declared later...
 			for(auto j = i; j != segments_by_y.end(); j++) //removed i++
 			{
 				/*//for debug -- Getting the negative segments here
@@ -298,11 +297,19 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 					for(auto m = i->intersected_points.begin(); m != i->intersected_points.end(); m++)
 					{
 						//create a temp_bridge with m as its endpt 1 at height of this_z
+						//TODO: really should write = operator for Point class at some time...
 						Point new_p1(*m);
 						Bridge temp_bridge;
 						temp_bridge.p1 = new_p1;
 						//and insert p1 into the points supported by the bridge
 						temp_bridge.supported_points.insert(new_p1);
+						//and set temp_bridge.length = 0
+						temp_bridge.length = 0.0;
+
+						/*//for debug
+						cout << "************TEMP BRIDGE MEMBERS before adding p2: " << endl;
+						temp_bridge.print_bridge_members(cout);*/
+
 						for(auto n = j->intersected_points.begin(); n != j->intersected_points.end(); n++)
 						{
 							//double this_distance = calc_dist(i->intersect_pt.x, i->intersect_pt.y, j->intersect_pt.x, j->intersect_pt.y);
@@ -312,22 +319,21 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 							cout << "*********************************************THIS DISTANCE: " << this_distance << endl;
 							cout << "X1, Y1: " << m->x << ", " << m->y << endl;
 							cout << "X2, Y2: " << n->.x << ", " << n->.y << endl;*/
-							//Point new_p1(*n);
-							//Point new_p2(*m);
-							//Bridge temp_bridge(new_p1, new_p2, this_z);
 							
-							if(this_distance < max_distance)
+							/*//for debug
+							cout << "This distance, temp_bridge.length: " << endl;
+							cout << this_distance << ", " << temp_bridge.length << endl;*/
+
+							if(this_distance < max_distance /*&& this_distance > temp_bridge.length*/)
 							{
 								//if the distance is less than the max distance, make n the new p2 of temp_bridge
 								Point new_p2(*n);
-								temp_bridge.p1 = new_p2;
+								temp_bridge.p2 = new_p2;
 								//and insert p2 into the points supported by the bridge
-
-								/*Point new_p1(*n); //moved it up outside of the if distance stmt
-								Point new_p2(*m);
-								Bridge temp_bridge(new_p1, new_p2, this_z);*/
-								//TODO: ISSUE IS SOMEWHERE WITH THIS LINE...or perhaps the declaration location of temp_bridge
-								temp_bridge.supported_points.insert(new_p2); 
+								temp_bridge.supported_points.insert(new_p2);
+								//and calculate temp_bridge's length
+								temp_bridge.length = this_distance;
+								//cout << "temp_bridge.length: " << temp_bridge.length << endl << endl; 
 
 								//for debug...
 								/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
@@ -337,17 +343,11 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 									m->print_coords(cout);
 								}*/
 
-								//TODO: really should write = operator for Point class at some time...
-								//Point new_p1(*n); //moved this & next line up..
-								//Point new_p2(*m);
-								//temp_bridge.p1 = new_p1;
-								//temp_bridge.p2 = new_p2;
-
 								/*//for debug
 								cout << "Sent to gain: " << endl;
 								cout << "\tthis_z: " << this_z << endl;
-								cout << "\tthis_distance: " << this_distance << endl;*/
-								cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;
+								cout << "\tthis_distance: " << this_distance << endl;
+								cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;*/
 								
 								double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
 								double l_max = calculate_lmax(segments);
@@ -358,8 +358,8 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 								cout << "l_max: " << l_max << endl;
 								cout << "Temp Score: " << temp_score << endl << endl;*/
 
-								//for debug
-								/*cout << "TEMP BRIDGE MEMBERS: " << endl;
+								/*//for debug
+								cout << "TEMP BRIDGE MEMBERS: " << endl;
 								temp_bridge.print_bridge_members(cout);*/
 
 								if(temp_gain > 0.0 && temp_score > best_score)
