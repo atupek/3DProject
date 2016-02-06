@@ -375,46 +375,11 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 									best_bridge.print_bridge_members(cout);*/
 								}
 							}
-							//for debug OKAY
-							/*cout << "Inside inner intersected points loop " << endl;
-							for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
-							{
-								i->print_coords(cout);
-								//i->print_intersect_pts(cout);
-							}*/
 						}
-						//for debug OKAY
-						/*cout << "Inside outer intersected points loop " << endl;
-						for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
-						{
-							i->print_coords(cout);
-							//i->print_intersect_pts(cout);
-						}*/
 					}
 				}
-				//for debug OKAY
-				/*cout << "OUTSIDE OF INNER SEGMENT LOOP" << endl;
-				for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
-				{
-					i->print_coords(cout);
-					//i->print_intersect_pts(cout);
-				}*/
 			}
-			/*//for debug OKAY
-			cout << "OUTSIDE OF OUTER SEGMENT LOOP" << endl;
-			for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
-			{
-				i->print_coords(cout);
-				//i->print_intersect_pts(cout);
-			}*/
 		}
-		//for debug OKAY
-		/*cout << "OUTSIDE OF Z-LOOP" << endl;
-		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++)
-		{
-			i->print_coords(cout);
-			//i->print_intersect_pts(cout);
-		}*/
 	}
 	return best_bridge;
 }
