@@ -275,7 +275,7 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 
 		for(auto i = segments_by_y.begin(); i != segments_by_y.end(); i++) //removed -- from .end()
 		{
-			/*//for debug --WHY ARE WE LOSING THE NEGATIVE SEGMENTS? AND WHERE?!?!
+			/*//for debug --WHY ARE WE LOSING THE NEGATIVE SEGMENTS? AND WHERE?!?! it had something to do with the -- or ++ so got rid of both
 			cout << "********************CURRENT 'i' SEGMENT:";
 			i->print_coords(cout);
 			//i->print_intersect_pts(cout);
@@ -293,7 +293,6 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 				//need to check to make sure segments' endpts are not equal, I think
 				if(i->endpt1.x != j->endpt1.x && i->endpt1.y != j->endpt1.y)
 				{
-					cout << "NOT EQUAL" << endl;
 					//compute distance between i & j intersect points
 					//if less than max_distance, add intersect points into temp_bridge.supported_points
 					for(auto m = i->intersected_points.begin(); m != i->intersected_points.end(); m++)
@@ -341,10 +340,21 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 								cout << "l_max: " << l_max << endl;
 								cout << "Temp Score: " << temp_score << endl << endl;*/
 
+								//for debug
+								/*cout << "TEMP BRIDGE MEMBERS: " << endl;
+								temp_bridge.print_bridge_members(cout);*/
+
 								if(temp_gain > 0.0 && temp_score > best_score)
 								{
 									best_bridge = temp_bridge;
 									best_score = temp_score;
+
+									/*//for debug
+									cout << "TEMP BRIDGE MEMBERS:" << endl;
+									temp_bridge.print_bridge_members(cout);
+
+									cout << "Best bridge members: " << endl;
+									best_bridge.print_bridge_members(cout);*/
 								}
 							}
 							//for debug OKAY
