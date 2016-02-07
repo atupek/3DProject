@@ -188,6 +188,18 @@ double calc_dist(double x1, double y1, double x2, double y2)
 //if they are not, then we skip
 bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 {
+	if(sweep_slope == 0)
+	{
+		//if horizontal, y1 == y2
+		return (p1.y == p2.y);
+	}
+	if(sweep_slope == std::numeric_limits<double>::infinity())
+	{
+		//if vertial, x1 == x2
+		return (p1.x == p2.x);
+	}
+	//make calculations for other cases and return true if on same line, otherwise return false
+	//return false;
 	return true;
 }
 
