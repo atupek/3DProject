@@ -16,6 +16,8 @@ double calculate_gain(double height, double length, int num_elements);
 double calculate_score(double gain, int num_elements, double lmax);
 double calc_dist(double x1, double y1, double x2, double y2);
 
+bool on_same_sweep_line(Point p1, Point p2, double sweep_slope);
+
 vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments);
 void sort_segments_by_z(vector<Anchoring_Segment> & segment);
 void stable_merge_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last);

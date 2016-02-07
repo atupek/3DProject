@@ -183,6 +183,14 @@ double calc_dist(double x1, double y1, double x2, double y2)
 	return dist;
 }
 
+//check if both points are on same sweep_line
+//if they are, then we continue with checking
+//if they are not, then we skip
+bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
+{
+	return true;
+}
+
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
 //returns bestBridge
 //Container (C) initialized with segments that intesect sweep plane
@@ -324,7 +332,11 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 							cout << "This distance, temp_bridge.length: " << endl;
 							cout << this_distance << ", " << temp_bridge.length << endl;*/
 
-							if(this_distance < max_distance /*&& this_distance > temp_bridge.length*/)
+							bool check_it = on_same_sweep_line(*m, *n, 0.0);
+
+							//check if this_distance < max_distance and points are on the same sweep line
+							//if(this_distance < max_distance /*&& this_distance > temp_bridge.length*/)
+							if(this_distance < max_distance && check_it)
 							{
 								//if the distance is less than the max distance, make n the new p2 of temp_bridge
 								Point new_p2(*n);
@@ -333,7 +345,7 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 								temp_bridge.supported_points.insert(new_p2);
 								//and calculate temp_bridge's length
 								temp_bridge.length = this_distance;
-								//cout << "temp_bridge.length: " << temp_bridge.length << endl << endl; 
+								//cout << "temp_bridge.length: " << temp_bridge.length << endl << endl;
 
 								//for debug...
 								/*cout << "number of supported points: " << temp_bridge.supported_points.size() << endl;
@@ -366,13 +378,6 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 								{
 									best_bridge = temp_bridge;
 									best_score = temp_score;
-
-									/*//for debug
-									cout << "TEMP BRIDGE MEMBERS:" << endl;
-									temp_bridge.print_bridge_members(cout);
-
-									cout << "Best bridge members: " << endl;
-									best_bridge.print_bridge_members(cout);*/
 								}
 							}
 						}
