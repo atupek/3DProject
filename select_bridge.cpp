@@ -183,7 +183,9 @@ double calc_dist(double x1, double y1, double x2, double y2)
 	return dist;
 }
 
-//check if both points are on same sweep_line
+//to check if both points are on same sweep_line
+//find slope between them, if slope == sweep_slope
+//then they're on the same sweep_line
 //if they are, then we continue with checking
 //if they are not, then we skip
 bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
@@ -191,16 +193,36 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 	if(sweep_slope == 0)
 	{
 		//if horizontal, y1 == y2
-		return (p1.y == p2.y);
+		//cout << "slope == 0" << endl;
+		//return (p1.y == p2.y);
+		//hmmm...if sweep_slope is horizontal, then anch_slope is vertical
+		//did I get my slopes messed up?
+		//check to see if x's are equal...
+		//cout << "p1.y: " << p1.y << endl;
+		//cout << "p2.y: " << p2.y << endl;
+		if(p1.x == p2.x)
+		{
+			cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
+			return true;
+		}
 	}
 	if(sweep_slope == std::numeric_limits<double>::infinity())
 	{
 		//if vertial, x1 == x2
+		cout << "slope == infinity" << endl;
 		return (p1.x == p2.x);
 	}
 	//make calculations for other cases and return true if on same line, otherwise return false
-	//return false;
-	return true;
+	double numerator = p1.y - p2.y;
+	double denominator = p1.x - p2.x;
+	double test_slope = numerator/denominator;
+	if(sweep_slope == test_slope)
+	{
+		cout << "slopes are equal" << endl;
+		return true;
+	}
+	//cout << "OUT HERE THERE IS NO TRUTH" << endl;
+	return false;
 }
 
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
@@ -217,7 +239,7 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 //				get bridge gain & score for points_supported_by_bridge, i, j, z
 //				if gain>0 and score > bestScore then bestBridge = currentBridge
 //return bestBridge
-Bridge select_bridge(set<Anchoring_Segment> &segments)
+Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope)
 {
 	/*//for debug
 	cout << "SET BEFORE SORTING: " << endl;
@@ -344,12 +366,15 @@ Bridge select_bridge(set<Anchoring_Segment> &segments)
 							cout << "This distance, temp_bridge.length: " << endl;
 							cout << this_distance << ", " << temp_bridge.length << endl;*/
 
-							bool check_it = on_same_sweep_line(*m, *n, 0.0);
+							//check if on the same sweep line
+							bool check_it = on_same_sweep_line(*m, *n, sweep_slope);
+							cout << "CHECK IT: " << check_it << endl;
 
 							//check if this_distance < max_distance and points are on the same sweep line
 							//if(this_distance < max_distance /*&& this_distance > temp_bridge.length*/)
-							if(this_distance < max_distance && check_it)
+							if((this_distance < max_distance) && check_it)
 							{
+								//cout << "IN HERE>>>>>>>>>" << endl;
 								//if the distance is less than the max distance, make n the new p2 of temp_bridge
 								Point new_p2(*n);
 								temp_bridge.p2 = new_p2;

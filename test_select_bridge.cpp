@@ -142,7 +142,7 @@ int main()
 		i->print_coords(cout);
 	}*/
 	
-	the_best_bridge = select_bridge(toy_segment_set);
+	the_best_bridge = select_bridge(toy_segment_set, test_slope);
 	cout << "Let's see what the toy set produces: " << endl;
 	the_best_bridge.print_bridge_members(cout);
 	cout << endl;

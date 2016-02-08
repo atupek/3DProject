@@ -54,7 +54,7 @@ int main()
 
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
-	int i = 4;
+	int i = 1;
 	make_point_set();
 
 	make_sweep_vector();
@@ -110,7 +110,7 @@ int main()
 	}
 
 	Bridge the_best_bridge;
-	the_best_bridge = select_bridge(segments_for_alg3);
+	the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
 
 	//for debug
 	cout << "*******************RESULTS*********************" <<endl;
