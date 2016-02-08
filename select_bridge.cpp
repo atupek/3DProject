@@ -200,7 +200,7 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 		//check to see if x's are equal...
 		//cout << "p1.y: " << p1.y << endl;
 		//cout << "p2.y: " << p2.y << endl;
-		if(p1.x == p2.x)
+		if(p1.y == p2.y)
 		{
 			cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
 			return true;
@@ -209,8 +209,12 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 	if(sweep_slope == std::numeric_limits<double>::infinity())
 	{
 		//if vertial, x1 == x2
-		cout << "slope == infinity" << endl;
-		return (p1.x == p2.x);
+		//cout << "slope == infinity" << endl;
+		if(p1.x == p2.x)
+		{
+			cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
+			return true;
+		}
 	}
 	//make calculations for other cases and return true if on same line, otherwise return false
 	double numerator = p1.y - p2.y;

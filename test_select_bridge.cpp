@@ -15,7 +15,8 @@ using std::vector;
 //NOTE:
 //test set is written to only be viable for segment slope == 0
 //any other slope will not work, because intersect points are slope-specific
-double test_slope = 0.0;
+double test_anch_seg_slope = 0.0;
+double test_sweep_slope = std::numeric_limits<double>::infinity();
 //double test_slope = std::numeric_limits<double>::infinity();
 //double test_slope = -1.0;
 //double test_slope = -0.5;
@@ -34,7 +35,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	segment0.endpt2 = point1;
 	segment0.intersected_points = {point0};
 	segment0.height = point0.z;
-	segment0.slope = test_slope;
+	segment0.slope = test_anch_seg_slope;
 
 	//segment 1
 	Point point2(19, 9, 15);
@@ -45,7 +46,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	segment1.endpt2 = point3;
 	segment1.intersected_points = {point2, point4};
 	segment1.height = point2.z;
-	segment1.slope = test_slope;
+	segment1.slope = test_anch_seg_slope;
 
 	//segment2
 	Point point5(18, 24, 17);
@@ -57,7 +58,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	Point point8(25, 24, 17);
 	segment2.intersected_points = {point5, point7, point8};
 	segment2.height = point5.z;
-	segment2.slope = test_slope;
+	segment2.slope = test_anch_seg_slope;
 
 	//segment3
 	Point point9(11, 15, 20);
@@ -70,7 +71,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	Point point13(25, 15, 20);
 	segment3.intersected_points = {point9, point11, point12, point13};
 	segment3.height = point9.z;
-	segment3.slope = test_slope;
+	segment3.slope = test_anch_seg_slope;
 
 	//segment4
 	Point point14(-5, 20, 18);
@@ -82,7 +83,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	Point point17(19, 20, 18);
 	segment4.intersected_points = {point0, point15, point16, point17};
 	segment4.height = point0.z;
-	segment4.slope = test_slope;
+	segment4.slope = test_anch_seg_slope;
 
 	//segment5
 	Point point18(-11, 9, 15);
@@ -93,7 +94,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	Point point20(18, 9, 15);
 	segment5.intersected_points = {point2, point19, point20};
 	segment5.height = point2.z;
-	segment5.slope = test_slope;
+	segment5.slope = test_anch_seg_slope;
 
 	//segment6
 	Point point21(-12, 24, 17);
@@ -103,7 +104,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	Point point22(11, 24, 17);
 	segment6.intersected_points = {point5, point22};
 	segment6.height = point5.z;
-	segment6.slope = test_slope;
+	segment6.slope = test_anch_seg_slope;
 
 	//segment7
 	Point point23(-19, 15, 20);
@@ -112,7 +113,7 @@ set<Anchoring_Segment> make_toy_example_1()
 	segment7.endpt2 = point23;
 	segment7.intersected_points = {point9};
 	segment7.height = point9.z;
-	segment7.slope = test_slope;
+	segment7.slope = test_anch_seg_slope;
 
 
 	toy_set_1.insert(segment0);
@@ -142,7 +143,7 @@ int main()
 		i->print_coords(cout);
 	}*/
 	
-	the_best_bridge = select_bridge(toy_segment_set, test_slope);
+	the_best_bridge = select_bridge(toy_segment_set, test_sweep_slope);
 	cout << "Let's see what the toy set produces: " << endl;
 	the_best_bridge.print_bridge_members(cout);
 	cout << endl;

@@ -54,7 +54,7 @@ int main()
 
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
-	int i = 1;
+	int i = 0;
 	make_point_set();
 
 	make_sweep_vector();
