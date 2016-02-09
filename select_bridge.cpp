@@ -10,6 +10,13 @@ using std::distance;
 //lmax calculates distance of heighest element being supported above the bridge
 //input: set of segments intersecting sweep plane at given event
 //output: highest z-value
+//NOPE ********************************TODO**********************************
+//returns double
+//for each point that is supported by the bridge, calculate the lmax
+//and return the largest value calculated
+//calculates the horizontal distance between the two points (the intersection pt and the point supported)
+//and the vertical distance between the two points
+//if that number is greater than the given max, then it becomes the new max
 double calculate_lmax(set<Anchoring_Segment> segments)
 {
 	double temp = 0.0;
@@ -32,16 +39,20 @@ double calculate_lmax(set<Anchoring_Segment> segments)
 //w(b) = length of bridge
 //h(b) = height of bridge
 //k = # elements supported
+//*************TODO******************CHECK: as long as everything sent is correct, will return correct
 double calculate_gain(double height, double length, int num_elements)
 {
 	return((num_elements-2)*height) - length;
+	//just seeing what this does if I don't constrain it to supporting at least two points --NO
+	//return ((num_elements * height) - length);
 }
 
 //S(b) = G(b) - k * lmax(b)
 //lmax(b) is the max length of structure connecting an element above to the bridge
+//****************TODO************CHECK: as long as everything sent is correct, will return correct
 double calculate_score(double gain, int num_elements, double lmax)
 {
-	return gain - num_elements * lmax;
+	return gain - (num_elements * lmax);
 }
 
 void check_collision()
@@ -202,7 +213,7 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 		//cout << "p2.y: " << p2.y << endl;
 		if(p1.y == p2.y)
 		{
-			cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
+			//cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
 			return true;
 		}
 	}
@@ -212,7 +223,7 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 		//cout << "slope == infinity" << endl;
 		if(p1.x == p2.x)
 		{
-			cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
+			//cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
 			return true;
 		}
 	}
@@ -222,7 +233,7 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 	double test_slope = numerator/denominator;
 	if(sweep_slope == test_slope)
 	{
-		cout << "slopes are equal" << endl;
+		//cout << "slopes are equal" << endl;
 		return true;
 	}
 	//cout << "OUT HERE THERE IS NO TRUTH" << endl;
@@ -243,6 +254,19 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 //				get bridge gain & score for points_supported_by_bridge, i, j, z
 //				if gain>0 and score > bestScore then bestBridge = currentBridge
 //return bestBridge
+
+
+//NOTE: INTERSECTIONS & POINTS THAT NEED SUPPORT ARE NOT THE SAME THING
+//BRIDGE CANNOT BE HIGHER THAN THE LOWEST Z OF A POINT ITS SUPPORTING
+
+//for each anchoring segment with an intersection along the same sweep line
+//check distance, if distance less than max_distance
+//add Point (NOT INTERSECTION) supported to set of supported points
+//calculate lmax which is total distance height + length to that point
+//calculate gain & score
+//where the length calculation in gain is from intersection to intersection along sweep line
+//if gain > 0, calculate the lmax and score
+//if score is better than best score, replace best bridge with temp bridge
 Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope)
 {
 	/*//for debug
@@ -406,10 +430,10 @@ Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope)
 								double l_max = calculate_lmax(segments);
 								double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
 
-								/*//for debug
+								//for debug
 								cout << "Temp Gain: " << temp_gain << endl;
 								cout << "l_max: " << l_max << endl;
-								cout << "Temp Score: " << temp_score << endl << endl;*/
+								cout << "Temp Score: " << temp_score << endl << endl;
 
 								/*//for debug
 								cout << "TEMP BRIDGE MEMBERS: " << endl;
