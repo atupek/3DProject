@@ -6,6 +6,8 @@ using std::copy;
 using std::size_t;
 #include <iterator>
 using std::distance;
+#include <cmath> //for abs
+using std::abs;
 
 //lmax calculates distance of heighest element being supported above the bridge
 //input: set of segments intersecting sweep plane at given event
@@ -33,6 +35,14 @@ double calculate_lmax(set<Anchoring_Segment> segments)
 		}
 	}
 	return temp;
+}
+
+double new_lmax(Point p1, Point p2)
+{
+	double horizontal_distance = calc_dist(p1.x, p1.y, p2.x, p2.y);
+	double vertical_distance = abs(p2.z - p1.z);
+	double lmax = horizontal_distance + vertical_distance;
+	return lmax;
 }
 
 //G(b) = (k-2)h(b)-w(b)
@@ -396,7 +406,7 @@ Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope)
 
 							//check if on the same sweep line
 							bool check_it = on_same_sweep_line(*m, *n, sweep_slope);
-							cout << "CHECK IT: " << check_it << endl;
+							//cout << "CHECK IT: " << check_it << endl;
 
 							//check if this_distance < max_distance and points are on the same sweep line
 							//if(this_distance < max_distance /*&& this_distance > temp_bridge.length*/)
@@ -420,29 +430,43 @@ Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope)
 									m->print_coords(cout);
 								}*/
 
-								/*//for debug
-								cout << "Sent to gain: " << endl;
+								//for debug
+								/*cout << "Sent to gain: " << endl;
 								cout << "\tthis_z: " << this_z << endl;
 								cout << "\tthis_distance: " << this_distance << endl;
 								cout << "\tnumber of supported points: " << temp_bridge.supported_points.size() << endl;*/
 								
 								double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
-								double l_max = calculate_lmax(segments);
-								double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
+								//double l_max = calculate_lmax(segments);
+								//double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), l_max);
 
 								//for debug
 								cout << "Temp Gain: " << temp_gain << endl;
-								cout << "l_max: " << l_max << endl;
-								cout << "Temp Score: " << temp_score << endl << endl;
+								/*cout << "l_max: " << l_max << endl;
+								cout << "Temp Score: " << temp_score << endl << endl;*/
 
 								/*//for debug
 								cout << "TEMP BRIDGE MEMBERS: " << endl;
 								temp_bridge.print_bridge_members(cout);*/
 
-								if(temp_gain > 0.0 && temp_score > best_score)
+								//this is the old code that I'm re-writing now...
+								/*if(temp_gain > 0.0 && temp_score > best_score)
 								{
 									best_bridge = temp_bridge;
 									best_score = temp_score;
+								}*/
+								if(temp_gain > 0)
+								{
+									//calculate l_max and score
+									double temp_l_max = new_lmax(i->endpt1, j->endpt1);
+									cout << "Lmax: " << temp_l_max << endl;
+									double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_l_max);
+									cout << "temp score: " << temp_score << endl;
+									if(temp_score > best_score)
+									{
+										best_bridge = temp_bridge;
+										best_score = temp_score;
+									}
 								}
 							}
 						}
