@@ -110,8 +110,8 @@ void send_bridges(ofstream & filename, set<Bridge> bridge_set)
 		{
 			filename << "//adding bridge" << endl;
 			filename << "\tbridge(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
-			filename << "\tpillar(" << i->p1.x << ", " << i->p1.y << ", " << i->height << ", " << (i->height - i->p1.z) << ");" << endl;
-			filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->height - i->p2.z) << ");" << endl;
+			filename << "\tpillar(" << i->p1.x << ", " << i->p1.y << ", " << i->height << ", " << (i->p1.z - i->height) << ");" << endl;
+			filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->p2.z - i->height) << ");" << endl;
 		}
 	}
 }
