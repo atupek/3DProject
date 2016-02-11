@@ -92,14 +92,27 @@ void send_points(ofstream & filename, set<Point> &point_set)
 	}
 }
 
-//will need to work in conditional for horizontal bridges, if horizontal, use bridge1
+//TODO: NEED TO CHECK THIS...
+//will need to work in conditional for horizontal bridges, if horizontal (p1.y == p2.y), use bridge1
 //otherwise use bridge
 void send_bridges(ofstream & filename, set<Bridge> bridge_set)
 {
 	for(auto i = bridge_set.begin(); i != bridge_set.end(); i++)
 	{
-		filename << "//adding bridge" << endl;
-		filename << "\tbridge(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
+		if(i->p1.y == i->p2.y)
+		{
+			filename << "//adding bridge" << endl;
+			filename << "\tbridge1(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
+			filename << "\tpillar(" << i->p1.x << ", " << i->p1.y << ", " << i->height << ", " << (i->height - i->p1.z) << ");" << endl;
+			filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->height - i->p2.z) << ");" << endl;
+		}
+		else
+		{
+			filename << "//adding bridge" << endl;
+			filename << "\tbridge(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
+			filename << "\tpillar(" << i->p1.x << ", " << i->p1.y << ", " << i->height << ", " << (i->height - i->p1.z) << ");" << endl;
+			filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->height - i->p2.z) << ");" << endl;
+		}
 	}
 }
 
@@ -115,7 +128,7 @@ int main()
 	ofstream out_file("scad_output.scad");
 	insert_header_info(out_file);
 	//sending_test_structures(out_file);
-	send_points(out_file, active_points);
+	//send_points(out_file, active_points);
 	send_bridges(out_file, active_bridges);
 	insert_closing_brace(out_file);
 
