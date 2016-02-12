@@ -92,7 +92,7 @@ void send_points(ofstream & filename, set<Point> &point_set)
 	}
 }
 
-//TODO: NEED TO CHECK THIS...
+//TODO: NEED TO TEST THIS...
 //will need to work in conditional for horizontal bridges, if horizontal (p1.y == p2.y), use bridge1
 //otherwise use bridge
 void send_bridges(ofstream & filename, set<Bridge> bridge_set)
@@ -128,7 +128,7 @@ int main()
 	ofstream out_file("scad_output.scad");
 	insert_header_info(out_file);
 	//sending_test_structures(out_file);
-	//send_points(out_file, active_points);
+	send_points(out_file, active_points);
 	send_bridges(out_file, active_bridges);
 	insert_closing_brace(out_file);
 
