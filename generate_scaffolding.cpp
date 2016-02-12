@@ -164,23 +164,180 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 
 				double x_int;
 				double y_int;
+
+				//check if segment_slope is 0, if it is, then sweep_slope is infinity
 				if(segment_slope == 0) //check for horizontal line
 				{
 					x_int = point_x;
 					y_int = segment_y;
+					
+					//for debug
+					cout << "Intersection at: " << x_int << ", " << y_int << endl;
+					//OKAY, intersections are being found.
+
+					//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
+					//check that it is within the endpoints of the anchoring segment
+					//first need to check if endpt1 < endpt2
+					//for debug:
+					cout << "CHECKING ENDPOINTS: " << endl;
+					cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
+					cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
+
+					//in segement is horizontal line, endpt1 < endpt2 if endpt1.x < endpt2.x (y's will be equal)
+					if(k->endpt1.x < k->endpt2.x)
+					{
+					//and check that the intersection point is between the endpoints
+						if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
+						{
+							//TODO: make new pair of intersected point & its associated segment
+							//add that pair to the sweep_line that was created
+							//at the event point
+							Point new_point(x_int, y_int, k->endpt1.z);
+							Anchoring_Segment new_seg(*k);
+
+							point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+							test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						}
+					}
+					else
+					{
+						//if it is, we swap endpoints 1 and 2...
+						//since I don't want to write swap for the Point class
+						//we'll do it using temps...
+						Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
+						Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
+
+						//and check that the intersection point is between the endpoints
+						if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
+						{
+
+							//TODO: make new pair of intersected point & its associated segment
+							//add that pair to the sweep_line that was created
+							//at the event point
+							Point new_point(x_int, y_int, k->endpt1.z);
+							Anchoring_Segment new_seg(*k);
+
+							point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+							test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						}
+					}
 				}
+				//check if segment slope is infinity, if it is, then sweep_slope is 0
 				else if(segment_slope == std::numeric_limits<double>::infinity()) //check for vertical line
 				{
 					x_int = segment_x;
 					y_int = point_y;
+					
+					//for debug
+					cout << "Intersection at: " << x_int << ", " << y_int << endl;
+					//OKAY, intersections are being found.
+
+					//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
+					//check that it is within the endpoints of the anchoring segment
+					//first need to check if endpt1 < endpt2
+					//for debug:
+					cout << "CHECKING ENDPOINTS: " << endl;
+					cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
+					cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
+
+					//if segment is vertical line, endpt1 < endpt2 if endpt1.y < endpt2.y (x's will be equal)
+					if(k->endpt1.y < k->endpt2.y)
+					{
+					//and check that the intersection point is between the endpoints
+						if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
+						{
+							//TODO: make new pair of intersected point & its associated segment
+							//add that pair to the sweep_line that was created
+							//at the event point
+							Point new_point(x_int, y_int, k->endpt1.z);
+							Anchoring_Segment new_seg(*k);
+
+							point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+							test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						}
+					}
+					else
+					{
+						//if it is, we swap endpoints 1 and 2...
+						//since I don't want to write swap for the Point class
+						//we'll do it using temps...
+						Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
+						Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
+
+						//and check that the intersection point is between the endpoints
+						if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
+						{
+
+							//TODO: make new pair of intersected point & its associated segment
+							//add that pair to the sweep_line that was created
+							//at the event point
+							Point new_point(x_int, y_int, k->endpt1.z);
+							Anchoring_Segment new_seg(*k);
+
+							point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+							test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						}
+					}
 				}
+				//other cases
 				else
 				{
 					x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+					
+					//for debug
+					cout << "Intersection at: " << x_int << ", " << y_int << endl;
+					//OKAY, intersections are being found.
+
+					//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
+					//check that it is within the endpoints of the anchoring segment
+					//first need to check if endpt1 < endpt2
+					//for debug:
+					cout << "CHECKING ENDPOINTS: " << endl;
+					cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
+					cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
+
+					//in others, endpt1 < endpt2 if endpt1.x < endpt2.x (neither will be equal...)
+					if(k->endpt1.x < k->endpt2.x)
+					{
+					//and check that the intersection point is between the endpoints
+						if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
+						{
+							//TODO: make new pair of intersected point & its associated segment
+							//add that pair to the sweep_line that was created
+							//at the event point
+							Point new_point(x_int, y_int, k->endpt1.z);
+							Anchoring_Segment new_seg(*k);
+
+							point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+							test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						}
+					}
+					else
+					{
+						//if it is, we swap endpoints 1 and 2...
+						//since I don't want to write swap for the Point class
+						//we'll do it using temps...
+						Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
+						Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
+
+						//and check that the intersection point is between the endpoints
+						if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
+						{
+
+							//TODO: make new pair of intersected point & its associated segment
+							//add that pair to the sweep_line that was created
+							//at the event point
+							Point new_point(x_int, y_int, k->endpt1.z);
+							Anchoring_Segment new_seg(*k);
+
+							point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+							test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						}
+					}
 				}
 
-				//for debug
+				/*//for debug
 				cout << "Intersection at: " << x_int << ", " << y_int << endl;
 				//OKAY, intersections are being found.
 
@@ -190,9 +347,9 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				//for debug:
 				cout << "CHECKING ENDPOINTS: " << endl;
 				cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
-				cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
+				cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;*/
 				
-				if(!(k->endpt1.x > k->endpt2.x)) //trying not greater than...
+				//if(!(k->endpt1.x > k->endpt2.x)) //trying not greater than...
 					//And that gives me only the negative anchoring segments for sweep_slope == 0
 					//and all intersections for sweep_slope == inf, 1, 2
 					//but still missing some for sweep_slope == 3, which might just be right?
@@ -202,18 +359,18 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					//I'd better do the check & insert inside the above conditionals...
 					//it's not actually that much code
 				//if(k->endpt1.x < k->endpt2.x) //TODO: ah, it misses the negatives on the 0 slope because of this check here I think...
-				{
+				//{
 					//and check that the intersection point is between the endpoints
-					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
-					{
+					//if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
+					//{
 						//TODO: make new pair of intersected point & its associated segment
 						//add that pair to the sweep_line that was created
 						//at the event point
-						Point new_point(x_int, y_int, k->endpt1.z);
-						Anchoring_Segment new_seg(*k);
+						//Point new_point(x_int, y_int, k->endpt1.z);
+						//Anchoring_Segment new_seg(*k);
 
-						point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
-						test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						//point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+						//test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
 
 						/*//getting rid of stuff???
 						//check if anchoring segment is already in the set
@@ -284,29 +441,29 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							new_seg.print_intersect_pts(cout);
 							cout << endl;
 						}*/
-					}
-				}
+					//}
+				//}
 				//this is in case endpt1 > endpt2
-				else
-				{
+				//else
+				//{
 					//if it is, we swap endpoints 1 and 2...
 					//since I don't want to write swap for the Point class
 					//we'll do it using temps...
-					Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
-					Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
+					//Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
+					//Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
 
 					//and check that the intersection point is between the endpoints
-					if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
-					{
+					//if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int <= temp_1.y) && (y_int >= temp_2.y))
+					//{
 
 						//TODO: make new pair of intersected point & its associated segment
 						//add that pair to the sweep_line that was created
 						//at the event point
-						Point new_point(x_int, y_int, k->endpt1.z);
-						Anchoring_Segment new_seg(*k);
+						//Point new_point(x_int, y_int, k->endpt1.z);
+						//Anchoring_Segment new_seg(*k);
 
-						point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
-						test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
+						//point_seg_pair new_pair = make_pair(new_point, *k);//don't need to make a new segment
+						//test_sweep_line.intersected_points.push_back(new_pair); //add the pair to the vector of pairs
 
 						/*//getting rid of stuff
 						//check if anchoring segment is already in the set
@@ -376,8 +533,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 							new_seg.print_intersect_pts(cout);
 							cout << endl;
 						}*/
-					}
-				}
+					//}
+				//}
 			}
 		}
 		sweep_line_vec.push_back(test_sweep_line);
