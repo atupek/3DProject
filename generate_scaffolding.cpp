@@ -134,8 +134,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 	{
 		Sweep_line test_sweep_line;
 		//for debug
-		/*cout << "****************EVENT INFO:*********************" << endl;
-		i->print_event_members(cout);*/
+		//cout << "**************** I EVENT INFO:*********************" << endl;
+		//i->print_event_members(cout);
 
 		//line 0
 		double point_x = i->p1.x;
@@ -151,6 +151,9 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 		//now go through each anchoring segment in the set of events and find out if they intersect
 		for(auto j = events.begin(); j != events.end(); j++)
 		{
+			//cout << "J EVENT INFO:" << endl;
+			//j->print_event_members(cout);
+			
 			for(auto k = j->event_segments.begin(); k != j->event_segments.end(); k++)
 			{
 				//line 1
@@ -178,17 +181,27 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				}
 
 				//for debug
-				//cout << "Intersection at: " << x_int << ", " << y_int << endl;
+				cout << "Intersection at: " << x_int << ", " << y_int << endl;
+				//OKAY, intersections are being found.
 
 				//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 				//check that it is within the endpoints of the anchoring segment
 				//first need to check if endpt1 < endpt2
-				/*//for debug:
+				//for debug:
 				cout << "CHECKING ENDPOINTS: " << endl;
 				cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
-				cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;*/
+				cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
 				
-				if(k->endpt1.x < k->endpt2.x)
+				if(!(k->endpt1.x > k->endpt2.x)) //trying not greater than...
+					//And that gives me only the negative anchoring segments for sweep_slope == 0
+					//and all intersections for sweep_slope == inf, 1, 2
+					//but still missing some for sweep_slope == 3, which might just be right?
+					//oh, shit, I see why...when x1 == x2 this will always be executed
+					//but the intersecting points will not be within the anchoring segment's endpoints
+					//for the positive anchoring_segments...damn.
+					//I'd better do the check & insert inside the above conditionals...
+					//it's not actually that much code
+				//if(k->endpt1.x < k->endpt2.x) //TODO: ah, it misses the negatives on the 0 slope because of this check here I think...
 				{
 					//and check that the intersection point is between the endpoints
 					if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))

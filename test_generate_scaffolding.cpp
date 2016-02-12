@@ -54,6 +54,8 @@ int main()
 
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
+
+	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
 	int i = 0;
 	make_point_set();
 
