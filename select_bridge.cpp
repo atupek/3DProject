@@ -331,13 +331,14 @@ Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_sl
 			sorted_by_y(*i);
 		}
 
-		//for debug
+		/*//for debug
 		cout << "Sweep slope = infinity" << endl;
 		cout << "Should be sorted by y coords of intersected points" << endl;
 		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 		{
 			i->print_sweep_line_members(cout);
-		}
+		}*/
+
 	}
 	else
 	{
@@ -348,17 +349,28 @@ Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_sl
 			sorted_by_x(*i);
 		}
 
-		//for debug
+		/*//for debug
 		cout << "Sweep slope = all others" << endl;
 		cout << "Should be sorted by x coords of intersected points" << endl;
 		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 		{
 			i->print_sweep_line_members(cout);
-		}
+		}*/
+
 	}
 
 	//put z-coords into set
 	//sorted by increasing z
+	set<double> z_set;
+	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+	{
+		for(auto j = i->intersected_points.begin(); j != i->intersected_points.end(); j++)
+		{
+			z_set.insert(j->first.z);
+		}
+	}
+	/*//for debug:
+	cout << "Size of z-set: " << z_set.size() << endl;*/
 
 	return best_bridge;
 }
