@@ -8,9 +8,13 @@
 #include "get_points/point.h"
 #include <set>
 using std::set;
+#include <vector>
+using std::vector;
+#include "sweep_line.h"
 
 Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope);
 double new_lmax(Point p1, Point p2);
+Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_slope);
 
 double calculate_lmax(set<Anchoring_Segment> segments);
 double calculate_gain(double height, double length, int num_elements);

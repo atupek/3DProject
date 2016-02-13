@@ -54,6 +54,7 @@ int main()
 
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
+	vector<Sweep_line> sweep_line_vec;
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
 	int i = 0;
@@ -88,7 +89,7 @@ int main()
 
 	//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
 
-	find_intersections(active_events, slope_of_sweep, i, segments_for_alg3);
+	find_intersections(active_events, slope_of_sweep, i, sweep_line_vec);
 
 	/*
 	cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
@@ -112,7 +113,8 @@ int main()
 	}*/
 
 	Bridge the_best_bridge;
-	the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
+	//the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
+	the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
 
 	//for debug
 	cout << "*******************RESULTS*********************" <<endl;

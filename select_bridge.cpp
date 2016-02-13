@@ -250,6 +250,13 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 	return false;
 }
 
+
+Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_slope)
+{
+	Bridge best_bridge;
+	return best_bridge;
+}
+
 //input to select_bridge set of segments (P) intersecting sweep plane at the current event
 //returns bestBridge
 //Container (C) initialized with segments that intesect sweep plane
