@@ -148,12 +148,13 @@ vector<Anchoring_Segment> set_up_sort_segments_by_y(set<Anchoring_Segment> &segm
 void sort_segments_by_y(vector<Anchoring_Segment> &segment)
 {
 	//doing merge sort...
-	merge_sort_y(segment.begin(), segment.end());
+	//merge_sort_y(segment.begin(), segment.end());
 }
 
-void stable_merge_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
+void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last)
 {
-	vector<Anchoring_Segment> buffer(distance(first, last));
+	//vector<Anchoring_Segment> buffer(distance(first, last));
+	vector<point_seg_pair> buffer(distance(first, last));
 
 	auto in1 = first;
 	auto in2 = middle;
@@ -161,7 +162,9 @@ void stable_merge_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_
 
 	while(in1 != middle && in2 != last)
 	{
-		if(in2->endpt1.y < in1->endpt1.y)
+		//if(in2->endpt1.y < in1->endpt1.y)
+			//*out++ = *in2++;
+		if(in2->first.y < in1->first.y)
 			*out++ = *in2++;
 		else
 			*out++ = *in1++;
@@ -172,7 +175,32 @@ void stable_merge_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_
 	copy(buffer.begin(), buffer.end(), first);
 }
 
-void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
+void stable_merge_x(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last)
+{
+	//vector<Anchoring_Segment> buffer(distance(first, last));
+	vector<point_seg_pair> buffer(distance(first, last));
+
+	auto in1 = first;
+	auto in2 = middle;
+	auto out = buffer.begin();
+
+	while(in1 != middle && in2 != last)
+	{
+		//if(in2->endpt1.y < in1->endpt1.y)
+			//*out++ = *in2++;
+		if(in2->first.x < in1->first.x)
+			*out++ = *in2++;
+		else
+			*out++ = *in1++;
+	}
+
+	copy(in1, middle, out);
+	copy(in2, last, out);
+	copy(buffer.begin(), buffer.end(), first);
+}
+
+//void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
+void merge_sort_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last)
 {
 
 	size_t size = distance(first, last);
@@ -189,6 +217,25 @@ void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 	merge_sort_y(middle, last);
 
 	stable_merge_y(first, middle, last);
+}
+
+void merge_sort_x(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last)
+{
+
+	size_t size = distance(first, last);
+
+	//base case
+	if (size <=1)
+		return;
+
+	//recursive case
+	auto middle = first;
+	advance(middle, size/2);
+
+	merge_sort_x(first, middle);
+	merge_sort_x(middle, last);
+
+	stable_merge_x(first, middle, last);
 }
 
 double calc_dist(double x1, double y1, double x2, double y2)
@@ -250,10 +297,69 @@ bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
 	return false;
 }
 
+//sweep_line is a vector of pairs of points & anchoring segments
+//pairs are typdef'ed as point_seg_pair
+void sorted_by_y(Sweep_line &line_to_sort)
+{
+	merge_sort_y(line_to_sort.intersected_points.begin(), line_to_sort.intersected_points.end());
+}
 
+void sorted_by_x(Sweep_line & line_to_sort)
+{
+	merge_sort_x(line_to_sort.intersected_points.begin(), line_to_sort.intersected_points.end());
+}
+
+//WORKING ON THIS
 Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_slope)
 {
 	Bridge best_bridge;
+	
+	double max_distance = 30.0;
+	double neg_inf(-std::numeric_limits<double>::infinity());
+	double best_score = neg_inf;
+
+	//sort segment intersections by y-coordinate if sweep_slope == infinity
+	//sort segment intersections by x_coordinate if sweep_slope == anything else
+	//which will be a sort pairs by point's y-coord
+	//vector<Sweep_line> sweep_lines_sorted_by_y = sort_by_y(sweep_lines);
+	if(sweep_slope == std::numeric_limits<double>::infinity())
+	{
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			//so now we're looking at an individual sweep line
+			//sort_sweep_line_by_y
+			sorted_by_y(*i);
+		}
+
+		//for debug
+		cout << "Sweep slope = infinity" << endl;
+		cout << "Should be sorted by y coords of intersected points" << endl;
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			i->print_sweep_line_members(cout);
+		}
+	}
+	else
+	{
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			//so now we're looking at an individual sweep line
+			//sort_sweep_line_by_x
+			sorted_by_x(*i);
+		}
+
+		//for debug
+		cout << "Sweep slope = all others" << endl;
+		cout << "Should be sorted by x coords of intersected points" << endl;
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			i->print_sweep_line_members(cout);
+		}
+	}
+
+	//put z-coords into set
+	//sorted by increasing z
+
 	return best_bridge;
 }
 

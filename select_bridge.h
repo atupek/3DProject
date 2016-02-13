@@ -30,7 +30,10 @@ void merge_sort_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Se
 
 vector<Anchoring_Segment> set_up_sort_segments_by_y(set<Anchoring_Segment> &segments);
 void sort_segments_by_y(vector<Anchoring_Segment> & segment);
-void stable_merge_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last);
-void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last);
+//void stable_merge_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last);
+//void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last);
+void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last);
+void merge_sort_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last);
+void sorted_by_y(Sweep_line &line_to_sort);
 
 #endif //Select_Bridge_Included
