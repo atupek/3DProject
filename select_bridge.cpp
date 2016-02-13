@@ -372,6 +372,76 @@ Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_sl
 	/*//for debug:
 	cout << "Size of z-set: " << z_set.size() << endl;*/
 
+	//go through each sweep_line and create potential bridges
+	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+	{
+		//cout << "Sweep Line info: " << endl;
+		//i->print_sweep_line_members(cout);
+		for(auto j = i->intersected_points.begin(); j != i->intersected_points.end(); j++)
+		{
+			/*//create a temp_bridge with m as its endpt 1 at height of this_z
+			//TODO: really should write = operator for Point class at some time...
+			Point new_p1(j->second.endpt1);
+			Bridge temp_bridge;
+			temp_bridge.p1 = new_p1;
+			//and insert p1 into the points supported by the bridge
+			temp_bridge.supported_points.insert(new_p1);
+			//and set temp_bridge.length = 0
+			temp_bridge.length = 0.0;*/
+			//create temp_bridge with endpt of intersected point
+			//and add associated anchoring segment's endpt1 to supported points (since endpt1 of segment will always be pt needing support)
+			Point new_endpt1(j->first);
+			Bridge temp_bridge;
+			temp_bridge.p1 = new_endpt1;
+			
+			for(auto k = i->intersected_points.begin(); k != i-> intersected_points.end(); k++)
+			{
+				//make z the inner loop...
+				for(auto m = z_set.begin(); m != z_set.end(); m++)
+				{
+					double this_z = *m;
+					temp_bridge.height = this_z;
+
+					Point new_endpt2(k->first);
+					temp_bridge.p2 = new_endpt2;
+					if(j->second.endpt1.z >= this_z)
+					{
+						temp_bridge.supported_points.insert(j->second.endpt1);
+					}
+					if(k->second.endpt1.z >= this_z) //if endpt is above the current z-level, add it to supported points
+					{
+						temp_bridge.supported_points.insert(k->second.endpt1);
+					}
+
+					//cout << "Check distance between temp bridge's end points..." << endl;
+					double this_distance = calc_dist(temp_bridge.p1.x, temp_bridge.p1.y, temp_bridge.p2.x, temp_bridge.p2.y);
+					temp_bridge.length = this_distance;
+					//cout << this_distance << endl;
+
+					//!= 0 because getting segfaults when trying to not compare intersected pts to themselves...
+					if(this_distance < max_distance && this_distance != 0)
+					{
+						//cout << "bridge to add" << endl;
+						//calculate gain
+						double temp_gain = calculate_gain(this_z, this_distance, temp_bridge.supported_points.size());
+						if(temp_gain > 0)
+						{
+							//calculate l_max and score
+							double temp_l_max = new_lmax(temp_bridge.p1, temp_bridge.p2);
+							cout << "Lmax: " << temp_l_max << endl;
+							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_l_max);
+							cout << "temp score: " << temp_score << endl;
+							if(temp_score > best_score)
+							{
+								best_bridge = temp_bridge;
+								best_score = temp_score;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	return best_bridge;
 }
 

@@ -57,7 +57,7 @@ int main()
 	vector<Sweep_line> sweep_line_vec;
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
-	int i = 0;
+	int i = 4;
 	make_point_set();
 
 	make_sweep_vector();
