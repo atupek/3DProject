@@ -333,12 +333,12 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 		}
 		sweep_line_vec.push_back(sweep_line);
 	}
-	//for debug
+	/*//for debug
 	cout << "sweep_line_vec.size: " << sweep_line_vec.size() << endl;
 	for(auto i = sweep_line_vec.begin(); i != sweep_line_vec.end(); i++)
 	{
 		i->print_sweep_line_members(cout);
-	}
+	}*/
 }
 
 //sets of segements crossing sweep plane with anchoring segments(?)

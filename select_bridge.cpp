@@ -376,29 +376,32 @@ Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_sl
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 	{
 		cout << "******************************NEW Sweep Line: " << endl; //okay, only executes 4 times for example test which is correct
+		Bridge temp_bridge;
 		//i->print_sweep_line_members(cout);
 		//for(auto j = i->intersected_points.begin(); j != i->intersected_points.end(); j++)
 		for(int j = 0; j < (i->intersected_points.size())-1; j++) //TODO: TRYING WITH INDICES INSTEAD OF ITERATORS
 		{
 			cout << endl << "J INDEX: " << j << endl;
 			//cout << "intersected_points.size: " << i->intersected_points.size() << endl;
-			//cout << "Point compare one: " << i->intersected_points[j].first.x << ", " << i->intersected_points[j].first.y << " at z= "
-																							//<< i->intersected_points[j].first.z << endl;
+			/*cout << "Point compare one: " << i->intersected_points[j].first.x << ", " << i->intersected_points[j].first.y << " at z= "
+																							<< i->intersected_points[j].first.z << endl;*/
 			//create temp_bridge with endpt of intersected point
 			//and add associated anchoring segment's endpt1 to supported points (since endpt1 of segment will always be pt needing support)
 			//Point new_endpt1(j->first);
 			Point new_endpt1(i->intersected_points[j].first); //INDICES INSTEAD OF ITERATORS
-			Bridge temp_bridge;
+			//Bridge temp_bridge;
+			//temp_bridge.supported_points.clear();
 			temp_bridge.p1 = new_endpt1;
 			
 			//for(auto k = i->intersected_points.begin(); k != i-> intersected_points.end(); k++)
 			for(int k = j; k < i->intersected_points.size(); k++) //INDICES INSTEAD OF ITERATORS
 			{
 				cout << "K INDEX: " << k << endl;
-				//make z the inner loop...
+				temp_bridge.supported_points.clear();
 				for(auto m = z_set.begin(); m != z_set.end(); m++)
 				{
 					double this_z = *m;
+					//cout << "this z: " << this_z << endl;
 					temp_bridge.height = this_z;
 
 					//Point new_endpt2(k->first);
@@ -412,18 +415,25 @@ Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_sl
 					cout << "\tat a height of z= " << this_z << endl;*/
 
 					//if(j->second.endpt1.z >= this_z)
+					//cout << "j's endpt1.z: " << i->intersected_points[j].second.endpt1.z << " >= this_z: " << this_z << endl;
+					//cout << "k's endpt1.z: " << i->intersected_points[k].second.endpt1.z << " >= this_z: " << this_z << endl;
+					cout << "number of supported points before adds: " << temp_bridge.supported_points.size() << endl;
 					if(i->intersected_points[j].second.endpt1.z >= this_z)
 					{
+						//cout << "true" << endl;
 						//cout << "j's endpt1.z: " << i->intersected_points[j].second.endpt1.z << " >= this_z: " << this_z << endl;
 						//temp_bridge.supported_points.insert(j->second.endpt1);
 						temp_bridge.supported_points.insert(i->intersected_points[j].second.endpt1);
+						cout << "number of supported points after add 1: " << temp_bridge.supported_points.size() << endl;
 					}
 					//if(k->second.endpt1.z >= this_z) //if endpt is above the current z-level, add it to supported points
 					if(i->intersected_points[k].second.endpt1.z >= this_z)
 					{
+						//cout << "true" << endl;
 						//cout << "k's endpt1.z: " << i->intersected_points[k].second.endpt1.z << " >= this_z: " << this_z << endl;
 						//temp_bridge.supported_points.insert(k->second.endpt1);
 						temp_bridge.supported_points.insert(i->intersected_points[k].second.endpt1);
+						cout << "number of supported points after add 2: " << temp_bridge.supported_points.size() << endl;
 					}
 
 					//cout << "Check distance between temp bridge's end points..." << endl;
