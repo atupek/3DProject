@@ -396,6 +396,8 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 				for(int n = m+1; n < i-> intersected_points.size(); n++)
 				{
 					cout << "inner intersected point " << n << endl;
+					//reminder: .first is intersected_point,
+					//			.second.endp1 is the anchoring segment's endpoint that needs supporting
 					Bridge temp_bridge(i->intersected_points[m].first, i->intersected_points[n].first, *j);
 					
 					/*//for debug
@@ -404,7 +406,17 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					if((temp_bridge.length < max_distance) && (temp_bridge.length != 0)) //!=0 because somehow pts are still being compared to selves
 					{
 						//cout << "LESS THAN MAX_DIST" << endl;
-						
+						//add m, n and any points between them to bridge's supported points vector
+						for(int k = m; k <= n; k++)
+						{
+							//cout << "adding point" << endl;
+							if(i->intersected_points[k].second.endpt1.z > *j)
+							{
+								cout << "point above j" << endl;
+								temp_bridge.supported_points.insert(i->intersected_points[k].second.endpt1);
+								cout << "added supported point" << endl;
+							}
+						}
 					}
 				}
 			}
