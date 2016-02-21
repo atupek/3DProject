@@ -379,6 +379,7 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	//iterate through each sweep line
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 	{
+		cout << "*****************NEW SWEEP LINE**************************" << endl;
 		//do this for each z-level in the z-set
 		for(auto j = z_set.begin(); j != z_set.end(); j++)
 		{
@@ -395,6 +396,16 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 				for(int n = m+1; n < i-> intersected_points.size(); n++)
 				{
 					cout << "inner intersected point " << n << endl;
+					Bridge temp_bridge(i->intersected_points[m].first, i->intersected_points[n].first, *j);
+					
+					/*//for debug
+					temp_bridge.print_bridge_members(cout);
+					cout << endl;*/
+					if((temp_bridge.length < max_distance) && (temp_bridge.length != 0)) //!=0 because somehow pts are still being compared to selves
+					{
+						//cout << "LESS THAN MAX_DIST" << endl;
+						
+					}
 				}
 			}
 
