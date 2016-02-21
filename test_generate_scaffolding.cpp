@@ -114,7 +114,8 @@ int main()
 
 	Bridge the_best_bridge;
 	//the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
-	the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
+	//the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
+	the_best_bridge = new_select_bridge(sweep_line_vec, slope_of_sweep[i]);
 
 	//for debug
 	cout << "*******************RESULTS*********************" <<endl;

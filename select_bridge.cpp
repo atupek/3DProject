@@ -309,7 +309,102 @@ void sorted_by_x(Sweep_line & line_to_sort)
 	merge_sort_x(line_to_sort.intersected_points.begin(), line_to_sort.intersected_points.end());
 }
 
-//WORKING ON THIS
+void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope)
+{
+	//sort segment intersections by y-coordinate if sweep_slope == infinity
+	//sort segment intersections by x_coordinate if sweep_slope == anything else
+	//which will be a sort pairs by point's y-coord
+	//vector<Sweep_line> sweep_lines_sorted_by_y = sort_by_y(sweep_lines);
+	if(sweep_slope == std::numeric_limits<double>::infinity())
+	{
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			//so now we're looking at an individual sweep line
+			//sort_sweep_line_by_y
+			sorted_by_y(*i);
+		}
+
+		/*//for debug
+		cout << "Sweep slope = infinity" << endl;
+		cout << "Should be sorted by y coords of intersected points" << endl;
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			i->print_sweep_line_members(cout);
+		}*/
+
+	}
+	else
+	{
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			//so now we're looking at an individual sweep line
+			//sort_sweep_line_by_x
+			sorted_by_x(*i);
+		}
+
+		/*//for debug
+		cout << "Sweep slope = all others" << endl;
+		cout << "Should be sorted by x coords of intersected points" << endl;
+		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+		{
+			i->print_sweep_line_members(cout);
+		}*/
+
+	}
+}
+
+Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
+{
+	Bridge best_bridge;
+	double max_distance = 30.0;
+	double neg_inf(-std::numeric_limits<double>::infinity());
+	double best_score = neg_inf;
+
+	//sort intersection points on sweep lines
+	sort_sweep_lines(sweep_lines, sweep_slope);
+
+	//put z-coords into set
+	//sorted by increasing z
+	set<double> z_set;
+	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+	{
+		for(auto j = i->intersected_points.begin(); j != i->intersected_points.end(); j++)
+		{
+			z_set.insert(j->first.z);
+		}
+	}
+	/*//for debug:
+	cout << "Size of z-set: " << z_set.size() << endl;*/
+
+	//iterate through each sweep line
+	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
+	{
+		//do this for each z-level in the z-set
+		for(auto j = z_set.begin(); j != z_set.end(); j++)
+		{
+			//sweep_line has vector of intersections, go through and for every pair of intersections (m, n)
+			//check if points are within max_distance
+			//if they are, add endpts at j's z-value (endp1 = m, endp2 =n)
+			//check if points between (m, n inclusive) are above j's z-value
+			//if they are, add points to bridge's supported points vector
+			//get bridge's gain & score
+			//then check pair of intersections (m+1, n)
+			for(int m = 0; m < i->intersected_points.size()-1; m++)
+			{
+				cout << "intersected point " << m << endl;
+				for(int n = m+1; n < i-> intersected_points.size(); n++)
+				{
+					cout << "inner intersected point " << n << endl;
+				}
+			}
+
+		}
+	}
+
+	return best_bridge;
+}
+
+//WORKING ON THIS --nope, abandoning for now, see above...
 Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_slope)
 {
 	Bridge best_bridge;
@@ -417,6 +512,8 @@ Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_sl
 					//if(j->second.endpt1.z >= this_z)
 					//cout << "j's endpt1.z: " << i->intersected_points[j].second.endpt1.z << " >= this_z: " << this_z << endl;
 					//cout << "k's endpt1.z: " << i->intersected_points[k].second.endpt1.z << " >= this_z: " << this_z << endl;
+
+					//TODO: ISSUE IS SOMEWHERE WITH THE ADDING SUPPORTED POINTS...
 					cout << "number of supported points before adds: " << temp_bridge.supported_points.size() << endl;
 					if(i->intersected_points[j].second.endpt1.z >= this_z)
 					{
