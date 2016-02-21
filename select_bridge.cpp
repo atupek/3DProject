@@ -392,10 +392,10 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 			//then check pair of intersections (m+1, n)
 			for(int m = 0; m < i->intersected_points.size()-1; m++)
 			{
-				cout << "intersected point " << m << endl;
+				//cout << "intersected point " << m << endl;
 				for(int n = m+1; n < i-> intersected_points.size(); n++)
 				{
-					cout << "inner intersected point " << n << endl;
+					//cout << "inner intersected point " << n << endl;
 					//reminder: .first is intersected_point,
 					//			.second.endp1 is the anchoring segment's endpoint that needs supporting
 					Bridge temp_bridge(i->intersected_points[m].first, i->intersected_points[n].first, *j);
@@ -412,9 +412,26 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 							//cout << "adding point" << endl;
 							if(i->intersected_points[k].second.endpt1.z > *j)
 							{
-								cout << "point above j" << endl;
+								//cout << "point above j" << endl;
 								temp_bridge.supported_points.insert(i->intersected_points[k].second.endpt1);
-								cout << "added supported point" << endl;
+								//cout << "added supported point" << endl;
+							}
+						}
+						//cout << "Bridge supported points size: " << temp_bridge.supported_points.size() << endl;
+						//and now we get gain, lmax, and score
+						double temp_gain = calculate_gain(*j, temp_bridge.length, temp_bridge.supported_points.size());
+						if(temp_gain > 0)
+						{
+							temp_bridge.print_bridge_members(cout);
+							cout << "temp gain: " << temp_gain << endl;
+							double temp_lmax = new_lmax(temp_bridge.p1, temp_bridge.p2);
+							cout << "temp lmax: " << temp_lmax << endl;
+							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_lmax);
+							cout << "temp score: " << temp_score << endl;
+							if(temp_score > best_score)
+							{
+								best_score = temp_score;
+								best_bridge = temp_bridge;
 							}
 						}
 					}
