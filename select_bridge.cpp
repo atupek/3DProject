@@ -52,9 +52,8 @@ double new_lmax(Point p1, Point p2)
 //*************TODO******************CHECK: as long as everything sent is correct, will return correct
 double calculate_gain(double height, double length, int num_elements)
 {
+	//cout << "GAIN: " << ((num_elements-2)*height) - length << endl;
 	return((num_elements-2)*height) - length;
-	//just seeing what this does if I don't constrain it to supporting at least two points --NO
-	//return ((num_elements * height) - length);
 }
 
 //S(b) = G(b) - k * lmax(b)
@@ -399,10 +398,12 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					//reminder: .first is intersected_point,
 					//			.second.endp1 is the anchoring segment's endpoint that needs supporting
 					Bridge temp_bridge(i->intersected_points[m].first, i->intersected_points[n].first, *j);
-					
-					/*//for debug
-					temp_bridge.print_bridge_members(cout);
-					cout << endl;*/
+					temp_bridge.p1.z = *j;
+					temp_bridge.p2.z = *j;
+					//for debug
+					//cout << endl;
+					//temp_bridge.print_bridge_members(cout);
+					//cout << endl;
 					if((temp_bridge.length < max_distance) && (temp_bridge.length != 0)) //!=0 because somehow pts are still being compared to selves
 					{
 						//cout << "LESS THAN MAX_DIST" << endl;
@@ -417,17 +418,25 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 								//cout << "added supported point" << endl;
 							}
 						}
-						//cout << "Bridge supported points size: " << temp_bridge.supported_points.size() << endl;
+						
+						/*//for debug
+						cout << "Bridge point 1: " << temp_bridge.p1.x << ", " << temp_bridge.p1.y << " at z: " << temp_bridge.p1.z << endl;
+						cout << "Bridge point 2: " << temp_bridge.p2.x << ", " << temp_bridge.p2.y << " at z: " << temp_bridge.p2.z << endl;
+						cout << "Bridge supported points size: " << temp_bridge.supported_points.size() << endl;
+						cout << "height: " << *j << endl;
+						cout << "bridge length: " << temp_bridge.length << endl;*/
+						
 						//and now we get gain, lmax, and score
 						double temp_gain = calculate_gain(*j, temp_bridge.length, temp_bridge.supported_points.size());
+						cout << "temp gain: " << temp_gain << endl;
 						if(temp_gain > 0)
 						{
-							temp_bridge.print_bridge_members(cout);
-							cout << "temp gain: " << temp_gain << endl;
+							//temp_bridge.print_bridge_members(cout);
+							//cout << "temp gain: " << temp_gain << endl;
 							double temp_lmax = new_lmax(temp_bridge.p1, temp_bridge.p2);
-							cout << "temp lmax: " << temp_lmax << endl;
+							//cout << "temp lmax: " << temp_lmax << endl;
 							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_lmax);
-							cout << "temp score: " << temp_score << endl;
+							//cout << "temp score: " << temp_score << endl <<endl;
 							if(temp_score > best_score)
 							{
 								best_score = temp_score;
