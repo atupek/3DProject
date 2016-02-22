@@ -45,6 +45,26 @@ double new_lmax(Point p1, Point p2)
 	return lmax;
 }
 
+double new_calc_lmax(Point p1, Point p2, set<Point> supported_pts)
+{
+	double z_max = 0;
+	for(auto i = supported_pts.begin(); i != supported_pts.end(); i++)
+	{
+		if(i->z > z_max)
+		{
+			z_max = i->z;
+		}
+	}
+	cout << "Calculating lmax: " << endl;
+	double horizontal_distance = calc_dist(p1.x, p1.y, p2.x, p2.y);
+	cout << "Horizontal dist: " << horizontal_distance << endl;
+	double vertical_distance = z_max - p1.z;
+	cout << "Vertical dist: " << vertical_distance << endl;
+	double lmax = horizontal_distance + vertical_distance;
+	return lmax;
+}
+
+
 //G(b) = (k-2)h(b)-w(b)
 //w(b) = length of bridge
 //h(b) = height of bridge
@@ -398,20 +418,22 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					//reminder: .first is intersected_point,
 					//			.second.endp1 is the anchoring segment's endpoint that needs supporting
 					Bridge temp_bridge(i->intersected_points[m].first, i->intersected_points[n].first, *j);
-					temp_bridge.p1.z = *j;
-					temp_bridge.p2.z = *j;
+					temp_bridge.p1.z = *j; //make sure bridge endpoints are at the proper z
+					temp_bridge.p2.z = *j; //make sure bridge endpoints are at the proper z
+					
 					//for debug
 					//cout << endl;
 					//temp_bridge.print_bridge_members(cout);
 					//cout << endl;
+					
 					if((temp_bridge.length < max_distance) && (temp_bridge.length != 0)) //!=0 because somehow pts are still being compared to selves
 					{
 						//cout << "LESS THAN MAX_DIST" << endl;
 						//add m, n and any points between them to bridge's supported points vector
-						for(int k = m; k <= n; k++)
+						for(int k = m; k < n+1; k++)
 						{
 							//cout << "adding point" << endl;
-							if(i->intersected_points[k].second.endpt1.z > *j)
+							if(i->intersected_points[k].second.endpt1.z >= *j)
 							{
 								//cout << "point above j" << endl;
 								temp_bridge.supported_points.insert(i->intersected_points[k].second.endpt1);
@@ -423,20 +445,26 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 						cout << "Bridge point 1: " << temp_bridge.p1.x << ", " << temp_bridge.p1.y << " at z: " << temp_bridge.p1.z << endl;
 						cout << "Bridge point 2: " << temp_bridge.p2.x << ", " << temp_bridge.p2.y << " at z: " << temp_bridge.p2.z << endl;
 						cout << "Bridge supported points size: " << temp_bridge.supported_points.size() << endl;
+						cout << "\tSupported Points: " << endl;
+						for(auto p = temp_bridge.supported_points.begin(); p != temp_bridge.supported_points.end(); p++)
+						{
+							cout << "\t";
+							p->print_coords_with_z(cout);
+						}
 						cout << "height: " << *j << endl;
 						cout << "bridge length: " << temp_bridge.length << endl;*/
-						
+
 						//and now we get gain, lmax, and score
 						double temp_gain = calculate_gain(*j, temp_bridge.length, temp_bridge.supported_points.size());
-						cout << "temp gain: " << temp_gain << endl;
+						//cout << "temp gain: " << temp_gain << endl << endl;
 						if(temp_gain > 0)
 						{
-							//temp_bridge.print_bridge_members(cout);
-							//cout << "temp gain: " << temp_gain << endl;
-							double temp_lmax = new_lmax(temp_bridge.p1, temp_bridge.p2);
-							//cout << "temp lmax: " << temp_lmax << endl;
+							temp_bridge.print_bridge_members(cout);
+							cout << "temp gain: " << temp_gain << endl;
+							double temp_lmax = new_calc_lmax(temp_bridge.p1, temp_bridge.p2, temp_bridge.supported_points);
+							cout << "temp lmax: " << temp_lmax << endl;
 							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_lmax);
-							//cout << "temp score: " << temp_score << endl <<endl;
+							cout << "temp score: " << temp_score << endl <<endl;
 							if(temp_score > best_score)
 							{
 								best_score = temp_score;
