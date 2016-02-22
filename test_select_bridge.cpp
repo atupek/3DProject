@@ -13,6 +13,10 @@ using std::vector;
 #include <limits> //for infinity
 
 //NOTE:
+//TEST NEEDS TO BE REWRITTEN TO TAKE VECTOR OF SWEEP LINES...
+//WHICH I REALLY DON'T FEEL LIKE DOING SINCE THE CODE HAS BEEN VERIFIED VIA SPREADSHEET...
+
+//NOTE:
 //test set is written to only be viable for segment slope == 0
 //any other slope will not work, because intersect points are slope-specific
 double test_anch_seg_slope = 0.0;
