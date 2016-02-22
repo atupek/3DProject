@@ -9,17 +9,14 @@ using std::distance;
 #include <cmath> //for abs
 using std::abs;
 
-//lmax calculates distance of heighest element being supported above the bridge
-//input: set of segments intersecting sweep plane at given event
-//output: highest z-value
-//NOPE ********************************TODO**********************************
+//TODO: DO I NEED TO INCLUDE THE CALCULATION FROM THE LINE TO THE POINT SUPPORTED?
+//lmax calculates total distance to heighest element being supported above the bridge
 //returns double
-//for each point that is supported by the bridge, calculate the lmax
-//and return the largest value calculated
-//calculates the horizontal distance between the two points (the intersection pt and the point supported)
-//and the vertical distance between the two points
-//if that number is greater than the given max, then it becomes the new max
-double new_calc_lmax(Point p1, Point p2, set<Point> supported_pts)
+//find z-max for each point that is supported by the bridge
+//calculates the horizontal distance between the two endpoint points (intersection pts)
+//and the vertical distance between the bridge and z-max
+//returns their sum
+double calculate_lmax(Point p1, Point p2, set<Point> supported_pts)
 {
 	double z_max = 0;
 	for(auto i = supported_pts.begin(); i != supported_pts.end(); i++)
@@ -42,16 +39,12 @@ double new_calc_lmax(Point p1, Point p2, set<Point> supported_pts)
 //w(b) = length of bridge
 //h(b) = height of bridge
 //k = # elements supported
-//*************TODO******************CHECK: as long as everything sent is correct, will return correct
 double calculate_gain(double height, double length, int num_elements)
 {
-	//cout << "GAIN: " << ((num_elements-2)*height) - length << endl;
 	return((num_elements-2)*height) - length;
 }
 
 //S(b) = G(b) - k * lmax(b)
-//lmax(b) is the max length of structure connecting an element above to the bridge
-//****************TODO************CHECK: as long as everything sent is correct, will return correct
 double calculate_score(double gain, int num_elements, double lmax)
 {
 	return gain - (num_elements * lmax);
@@ -63,89 +56,8 @@ void check_collision()
 	//checking for collisions between bridge and model
 }
 
-vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments)
-{
-	//copy segments into vector
-	vector<Anchoring_Segment> unordered_segments;
-	for(auto i = segments.begin(); i != segments.end(); i++)
-	{
-		unordered_segments.push_back(*i);
-	}
-
-	return unordered_segments;
-}
-
-void sort_segments_by_z(vector<Anchoring_Segment> &segment)
-{
-	//doing merge sort...
-	merge_sort_z(segment.begin(), segment.end());
-}
-
-void stable_merge_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last)
-{
-	vector<Anchoring_Segment> buffer(distance(first, last));
-
-	auto in1 = first;
-	auto in2 = middle;
-	auto out = buffer.begin();
-
-	while(in1 != middle && in2 != last)
-	{
-		if(in2->endpt1.z < in1->endpt1.z)
-			*out++ = *in2++;
-		else
-			*out++ = *in1++;
-	}
-
-	copy(in1, middle, out);
-	copy(in2, last, out);
-	copy(buffer.begin(), buffer.end(), first);
-}
-
-void merge_sort_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
-{
-
-	size_t size = distance(first, last);
-
-	//base case
-	if (size <=1)
-		return;
-
-	//recursive case
-	auto middle = first;
-	advance(middle, size/2);
-
-	merge_sort_z(first, middle);
-	merge_sort_z(middle, last);
-
-	stable_merge_z(first, middle, last);
-}
-
-vector<Anchoring_Segment> set_up_sort_segments_by_y(set<Anchoring_Segment> &segments)
-{
-	//copy segments into vector
-	//cout << "COPYING SEGMENTS INTO A VECTOR" << endl;
-	vector<Anchoring_Segment> unordered_segments;
-	for(auto i = segments.begin(); i != segments.end(); i++)
-	{
-		unordered_segments.push_back(*i);
-		//cout << "Added segment: " << endl;
-		//i->print_coords(cout);
-		//i->print_intersect_pts(cout);
-	}
-
-	return unordered_segments;
-}
-
-void sort_segments_by_y(vector<Anchoring_Segment> &segment)
-{
-	//doing merge sort...
-	//merge_sort_y(segment.begin(), segment.end());
-}
-
 void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last)
 {
-	//vector<Anchoring_Segment> buffer(distance(first, last));
 	vector<point_seg_pair> buffer(distance(first, last));
 
 	auto in1 = first;
@@ -154,8 +66,6 @@ void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pai
 
 	while(in1 != middle && in2 != last)
 	{
-		//if(in2->endpt1.y < in1->endpt1.y)
-			//*out++ = *in2++;
 		if(in2->first.y < in1->first.y)
 			*out++ = *in2++;
 		else
@@ -169,7 +79,6 @@ void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pai
 
 void stable_merge_x(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last)
 {
-	//vector<Anchoring_Segment> buffer(distance(first, last));
 	vector<point_seg_pair> buffer(distance(first, last));
 
 	auto in1 = first;
@@ -178,8 +87,6 @@ void stable_merge_x(vector<point_seg_pair>::iterator first, vector<point_seg_pai
 
 	while(in1 != middle && in2 != last)
 	{
-		//if(in2->endpt1.y < in1->endpt1.y)
-			//*out++ = *in2++;
 		if(in2->first.x < in1->first.x)
 			*out++ = *in2++;
 		else
@@ -191,7 +98,6 @@ void stable_merge_x(vector<point_seg_pair>::iterator first, vector<point_seg_pai
 	copy(buffer.begin(), buffer.end(), first);
 }
 
-//void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last)
 void merge_sort_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last)
 {
 
@@ -243,52 +149,6 @@ double calc_dist(double x1, double y1, double x2, double y2)
 	return dist;
 }
 
-//to check if both points are on same sweep_line
-//find slope between them, if slope == sweep_slope
-//then they're on the same sweep_line
-//if they are, then we continue with checking
-//if they are not, then we skip
-bool on_same_sweep_line(Point p1, Point p2, double sweep_slope)
-{
-	if(sweep_slope == 0)
-	{
-		//if horizontal, y1 == y2
-		//cout << "slope == 0" << endl;
-		//return (p1.y == p2.y);
-		//hmmm...if sweep_slope is horizontal, then anch_slope is vertical
-		//did I get my slopes messed up?
-		//check to see if x's are equal...
-		//cout << "p1.y: " << p1.y << endl;
-		//cout << "p2.y: " << p2.y << endl;
-		if(p1.y == p2.y)
-		{
-			//cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
-			return true;
-		}
-	}
-	if(sweep_slope == std::numeric_limits<double>::infinity())
-	{
-		//if vertial, x1 == x2
-		//cout << "slope == infinity" << endl;
-		if(p1.x == p2.x)
-		{
-			//cout << "P1, P2: (" << p1.x << ", " << p1.y << "), (" << p2.x << ", " << p2.y << ")" << endl;
-			return true;
-		}
-	}
-	//make calculations for other cases and return true if on same line, otherwise return false
-	double numerator = p1.y - p2.y;
-	double denominator = p1.x - p2.x;
-	double test_slope = numerator/denominator;
-	if(sweep_slope == test_slope)
-	{
-		//cout << "slopes are equal" << endl;
-		return true;
-	}
-	//cout << "OUT HERE THERE IS NO TRUTH" << endl;
-	return false;
-}
-
 //sweep_line is a vector of pairs of points & anchoring segments
 //pairs are typdef'ed as point_seg_pair
 void sorted_by_y(Sweep_line &line_to_sort)
@@ -306,16 +166,13 @@ void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	//sort segment intersections by y-coordinate if sweep_slope == infinity
 	//sort segment intersections by x_coordinate if sweep_slope == anything else
 	//which will be a sort pairs by point's y-coord
-	//vector<Sweep_line> sweep_lines_sorted_by_y = sort_by_y(sweep_lines);
 	if(sweep_slope == std::numeric_limits<double>::infinity())
 	{
 		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 		{
 			//so now we're looking at an individual sweep line
-			//sort_sweep_line_by_y
 			sorted_by_y(*i);
 		}
-
 		/*//for debug
 		cout << "Sweep slope = infinity" << endl;
 		cout << "Should be sorted by y coords of intersected points" << endl;
@@ -323,17 +180,14 @@ void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope)
 		{
 			i->print_sweep_line_members(cout);
 		}*/
-
 	}
 	else
 	{
 		for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 		{
 			//so now we're looking at an individual sweep line
-			//sort_sweep_line_by_x
 			sorted_by_x(*i);
 		}
-
 		/*//for debug
 		cout << "Sweep slope = all others" << endl;
 		cout << "Should be sorted by x coords of intersected points" << endl;
@@ -341,11 +195,10 @@ void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope)
 		{
 			i->print_sweep_line_members(cout);
 		}*/
-
 	}
 }
 
-Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
+Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 {
 	Bridge best_bridge;
 	double max_distance = 30.0;
@@ -371,7 +224,7 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	//iterate through each sweep line
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 	{
-		cout << "*****************NEW SWEEP LINE**************************" << endl;
+		//cout << "*****************NEW SWEEP LINE**************************" << endl;
 		//do this for each z-level in the z-set
 		for(auto j = z_set.begin(); j != z_set.end(); j++)
 		{
@@ -432,12 +285,12 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 						//cout << "temp gain: " << temp_gain << endl << endl;
 						if(temp_gain > 0)
 						{
-							temp_bridge.print_bridge_members(cout);
-							cout << "temp gain: " << temp_gain << endl;
-							double temp_lmax = new_calc_lmax(temp_bridge.p1, temp_bridge.p2, temp_bridge.supported_points);
-							cout << "temp lmax: " << temp_lmax << endl;
+							//temp_bridge.print_bridge_members(cout);
+							//cout << "temp gain: " << temp_gain << endl;
+							double temp_lmax = calculate_lmax(temp_bridge.p1, temp_bridge.p2, temp_bridge.supported_points);
+							//cout << "temp lmax: " << temp_lmax << endl;
 							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_lmax);
-							cout << "temp score: " << temp_score << endl <<endl;
+							//cout << "temp score: " << temp_score << endl <<endl;
 							if(temp_score > best_score)
 							{
 								best_score = temp_score;
@@ -447,37 +300,9 @@ Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					}
 				}
 			}
-
 		}
 	}
-
 	return best_bridge;
 }
 
-//input to select_bridge set of segments (P) intersecting sweep plane at the current event
-//returns bestBridge
-//Container (C) initialized with segments that intesect sweep plane
-//Z, sort all segments in container (C) by Z
-//for each level (z)
-//	for i=0 to size(Z)-1
-//		Points_supported_by_bridge (A) <- 0 //initialize to empty set
-//		for j=i to size(Z) -1
-//			if distance from C[i] to C[j] <= max_distance
-//				put C[j] into Points_supported_by_bridge
-//				if there are collisions between points_supported_by_bridge, i, j, z then break
-//				get bridge gain & score for points_supported_by_bridge, i, j, z
-//				if gain>0 and score > bestScore then bestBridge = currentBridge
-//return bestBridge
 
-
-//NOTE: INTERSECTIONS & POINTS THAT NEED SUPPORT ARE NOT THE SAME THING
-//BRIDGE CANNOT BE HIGHER THAN THE LOWEST Z OF A POINT ITS SUPPORTING
-
-//for each anchoring segment with an intersection along the same sweep line
-//check distance, if distance less than max_distance
-//add Point (NOT INTERSECTION) supported to set of supported points
-//calculate lmax which is total distance height + length to that point
-//calculate gain & score
-//where the length calculation in gain is from intersection to intersection along sweep line
-//if gain > 0, calculate the lmax and score
-//if score is better than best score, replace best bridge with temp bridge

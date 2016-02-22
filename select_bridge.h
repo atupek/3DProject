@@ -12,27 +12,25 @@ using std::set;
 using std::vector;
 #include "sweep_line.h"
 
-Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope);
-void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope);
-double new_calc_lmax(Point p1, Point p2, set<Point> supported_pts);
-
+double calculate_lmax(Point p1, Point p2, set<Point> supported_pts);
 double calculate_gain(double height, double length, int num_elements);
 double calculate_score(double gain, int num_elements, double lmax);
+
+void check_collision();
+
+void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last);
+void stable_merge_x(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last);
+void merge_sort_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last);
+void merge_sort_x(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last);
+
 double calc_dist(double x1, double y1, double x2, double y2);
 
-bool on_same_sweep_line(Point p1, Point p2, double sweep_slope);
-
-vector<Anchoring_Segment> set_up_sort_segments_by_z(set<Anchoring_Segment> &segments);
-void sort_segments_by_z(vector<Anchoring_Segment> & segment);
-void stable_merge_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last);
-void merge_sort_z(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last);
-
-vector<Anchoring_Segment> set_up_sort_segments_by_y(set<Anchoring_Segment> &segments);
-void sort_segments_by_y(vector<Anchoring_Segment> & segment);
-//void stable_merge_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator middle, vector<Anchoring_Segment>::iterator last);
-//void merge_sort_y(vector<Anchoring_Segment>::iterator first, vector<Anchoring_Segment>::iterator last);
-void stable_merge_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator middle, vector<point_seg_pair>::iterator last);
-void merge_sort_y(vector<point_seg_pair>::iterator first, vector<point_seg_pair>::iterator last);
 void sorted_by_y(Sweep_line &line_to_sort);
+void sorted_by_x(Sweep_line & line_to_sort);
+void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope);
+
+Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope);
+
+
 
 #endif //Select_Bridge_Included
