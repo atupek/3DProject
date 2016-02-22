@@ -12,14 +12,10 @@ using std::set;
 using std::vector;
 #include "sweep_line.h"
 
-Bridge select_bridge(set<Anchoring_Segment> &segments, double sweep_slope);
-double new_lmax(Point p1, Point p2);
-Bridge select_bridge_sweep_line(vector<Sweep_line> &sweep_lines, double sweep_slope);
 Bridge new_select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope);
 void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope);
 double new_calc_lmax(Point p1, Point p2, set<Point> supported_pts);
 
-double calculate_lmax(set<Anchoring_Segment> segments);
 double calculate_gain(double height, double length, int num_elements);
 double calculate_score(double gain, int num_elements, double lmax);
 double calc_dist(double x1, double y1, double x2, double y2);
