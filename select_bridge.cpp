@@ -55,11 +55,11 @@ double new_calc_lmax(Point p1, Point p2, set<Point> supported_pts)
 			z_max = i->z;
 		}
 	}
-	cout << "Calculating lmax: " << endl;
+	//cout << "Calculating lmax: " << endl;
 	double horizontal_distance = calc_dist(p1.x, p1.y, p2.x, p2.y);
-	cout << "Horizontal dist: " << horizontal_distance << endl;
+	//cout << "Horizontal dist: " << horizontal_distance << endl;
 	double vertical_distance = z_max - p1.z;
-	cout << "Vertical dist: " << vertical_distance << endl;
+	//cout << "Vertical dist: " << vertical_distance << endl;
 	double lmax = horizontal_distance + vertical_distance;
 	return lmax;
 }
