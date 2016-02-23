@@ -9,6 +9,13 @@ using std::distance;
 #include <cmath> //for abs
 using std::abs;
 
+double pt_line_dist(Point p1, Point p2, double x0, double y0)
+{
+	double numerator = abs( (p2.y-p1.y)*x0 - (p2.x-p1.x)* y0 + (p2.x * p1.y) - (p2.y * p1.x) );
+	double denominator = sqrt( pow((p2.y - p1.y), 2) + pow((p2.x - p1.x), 2));
+	return numerator/denominator;
+}
+
 //TODO: DO I NEED TO INCLUDE THE CALCULATION FROM THE LINE TO THE POINT SUPPORTED?
 //lmax calculates total distance to heighest element being supported above the bridge
 //returns double
@@ -26,12 +33,25 @@ double calculate_lmax(Point p1, Point p2, set<Point> supported_pts)
 			z_max = i->z;
 		}
 	}
+
+	double horiz_max = 0;
+	for(auto i = supported_pts.begin(); i != supported_pts.end(); i++)
+	{
+		double temp_dist = pt_line_dist(p1, p2, i->x, i->y);
+		if(temp_dist > horiz_max)
+		{
+			horiz_max = temp_dist;
+		}
+	}
+	
 	//cout << "Calculating lmax: " << endl;
 	double horizontal_distance = calc_dist(p1.x, p1.y, p2.x, p2.y);
 	//cout << "Horizontal dist: " << horizontal_distance << endl;
+	double total_horizontal_dist = horiz_max + horizontal_distance;
+	//cout << "total horizontal dist: " << total_horizontal_dist << endl;
 	double vertical_distance = z_max - p1.z;
 	//cout << "Vertical dist: " << vertical_distance << endl;
-	double lmax = horizontal_distance + vertical_distance;
+	double lmax = total_horizontal_dist+ vertical_distance;
 	return lmax;
 }
 
