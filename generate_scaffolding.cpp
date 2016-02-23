@@ -429,7 +429,29 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	cout << "Active points size after: " << active_pts.size() << endl;
 
 	//drop pillar for each supported point
-	
+	//add point at bottom of pillar to set of active points
+	//filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->p2.z - i->height) << ");" << endl;
+	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
+	{
+		if(i->z != best_bridge.p1.z) //if the supported point is *above* the bridge (not on the same level as bridge)
+		{
+			//pillar(x, y, height of pillar base, vertical height of pillar)
+			//NOTE: Also need to work epsilon in here...
+			cout << "\tpillar(" << i->x << ", " << i->y << ", " << best_bridge.height << ", " << (i->z - best_bridge.height) << ");" << endl;
+		}
+		Point lowered_point(i->x, i->y, best_bridge.height);
+		active_pts.insert(lowered_point);
+	}
+	//for debug:
+	cout << "Active points size after dropped pillars: " << active_pts.size() << endl;
+
+	//lay bar from dropped pillar to bridge for each supported point
+	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
+	{
+		//find closest point on bridge line to the dropped pillar
+		//and call bridge on that (unless y1 == y2, and then call bridge1)
+
+	}
 
 	//we must remove the supported points from the set of active events.
 	//this code below is not going to work because can't compare a point to an event...damn.
