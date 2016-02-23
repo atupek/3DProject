@@ -41,11 +41,13 @@ void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & 
 
 void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set);
 
+void difference_pt_sets(set<Point> & original_set, set<Point> & remove_set);
+
 //Pillar make_pillar(Point point1, double height);
 
 //Cube_Primitive make_cube_primitive(Point point1, Point point2);
 
-void snap(Bridge & best_bridge, set<Event> & _active_events);
+void snap(Bridge & best_bridge, set<Point> & active_pts);
 
 void generate_scaffolding(set<Point> points_needing_support);
 

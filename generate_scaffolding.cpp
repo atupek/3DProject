@@ -373,6 +373,22 @@ void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segmen
 		}
 	}
 }
+
+void difference_pt_sets(set<Point> & original_set, set<Point> & remove_set)
+{
+	//go through all segments in remove_set
+	//look for them in original_set
+	//if they're in original_set, remove them
+	for(auto i = remove_set.begin(); i != remove_set.end(); i++)
+	{
+		std::set<Point>::iterator it;
+		it = original_set.find(*i);
+		if(it != original_set.end())
+		{
+			original_set.erase(it);
+		}
+	}
+}
 /*
 Pillar make_pillar(Point point1, double height)
 {
@@ -392,9 +408,29 @@ Cube_Primitive make_cube_primitive(Point point1, Point point2)
 //maybe also need to send the active events, too.  Does that change with each sweep direction? Hmmm...
 //void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge)
 //void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
-void snap(Bridge & best_bridge, set<Event> & _active_events)
+void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
-	//STARTING WORK HERE:
+	//remove supported points from set of points that need support (active_pts)
+	//damn it, supported_pts is a vector, not a set...so I don't need to use the difference_pt_set
+	//I can just go thorough the set and erase it...
+	//for debug:
+	cout << "Active points size before: " << active_pts.size() << endl;
+	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
+	{
+		std::set<Point>::iterator it;
+		it = active_pts.find(*i);
+		if(it != active_pts.end())
+		{
+			active_pts.erase(it);
+			cout << "ERASED POINT" << endl;
+		}
+	}
+	//for debug:
+	cout << "Active points size after: " << active_pts.size() << endl;
+
+	//drop pillar for each supported point
+	
+
 	//we must remove the supported points from the set of active events.
 	//this code below is not going to work because can't compare a point to an event...damn.
 	//so I'll need to take the point, make an event out of it, and then do the removal,

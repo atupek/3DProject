@@ -134,6 +134,8 @@ int main()
 		i->print_coords_with_z(cout);
 	}
 
+	snap(the_best_bridge, active_points);
+
 	//*******************************WHERE I AM NOW:
 	//algorithm3 takes set of anchoring segments, not set of points, so need to adjust
 	//find intersections function to return set of anchoring segments, not set of points
