@@ -16,7 +16,6 @@ double pt_line_dist(Point p1, Point p2, double x0, double y0)
 	return numerator/denominator;
 }
 
-//TODO: DO I NEED TO INCLUDE THE CALCULATION FROM THE LINE TO THE POINT SUPPORTED?
 //lmax calculates total distance to heighest element being supported above the bridge
 //returns double
 //find z-max for each point that is supported by the bridge
@@ -43,7 +42,7 @@ double calculate_lmax(Point p1, Point p2, set<Point> supported_pts)
 			horiz_max = temp_dist;
 		}
 	}
-	
+
 	//cout << "Calculating lmax: " << endl;
 	double horizontal_distance = calc_dist(p1.x, p1.y, p2.x, p2.y);
 	//cout << "Horizontal dist: " << horizontal_distance << endl;
