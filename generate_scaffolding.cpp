@@ -451,6 +451,10 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	//I can just go thorough the set and erase it...
 	//for debug:
 	cout << "Active points size before: " << active_pts.size() << endl;
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		i->print_coords_with_z(cout);
+	}
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
 		std::set<Point>::iterator it;
@@ -490,7 +494,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		Point closest_point = find_closest(best_bridge.p1, best_bridge.p2, *i);
 		//cout << "Closest points: " << endl;
 		//closest_point.print_coords_with_z(cout);
-		if(best_bridge.p1.y == best_bridge.p2.y)//if bridge is horizontal use bridge1
+		if(best_bridge.p1.x == best_bridge.p2.x)//if original bridge is vertical, attaching will be horizontal use bridge1
 		{
 			//filename << "\tbridge1(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
 			cout << "\tbridge1(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
@@ -501,6 +505,30 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			cout << "\tbridge(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
 		}
 
+	}
+
+	//lay bar from bridge endpt1 to endpt2
+	//and add pts to active_pts
+	//first check for horizontal
+	if(best_bridge.p1.y == best_bridge.p2.y)//if horizontal, use bridge1
+	{
+		cout << "//THE MAIN BRIDGE:" << endl;
+		cout << "\tbridge1(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
+	}
+	else //otherwise use bridge
+	{
+		cout << "//THE MAIN BRIDGE:" << endl;
+		cout << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
+	}
+	active_pts.insert(best_bridge.p1);
+	active_pts.insert(best_bridge.p2);
+
+	//WHERE I AM: NEED TO TEST THIS....
+	//dang it...I think I need to add a z-comparison into the < operator for points...
+	cout << "Active points size after dropped bars & bridges: " << active_pts.size() << endl;
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		i->print_coords_with_z(cout);
 	}
 
 	/*//for 'testing...' //seems to work...definitely not exhaustive
