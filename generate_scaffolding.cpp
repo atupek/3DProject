@@ -404,6 +404,42 @@ Cube_Primitive make_cube_primitive(Point point1, Point point2)
 	return temp;
 }*/
 
+Point find_closest(Point bridge_p1, Point bridge_p2, Point p3)
+{
+	//if bridge_slope == 0
+	if(bridge_p1.y == bridge_p2.y)
+	{
+		Point new_pt(p3.x, bridge_p1.y, bridge_p1.z);
+		return new_pt;
+	}
+	//if bridge_slope == infinity
+	else if(bridge_p1.x == bridge_p2.x)
+	{
+		Point new_pt(bridge_p1.x, p3.y, bridge_p1.z);
+		return new_pt;
+	}
+	else
+	{
+		double bridge_slope = (bridge_p1.y - bridge_p2.y) / (bridge_p1.x - bridge_p2.x);
+		double perp_slope = -1/bridge_slope;
+
+		//equation of bridge_line is:
+		//y-bridge_p1.y = bridge_slope * (x - bridge_p1.x)
+		//equation of line perpendicular to bridge is:
+		//y-p3.y = perp_slope * (x - p3.x)
+
+		double x_int = ( p3.y - bridge_p1.y + (bridge_slope * bridge_p1.x) - (perp_slope * p3.x) )/ (bridge_slope - perp_slope);
+		double y_int = perp_slope * (x_int - p3.x) + p3.y;
+		double y_int2 = bridge_slope * (x_int - bridge_p1.x) + bridge_p1.y;
+		//cout << "x_int: " << x_int << endl;
+		//cout << "y_int: " << y_int << endl;
+		//cout << "y_int2: " << y_int2 << endl;
+		Point new_pt(x_int, y_int, bridge_p1.z);
+		return new_pt;
+
+	}
+}
+
 //TODO: snap should just take the bridge, because each bridge has a set of points supported by bridge called supported_points
 //maybe also need to send the active events, too.  Does that change with each sweep direction? Hmmm...
 //void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge)
@@ -446,26 +482,32 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	cout << "Active points size after dropped pillars: " << active_pts.size() << endl;
 
 	//lay bar from dropped pillar to bridge for each supported point
+	//as long as point is not actually on the bridge...TODO....THIS CONDITIONAL
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
 		//find closest point on bridge line to the dropped pillar
 		//and call bridge on that (unless y1 == y2, and then call bridge1)
+		Point closest_point = find_closest(best_bridge.p1, best_bridge.p2, *i);
+		//cout << "Closest points: " << endl;
+		//closest_point.print_coords_with_z(cout);
+		if(best_bridge.p1.y == best_bridge.p2.y)//if bridge is horizontal use bridge1
+		{
+			//filename << "\tbridge1(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
+			cout << "\tbridge1(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
+		}
+		else
+		{
+			//filename << "\tbridge(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
+			cout << "\tbridge(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
+		}
 
 	}
 
-	//we must remove the supported points from the set of active events.
-	//this code below is not going to work because can't compare a point to an event...damn.
-	//so I'll need to take the point, make an event out of it, and then do the removal,
-	//but that means that I need to rewrite the < comparitor for the event class.  Damn.
-	/*for(auto i = 0; i < best_bridge.supported_points.size(); i++)
-	{
-		std::set<Event>::iterator it;
-		it = _active_events.find(*i);
-		if(it != _active_events.end())
-		{
-			_active_events.erase(it);
-		}
-	}*/
+	/*//for 'testing...' //seems to work...definitely not exhaustive
+	Point test_0(0, 0, 0);
+	Point test_1(10, 5, 0);
+	Point test_2(5, 10, 0);
+	Point test_3 = find_closest(test_0, test_1, test_2);*/
 
 	//generate pillar from supported point (x, y, z1) to point on bridge (x, y, z2)
 	//however we're going to do that...

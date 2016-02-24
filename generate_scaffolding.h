@@ -42,6 +42,7 @@ void union_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & 
 void difference_sets(set<Anchoring_Segment> & original_set, set<Anchoring_Segment> & remove_set);
 
 void difference_pt_sets(set<Point> & original_set, set<Point> & remove_set);
+Point find_closest(Point bridge_p1, Point bridge_p2, Point p3);
 
 //Pillar make_pillar(Point point1, double height);
 
