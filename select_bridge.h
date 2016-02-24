@@ -14,6 +14,8 @@ using std::vector;
 
 
 double pt_line_dist(Point p1, Point p2, double x0, double y0);
+double calc_z_diff(Point supported_pt, double temp_bridge_height);
+double calc_horiz_dist(Point p1, Point p2, Point supported_pt);
 double calculate_lmax(Point p1, Point p2, set<Point> supported_pts);
 double calculate_gain(double height, double length, int num_elements);
 double calculate_score(double gain, int num_elements, double lmax);

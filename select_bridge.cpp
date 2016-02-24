@@ -16,6 +16,16 @@ double pt_line_dist(Point p1, Point p2, double x0, double y0)
 	return numerator/denominator;
 }
 
+double calc_z_diff(Point supported_pt, double temp_bridge_height)
+{
+	return supported_pt.z - temp_bridge_height;
+}
+
+double calc_horiz_dist(Point p1, Point p2, Point supported_pt)
+{
+	return pt_line_dist(p1, p2, supported_pt.x, supported_pt.y);
+}
+
 //lmax calculates total distance to heighest element being supported above the bridge
 //returns double
 //find z-max for each point that is supported by the bridge
@@ -221,6 +231,8 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 {
 	Bridge best_bridge;
 	double max_distance = 30.0;
+	double max_horizontal = 15.0;//TODO:adjust these numbers!
+	double min_vertical_dist = 1.0;//TODO:adjust these numbers!
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	double best_score = neg_inf;
 
@@ -278,7 +290,12 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 						for(int k = m; k < n+1; k++)
 						{
 							//cout << "adding point" << endl;
-							if(i->intersected_points[k].second.endpt1.z >= *j)
+							//first check constraints for angled pillar...
+							double temp_horiz_dist = calc_horiz_dist(temp_bridge.p1, temp_bridge.p2, i->intersected_points[k].second.endpt1);
+							double temp_vert_dist = calc_z_diff(i->intersected_points[k].second.endpt1, temp_bridge.height);
+							if((i->intersected_points[k].second.endpt1.z >= *j)
+									&& (temp_horiz_dist <= max_horizontal)
+									&& (temp_vert_dist >= min_vertical_dist))
 							{
 								//cout << "point above j" << endl;
 								temp_bridge.supported_points.insert(i->intersected_points[k].second.endpt1);
