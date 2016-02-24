@@ -232,7 +232,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	Bridge best_bridge;
 	double max_distance = 30.0;
 	double max_horizontal = 15.0;//TODO:adjust these numbers!
-	double min_vertical_dist = 1.0;//TODO:adjust these numbers!
+	double min_vertical_dist = 0.0;//TODO:adjust these numbers!
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	double best_score = neg_inf;
 
@@ -293,9 +293,11 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 							//first check constraints for angled pillar...
 							double temp_horiz_dist = calc_horiz_dist(temp_bridge.p1, temp_bridge.p2, i->intersected_points[k].second.endpt1);
 							double temp_vert_dist = calc_z_diff(i->intersected_points[k].second.endpt1, temp_bridge.height);
+							//so this broke it....why?
 							if((i->intersected_points[k].second.endpt1.z >= *j)
 									&& (temp_horiz_dist <= max_horizontal)
 									&& (temp_vert_dist >= min_vertical_dist))
+									//if(i->intersected_points[k].second.endpt1.z >= *j)
 							{
 								//cout << "point above j" << endl;
 								temp_bridge.supported_points.insert(i->intersected_points[k].second.endpt1);
