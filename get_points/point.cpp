@@ -138,6 +138,10 @@ bool operator < (const Point & lhs, const Point & rhs)
     {
         return true;
     }
+    if(lhs.z < rhs.z)
+    {
+        return true;
+    }
     return false;
 }
 
