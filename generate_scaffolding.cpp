@@ -450,7 +450,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	//damn it, supported_pts is a vector, not a set...so I don't need to use the difference_pt_set
 	//I can just go thorough the set and erase it...
 	//for debug:
-	cout << "Active points size before: " << active_pts.size() << endl;
+	cout << "*******Active points size before: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
@@ -462,11 +462,18 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		if(it != active_pts.end())
 		{
 			active_pts.erase(it);
-			cout << "ERASED POINT" << endl;
+			//cout << "ERASED POINT" << endl;
 		}
 	}
 	//for debug:
-	cout << "Active points size after: " << active_pts.size() << endl;
+	cout << "*******Active points size after erasure: " << active_pts.size() << endl;
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		i->print_coords_with_z(cout);
+	}
+
+	//active_pts.insert(best_bridge.p1);
+	//active_pts.insert(best_bridge.p2);
 
 	//drop pillar for each supported point
 	//add point at bottom of pillar to set of active points
@@ -478,12 +485,18 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			//pillar(x, y, height of pillar base, vertical height of pillar)
 			//NOTE: Also need to work epsilon in here...
 			cout << "\tpillar(" << i->x << ", " << i->y << ", " << best_bridge.height << ", " << (i->z - best_bridge.height) << ");" << endl;
+			//Point lowered_point(i->x, i->y, best_bridge.height);
+			//active_pts.insert(lowered_point);
 		}
 		Point lowered_point(i->x, i->y, best_bridge.height);
 		active_pts.insert(lowered_point);
 	}
 	//for debug:
-	cout << "Active points size after dropped pillars: " << active_pts.size() << endl;
+	cout << "*********Active points size after dropped pillars: " << active_pts.size() << endl;
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		i->print_coords_with_z(cout);
+	}
 
 	//lay bar from dropped pillar to bridge for each supported point
 	//as long as point is not actually on the bridge...TODO....THIS CONDITIONAL
@@ -507,6 +520,12 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 
 	}
 
+	/*//for 'testing...' //seems to work...definitely not exhaustive
+	Point test_0(0, 0, 0);
+	Point test_1(10, 5, 0);
+	Point test_2(5, 10, 0);
+	Point test_3 = find_closest(test_0, test_1, test_2);*/
+
 	//lay bar from bridge endpt1 to endpt2
 	//and add pts to active_pts
 	//first check for horizontal
@@ -520,22 +539,43 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		cout << "//THE MAIN BRIDGE:" << endl;
 		cout << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
 	}
-	active_pts.insert(best_bridge.p1);
-	active_pts.insert(best_bridge.p2);
+	
+	/*cout << "Bridge endpt 1: ";
+	best_bridge.p1.print_coords_with_z(cout);
+	cout << "Bridge endpt 2: ";
+	best_bridge.p2.print_coords_with_z(cout);*/
 
-	//WHERE I AM: NEED TO TEST THIS....
-	//dang it...I think I need to add a z-comparison into the < operator for points...
-	cout << "Active points size after dropped bars & bridges: " << active_pts.size() << endl;
+	/*
+	Point new_test_pt(2, 2, 2);
+	active_pts.insert(new_test_pt);
+	Point new_test_pt1(18, 9, 17);
+	active_pts.insert(new_test_pt1);*/
+	
+	cout << "Active points before adding endpts: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
 	}
 
-	/*//for 'testing...' //seems to work...definitely not exhaustive
-	Point test_0(0, 0, 0);
-	Point test_1(10, 5, 0);
-	Point test_2(5, 10, 0);
-	Point test_3 = find_closest(test_0, test_1, test_2);*/
+	cout << "Bridge endpt 1: ";
+	best_bridge.p1.print_coords_with_z(cout);
+	active_pts.insert(best_bridge.p1);
+	cout << "Bridge endpt 2: ";
+	best_bridge.p2.print_coords_with_z(cout);
+	active_pts.insert(best_bridge.p2);
+
+	Point stupid_pt(19, 15, 17);
+	active_pts.insert(stupid_pt);
+
+	//WHERE I AM: NEED TO TEST THIS....
+	//dang it...I think I need to add a z-comparison into the < operator for points?
+	//but that's not why bridge endpt1 isn't being added to the set...
+	cout << "Active points size after adding endpts: " << active_pts.size() << endl;
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		i->print_coords_with_z(cout);
+	}
+
 
 	//generate pillar from supported point (x, y, z1) to point on bridge (x, y, z2)
 	//however we're going to do that...
