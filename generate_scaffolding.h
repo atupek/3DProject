@@ -48,6 +48,7 @@ Point find_closest(Point bridge_p1, Point bridge_p2, Point p3);
 
 //Cube_Primitive make_cube_primitive(Point point1, Point point2);
 
+void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active_pts);
 void snap(Bridge & best_bridge, set<Point> & active_pts);
 
 void generate_scaffolding(set<Point> points_needing_support);

@@ -440,31 +440,47 @@ Point find_closest(Point bridge_p1, Point bridge_p2, Point p3)
 	}
 }
 
+void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active_pts)
+{
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		if(i->x == supported_pt.x && i->y == supported_pt.y && i->z == supported_pt.z)
+		{
+			active_pts.erase(i);
+		}
+	}
+}
+
 //TODO: snap should just take the bridge, because each bridge has a set of points supported by bridge called supported_points
 //maybe also need to send the active events, too.  Does that change with each sweep direction? Hmmm...
 //void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge)
 //void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
 void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
-	//remove supported points from set of points that need support (active_pts)
-	//damn it, supported_pts is a vector, not a set...so I don't need to use the difference_pt_set
-	//I can just go thorough the set and erase it...
 	//for debug:
 	cout << "*******Active points size before: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
 	}
+	
+	//remove supported points from set of points that need support (active_pts)
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
+		/*cout << "supported point being checked: ";
+		i->print_coords_with_z(cout);
 		std::set<Point>::iterator it;
 		it = active_pts.find(*i);
 		if(it != active_pts.end())
 		{
+			cout << "erasing point: ";
+			it->print_coords_with_z(cout);
 			active_pts.erase(it);
-			//cout << "ERASED POINT" << endl;
-		}
+			cout << "ERASED POINT" << endl;
+		}*/
+		remove_supported_pt_from_active_set(*i, active_pts);
 	}
+	
 	//for debug:
 	cout << "*******Active points size after erasure: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
@@ -472,9 +488,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		i->print_coords_with_z(cout);
 	}
 
-	//active_pts.insert(best_bridge.p1);
-	//active_pts.insert(best_bridge.p2);
-
+	/*
 	//drop pillar for each supported point
 	//add point at bottom of pillar to set of active points
 	//filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->p2.z - i->height) << ");" << endl;
@@ -489,8 +503,11 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			//active_pts.insert(lowered_point);
 		}
 		Point lowered_point(i->x, i->y, best_bridge.height);
+		cout << "Lowered point: ";
+		lowered_point.print_coords_with_z(cout);
 		active_pts.insert(lowered_point);
 	}
+
 	//for debug:
 	cout << "*********Active points size after dropped pillars: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
@@ -518,7 +535,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			cout << "\tbridge(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
 		}
 
-	}
+	}*/
 
 	/*//for 'testing...' //seems to work...definitely not exhaustive
 	Point test_0(0, 0, 0);
@@ -526,6 +543,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	Point test_2(5, 10, 0);
 	Point test_3 = find_closest(test_0, test_1, test_2);*/
 
+	/*
 	//lay bar from bridge endpt1 to endpt2
 	//and add pts to active_pts
 	//first check for horizontal
@@ -538,7 +556,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	{
 		cout << "//THE MAIN BRIDGE:" << endl;
 		cout << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
-	}
+	}*/
 	
 	/*cout << "Bridge endpt 1: ";
 	best_bridge.p1.print_coords_with_z(cout);
@@ -550,22 +568,26 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	active_pts.insert(new_test_pt);
 	Point new_test_pt1(18, 9, 17);
 	active_pts.insert(new_test_pt1);*/
-	
+	/*
 	cout << "Active points before adding endpts: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}
+	}*/
 
+		/*
 	cout << "Bridge endpt 1: ";
 	best_bridge.p1.print_coords_with_z(cout);
+	
 	active_pts.insert(best_bridge.p1);
+	
 	cout << "Bridge endpt 2: ";
 	best_bridge.p2.print_coords_with_z(cout);
+	
 	active_pts.insert(best_bridge.p2);
 
-	Point stupid_pt(19, 15, 17);
-	active_pts.insert(stupid_pt);
+	//Point stupid_pt(19, 15, 17);
+	//active_pts.insert(stupid_pt);
 
 	//WHERE I AM: NEED TO TEST THIS....
 	//dang it...I think I need to add a z-comparison into the < operator for points?
@@ -574,7 +596,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}
+	}*/
 
 
 	//generate pillar from supported point (x, y, z1) to point on bridge (x, y, z2)
