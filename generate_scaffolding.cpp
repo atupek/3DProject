@@ -488,7 +488,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		i->print_coords_with_z(cout);
 	}
 
-	/*
+	
 	//drop pillar for each supported point
 	//add point at bottom of pillar to set of active points
 	//filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->p2.z - i->height) << ");" << endl;
@@ -535,7 +535,11 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			cout << "\tbridge(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
 		}
 
-	}*/
+	}
+
+	//****************TODO*********************************NOW!!!!!*****************
+	//go back and change the < point operator back and see if correct bridges
+	//are created....
 
 	/*//for 'testing...' //seems to work...definitely not exhaustive
 	Point test_0(0, 0, 0);
