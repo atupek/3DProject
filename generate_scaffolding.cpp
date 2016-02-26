@@ -489,7 +489,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	}
 
 	
-	//drop pillar for each supported point
+	//drop slanted pillar for each supported point
 	//add point at bottom of pillar to set of active points
 	//filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->p2.z - i->height) << ");" << endl;
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
@@ -497,15 +497,12 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		if(i->z != best_bridge.p1.z) //if the supported point is *above* the bridge (not on the same level as bridge)
 		{
 			//pillar(x, y, height of pillar base, vertical height of pillar)
+			//slanted_pillar(x1, y1, z1, x2, y2, z2) //where x1, y1, z1 are coords of pt that needs support
+			//and x2, y2, z2 are coords of closest point on bridge to pt that needs support
+			//TODO: call closest point here!
 			//NOTE: Also need to work epsilon in here...
-			cout << "\tpillar(" << i->x << ", " << i->y << ", " << best_bridge.height << ", " << (i->z - best_bridge.height) << ");" << endl;
-			//Point lowered_point(i->x, i->y, best_bridge.height);
-			//active_pts.insert(lowered_point);
+			cout << "\tslanted_pillar(" << i->x << ", " << i->y << ", " << i->z << ", x2, y2, " << best_bridge.height << ")" << endl;
 		}
-		Point lowered_point(i->x, i->y, best_bridge.height);
-		cout << "Lowered point: ";
-		lowered_point.print_coords_with_z(cout);
-		active_pts.insert(lowered_point);
 	}
 
 	//for debug:
@@ -514,7 +511,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	{
 		i->print_coords_with_z(cout);
 	}
-
+/*
 	//lay bar from dropped pillar to bridge for each supported point
 	//as long as point is not actually on the bridge...TODO....THIS CONDITIONAL
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
@@ -535,7 +532,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			cout << "\tbridge(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
 		}
 
-	}
+	}*/
 
 	//****************TODO*********************************NOW!!!!!*****************
 	//go back and change the < point operator back and see if correct bridges
@@ -547,7 +544,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	Point test_2(5, 10, 0);
 	Point test_3 = find_closest(test_0, test_1, test_2);*/
 
-	/*
+	
 	//lay bar from bridge endpt1 to endpt2
 	//and add pts to active_pts
 	//first check for horizontal
@@ -560,7 +557,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	{
 		cout << "//THE MAIN BRIDGE:" << endl;
 		cout << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
-	}*/
+	}
 	
 	/*cout << "Bridge endpt 1: ";
 	best_bridge.p1.print_coords_with_z(cout);
@@ -579,7 +576,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		i->print_coords_with_z(cout);
 	}*/
 
-		/*
+	
 	cout << "Bridge endpt 1: ";
 	best_bridge.p1.print_coords_with_z(cout);
 	
@@ -600,7 +597,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}*/
+	}
 
 
 	//generate pillar from supported point (x, y, z1) to point on bridge (x, y, z2)
