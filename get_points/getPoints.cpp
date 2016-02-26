@@ -15,6 +15,7 @@ using std::cout;
 using std::endl;
 #include <fstream>
 using std::ifstream;
+using std::ofstream;
 #include <cstdlib>
 #include <string>
 using std::string;
@@ -30,6 +31,8 @@ using std::vector;
 using std::istringstream;
 using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
+
+//ofstream outFile("points_to_support.txt");
 
 char gcodeFile[256];
 //all the points from the original model
@@ -272,6 +275,22 @@ void getPoints()
 	}*/
 }
 
+void points_to_file()
+{
+	//FILE * outFile;
+   	//outFile = fopen ("outfile.txt","w");
+   	ofstream outFile("points_to_support.txt");
+	//outFile << "outfile" << endl;
+	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
+	{
+		for(auto j = i->begin(); j!= i->end(); j++)
+		{
+			//blah
+			j->print_coords_with_z(outFile);
+		}
+	}
+}
+
 //for debug, print bmps of test data (from points shifted over)
 void print_bmps()
 {
@@ -289,6 +308,8 @@ int main()
 {
 	getPoints();
 	//print_bmps();
+	//ofstream outFile("points_to_support.txt");
+	points_to_file();
 
 	return 0;
 }
