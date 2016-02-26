@@ -501,7 +501,9 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			//and x2, y2, z2 are coords of closest point on bridge to pt that needs support
 			//TODO: call closest point here!
 			//NOTE: Also need to work epsilon in here...
-			cout << "\tslanted_pillar(" << i->x << ", " << i->y << ", " << i->z << ", x2, y2, " << best_bridge.height << ")" << endl;
+			Point point_on_bridge = find_closest(best_bridge.p1, best_bridge.p2, *i);
+			cout << "\tslanted_pillar(" << i->x << ", " << i->y << ", " << i->z << ", " <<
+				point_on_bridge.x << ", " << point_on_bridge.y << ", " <<  best_bridge.height << ")" << endl;
 		}
 	}
 
@@ -511,39 +513,6 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	{
 		i->print_coords_with_z(cout);
 	}
-/*
-	//lay bar from dropped pillar to bridge for each supported point
-	//as long as point is not actually on the bridge...TODO....THIS CONDITIONAL
-	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
-	{
-		//find closest point on bridge line to the dropped pillar
-		//and call bridge on that (unless y1 == y2, and then call bridge1)
-		Point closest_point = find_closest(best_bridge.p1, best_bridge.p2, *i);
-		//cout << "Closest points: " << endl;
-		//closest_point.print_coords_with_z(cout);
-		if(best_bridge.p1.x == best_bridge.p2.x)//if original bridge is vertical, attaching will be horizontal use bridge1
-		{
-			//filename << "\tbridge1(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
-			cout << "\tbridge1(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
-		}
-		else
-		{
-			//filename << "\tbridge(" << i->p1.x << ", " << i->p1.y << ", " << i->p2.x << ", " << i->p2.y << ", " << i->height << ");" << endl;
-			cout << "\tbridge(" << i->x << ", " << i->y << ", " << closest_point.x << ", " << closest_point.y << ", " << best_bridge.height << ");" << endl;
-		}
-
-	}*/
-
-	//****************TODO*********************************NOW!!!!!*****************
-	//go back and change the < point operator back and see if correct bridges
-	//are created....
-
-	/*//for 'testing...' //seems to work...definitely not exhaustive
-	Point test_0(0, 0, 0);
-	Point test_1(10, 5, 0);
-	Point test_2(5, 10, 0);
-	Point test_3 = find_closest(test_0, test_1, test_2);*/
-
 	
 	//lay bar from bridge endpt1 to endpt2
 	//and add pts to active_pts
@@ -559,36 +528,15 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		cout << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
 	}
 	
-	/*cout << "Bridge endpt 1: ";
-	best_bridge.p1.print_coords_with_z(cout);
-	cout << "Bridge endpt 2: ";
-	best_bridge.p2.print_coords_with_z(cout);*/
-
-	/*
-	Point new_test_pt(2, 2, 2);
-	active_pts.insert(new_test_pt);
-	Point new_test_pt1(18, 9, 17);
-	active_pts.insert(new_test_pt1);*/
-	/*
-	cout << "Active points before adding endpts: " << active_pts.size() << endl;
-	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
-	{
-		i->print_coords_with_z(cout);
-	}*/
-
-	
-	cout << "Bridge endpt 1: ";
-	best_bridge.p1.print_coords_with_z(cout);
+	//cout << "Bridge endpt 1: ";
+	//best_bridge.p1.print_coords_with_z(cout);
 	
 	active_pts.insert(best_bridge.p1);
 	
-	cout << "Bridge endpt 2: ";
-	best_bridge.p2.print_coords_with_z(cout);
+	//cout << "Bridge endpt 2: ";
+	//best_bridge.p2.print_coords_with_z(cout);
 	
 	active_pts.insert(best_bridge.p2);
-
-	//Point stupid_pt(19, 15, 17);
-	//active_pts.insert(stupid_pt);
 
 	//WHERE I AM: NEED TO TEST THIS....
 	//dang it...I think I need to add a z-comparison into the < operator for points?
@@ -598,29 +546,6 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	{
 		i->print_coords_with_z(cout);
 	}
-
-
-	//generate pillar from supported point (x, y, z1) to point on bridge (x, y, z2)
-	//however we're going to do that...
-
-	//higher bridge endpoint needs to be brought down to z-height of lower endpoint
-	//and pillar producted to upper z-height
-	/*if(best_bridge.p1.z > best_bridge.p2.z) //if z of p1 > z of p2, z of p1 = z of p2
-	{
-		best_bridge.p1.z = best_bridge.p2.z;
-	}
-	else
-	{
-		best_bridge.p2.z = best_bridge.p1.z; //otherwise z of p2 >= z of p1 and z p2 should be changed to reflect that
-	}*/
-	//and now produce pillar, however we're going to do that...
-
-	//Okay, once that is done we need to add the endpoints of the bridge into the set of active events
-	//so we need to create a new event
-	/*Event new_event1(best_bridge.p1);
-	Event new_event2(best_bridge.p2);
-	_active_events.insert(new_event1);
-	_active_events.insert(new_event2);*/
 
 }
 
