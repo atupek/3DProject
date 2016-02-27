@@ -4,6 +4,8 @@
 #include "bridge.h"
 #include <limits> //for infinity
 #include "event.h"
+#include <fstream>
+using std::ifstream;
 //#include "pillar.h"
 //#include "cube_primitive.h"
 
@@ -44,6 +46,31 @@ void make_sweep_vector()
 	//think I've taken care of the two TODO's above...
 }
 
+set<Point> get_pts_from_file()
+{
+	set<Point> pts_to_run;
+	ifstream inFile("get_points/points_to_support.txt");
+	string line;
+	string delim = ", ";
+	while(!inFile.eof()) //important that pts_to_support doesn't end with an empty newline...
+	{
+		getline(inFile, line);
+		string x_token = line.substr(0, line.find(delim));
+		//cout << "x_token: " << x_token << endl;
+		double x_value = stod(x_token);
+		string substr_no_x = line.substr(line.find(delim)+2, line.find("\n"));
+		//cout << "substr no x: " << substr_no_x << endl;
+		string y_token = substr_no_x.substr(0, line.find(delim));
+		//cout << "y_token: " << y_token << endl;
+		double y_value = stod(y_token);
+		string z_token = substr_no_x.substr(line.find(delim)+2, line.find("\n"));
+		//cout << "z_token: " << z_token << endl;
+		double z_value = stod(z_token);
+		Point new_pt(x_value, y_value, z_value);
+		pts_to_run.insert(new_pt);
+	}
+	return pts_to_run;
+}
 
 int main()
 {
@@ -55,6 +82,9 @@ int main()
 	set<Point> points_for_alg3;
 	set<Anchoring_Segment> segments_for_alg3;
 	vector<Sweep_line> sweep_line_vec;
+
+	set<Point> points_testing = get_pts_from_file();
+	cout << "NUMBER OF POINTS: " << points_testing.size() << endl;
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
 	int i = 4;
