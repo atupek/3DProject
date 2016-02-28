@@ -325,7 +325,6 @@ int main()
 {
 	getPoints();
 	//print_bmps();
-	//ofstream outFile("points_to_support.txt");
 	points_to_file();
 
 	return 0;

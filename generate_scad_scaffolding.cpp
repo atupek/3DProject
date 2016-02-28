@@ -3,21 +3,40 @@
 #include <fstream>
 #include "bridge.h"
 #include "get_points/point.h"
+#include <vector>
 using std::ofstream;
 using std::cout;
 using std::endl;
 using std::string;
+using std::vector;
 
 //for testing (from test_generate_scaffolding)
 set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
-//void make_point_set()
-//{
-	//Point p0(1, 1, 1);
-	Point p1(19, 9, 15);
-	Point p2(11, 15, 20);
-	Point p3(25, 20, 18);
-	Point p4(18, 24, 17);
-	//active_points.insert(p0);
+
+Point p1(19, 9, 15);
+Point p2(11, 15, 20);
+Point p3(25, 20, 18);
+Point p4(18, 24, 17);
+
+vector<Point> pts_for_pillars;
+
+Point p5(19, 13, 17);
+Point p6(19, 9, 15);
+Point p7(13, 15, 22);
+Point p8(11, 15, 20);
+Point p9(18, 20, 20);
+Point p10(18, 24, 17);
+
+void make_pillar_pt_vec()
+{
+	pts_for_pillars.push_back(p5);
+	pts_for_pillars.push_back(p6);
+	pts_for_pillars.push_back(p7);
+	pts_for_pillars.push_back(p8);
+	pts_for_pillars.push_back(p9);
+	pts_for_pillars.push_back(p10);
+}
+
 void make_point_set()
 {
 	active_points.insert(p1);
@@ -47,6 +66,29 @@ void insert_header_info(ofstream &filename)
 	filename << "radius = 1;" << endl;
 	filename << "delta = 2;" << endl;
 	filename << "height = 0.4;" << endl << endl;
+
+	filename << "module circle1(x_coord, y_coord, z_coord)" << endl;
+	filename << "{" << endl;
+    filename << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
+    filename << "\tcylinder(.2, radius, radius);" << endl;
+	filename << "}" << endl;
+
+	filename << "module circle2(x_coord, y_coord, z_coord)" << endl;
+	filename << "{" << endl;
+    filename << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
+    filename << "\tcylinder(.2, radius, radius);" << endl;
+	filename << "}" << endl;
+
+	filename << "module slanted_pillar(x_coord1, y_coord1, z_coord1, x_coord2, y_coord2, z_coord2)" << endl;
+	filename << "{" << endl;
+    filename << "\thull()" << endl;
+    filename << "\t{" << endl;
+    filename << "\t\tcircle1(x_coord1, y_coord1, z_coord1);" << endl;
+    filename << "\t\tcircle2(x_coord2, y_coord2, z_coord2);" << endl;
+    filename << "\t}" << endl;
+	filename << "}" << endl;
+
+
 	filename << "module pillar(x_coord, y_coord, z_coord, z_height)" << endl;
 	filename << "{" << endl;
     filename << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
@@ -78,6 +120,16 @@ void sending_test_structures(ofstream & filename)
 	filename << "\tbridge1(0, 0, 25, 20, 10);" << endl;
 	filename << "\tbridge1(0, 0, 10, 0, 5);" << endl;
 	filename << "\tpillar(10, 10, 10, 10);" << endl;
+}
+
+void send_slanted_pillars(ofstream & filename, vector<Point> &pts_for_pillars)
+{
+	for(int i = 0; i < pts_for_pillars.size()-1; i+=2)
+	{
+		filename << "//adding slanted pillar" << endl;
+		filename << "\tslanted_pillar(" << pts_for_pillars[i].x << ", " << pts_for_pillars[i].y << ", " << pts_for_pillars[i].z << ", "
+										<< pts_for_pillars[i+1].x << ", " << pts_for_pillars[i+1].y << ", " << pts_for_pillars[i+1].z << ");" << endl;
+	}
 }
 
 void send_points(ofstream & filename, set<Point> &point_set)
@@ -125,9 +177,11 @@ int main()
 {
 	make_point_set();
 	make_bridge_set();
+	make_pillar_pt_vec();
 	ofstream out_file("scad_output.scad");
 	insert_header_info(out_file);
 	//sending_test_structures(out_file);
+	send_slanted_pillars(out_file, pts_for_pillars);
 	send_points(out_file, active_points);
 	send_bridges(out_file, active_bridges);
 	insert_closing_brace(out_file);

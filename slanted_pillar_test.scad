@@ -14,26 +14,26 @@ x_2 = 4;
 y_2 = 5;
 z_2 = 3;
 
-module circle1()
+module circle1(x_coord, y_coord, z_coord)
 {
-    translate([x_1, y_1, z_1])
+    translate([x_coord, y_coord, z_coord])
     cylinder(.2, radius, radius);
 }
-circle1();
+//circle1(x_1, y_1, z_1);
 
-module circle2()
+module circle2(x_coord, y_coord, z_coord)
 {
-    translate([x_2, y_2, z_2])
+    translate([x_coord, y_coord, z_coord])
     cylinder(.2, radius, radius);
 }
-circle2();
+//circle2(x_2, y_2, z_2);
 
-module slanted_pillar()
+module slanted_pillar(x_coord1, y_coord1, z_coord1, x_coord2, y_coord2, z_coord2)
 {
     hull()
     {
-        circle1();
-        circle2();
+        circle1(x_coord1, y_coord1, z_coord1);
+        circle2(x_coord2, y_coord2, z_coord2);
     }
 }
-slanted_pillar();
+slanted_pillar(x_1, y_1, z_1, x_2, y_2, z_2);
