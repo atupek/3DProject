@@ -92,17 +92,21 @@ void getPoints()
 	//obvious.
 	get_file_name();
 
+	cout << "Got file name...matching regex next..." << endl;
 	//match regex & create points, load them into layers, specified by the layer index
 	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
+	cout << "matched regexes...erasing first three layers next..." << endl;
 	//first three layers of model have no points because of way gcode is sliced
 	this_model.erase(this_model.begin(), this_model.begin()+2);
 	//last layer must also be removed for some reason...
 	layer_index--;
 
+	cout << "erased first three layers...making new model..." << endl;
 	//make a new model for the converted model
 	all_layers converted_model = this_model;
 
+	cout << "new model made...multiplying for resolution..." << endl;
 	//multiply x, y, & e by 10 for the highest resolution (.1mm)
 	//mulitply x, y, & e by 2 for the middle resolution (.5mm)
 	//multiply by nothing for the lowest resolution (1mm)
@@ -125,8 +129,9 @@ void getPoints()
 	}*/
 
 	//************************for testing only************************************** 
-	shiftPoints(converted_model[4]);
+	//shiftPoints(converted_model[4]);
 
+	cout << "new resolution done...initializing pixel vector..." << endl;
 	//model
 	//create vector of pixel layers, these are empty to begin with
 	//and will be populated with fill_pixel_vector
@@ -136,6 +141,7 @@ void getPoints()
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
+	cout << "initializing second pixel vector..." << endl;
 	//processed_pix_model
 	//create vector of pixel layers, empty to begin with
 	//POPULATED BY DRAW LINES FUNCTION (Bresenham)
@@ -146,6 +152,7 @@ void getPoints()
 		initialize_pixel_vector(processed_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
+	cout << "initializing third pixel vector..." << endl;
 	//fattened_pix_model
 	//create vector of pixel layers, empty to begin with
 	//POPULATED BY FATTEN LINES FUNCTION
@@ -157,6 +164,7 @@ void getPoints()
 		initialize_pixel_vector(fattened_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
+	cout << "initializing fourth pixel vector..." << endl;
 	//compared_pix_model
 	//create vector of pixel layers, these are empty to begin with
 	//POPULATED BY COMPARE_PIXEL_LAYERS FUNCTION
@@ -167,6 +175,7 @@ void getPoints()
 		initialize_pixel_vector(compared_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
+	cout << "initializng final pixel vector..." << endl;
 	//final_pix_model
 	//create vector of pixel layers, these are empty to begin with
 	//POPULATED BY CHECK_NEIGHBORS FUNCTION
@@ -176,7 +185,7 @@ void getPoints()
 	{
 		initialize_pixel_vector(final_pix_model, num_pixel_rows, num_pixel_columns);
 	}
-	
+	cout << "filling pixel vector..." << endl;
 	//takes x, y coords from Point vector (first argument) and sets those pixels in the pixel layer (second argument)
 	//loops through all Point vectors for the entire model
 	for(auto i = 0; i < layer_index; i++)
@@ -190,18 +199,23 @@ void getPoints()
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
 	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);*/
 
+	cout << "drawing lines..." << endl;
+	cout << "layer index: " << layer_index << endl;
 	//draw lines between the points using bresenham algorithm
 	//takes in a point_layer and draws a line from point n to n+1 in the corresponding pixel_layer in processed_pix_model
-	for(auto i = 0; i < layer_index; i++)
+	for(auto i = 0; i < (layer_index-1); i++)
 	{
+		cout << "Processing layer: " << i << endl;
 		//cout << "converted_model[i].size(): " << converted_model[i].size() << endl;
 		for(auto j = 0; j < converted_model[i].size()-1; j++)
 		{
 			bresenham(converted_model[i][j].x, converted_model[i][j+1].x,
 						converted_model[i][j].y, converted_model[i][j+1].y, processed_pix_model[i]);
 		}
+		cout << "layer processed..." << endl;
 	}
 
+	cout << "assigning procesed_pix_model to fattened_pix_model..." << endl;
 	fattened_pix_model = processed_pix_model;
 	/*
 	//for debug...
@@ -209,6 +223,7 @@ void getPoints()
 	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
 	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);*/
 
+	cout << "fattening the lines...." << endl;
 	//fatten up the lines
 	//takes pixel layer from processed_pix_model and fattens lines into corresponding layer of fattened_pix_model
 	for(auto i = 0; i < layer_index; i++)
@@ -223,6 +238,7 @@ void getPoints()
 	print_bitmap(fattened_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
 	print_bitmap(fattened_pix_model[4], 5, num_pixel_rows, num_pixel_columns);*/
 
+	cout << "comparing pixel layers..." << endl;
 	//compare pixel layers & load difference into a third layer
 	//compare pixel layers n (fattened_pix_model), n+1 (initial model)
 	//and load difference into compared_pix_model
@@ -240,6 +256,7 @@ void getPoints()
 	print_bitmap(fattened_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
 	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);*/
 
+	cout << "checking neighbors..." << endl;
 	//check neighbors between model[i+1] and fattened_pix_model[i+1]
 	//if neighbors exist in layer, then point in final_pix_model doesn't need support
 	for(auto i = 0; i < layer_index-1; i++)
@@ -252,7 +269,7 @@ void getPoints()
 	//after checking neighbors, prints okay
 	print_bitmap(final_pix_model[3], 9, num_pixel_rows, num_pixel_columns);*/
 
-
+	cout << "putting all points into vector..." << endl;
 	//fill point vector with points that need support
 	//all_points_needing_support is a vector of this_layer (vector<Point>)
 	for(auto i = 0; i < final_pix_model.size(); i++)
