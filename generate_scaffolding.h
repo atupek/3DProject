@@ -23,6 +23,8 @@ using std::priority_queue;
 using std::vector; //vector of sweep directions
 #include <algorithm> //for for_each
 #include "event.h"
+#include <string>
+using std::string;
 
 //creates anchoring segment
 void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments);
@@ -50,6 +52,10 @@ Point find_closest(Point bridge_p1, Point bridge_p2, Point p3);
 
 void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active_pts);
 void snap(Bridge & best_bridge, set<Point> & active_pts);
+
+void send_remaining_points_to_scad(set<Point> &active_pts);
+void setup_scad();
+void output_pts_to_support_to_scad(set<Point> &active_pts, string color);
 
 void generate_scaffolding(set<Point> points_needing_support);
 

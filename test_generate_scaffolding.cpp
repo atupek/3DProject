@@ -6,23 +6,20 @@
 #include "event.h"
 #include <fstream>
 using std::ifstream;
-//#include "pillar.h"
-//#include "cube_primitive.h"
 
-set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
+//****************comment out to try from file....
+//set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
 set<Bridge> active_bridges; //this will be added to when we have bridges returned from algorithm 3: SelectBridge
 
 set<Anchoring_Segment> segments;
-
-//vector<Pillar> scad_pillars;
-//vector<Cube_Primitive> scad_cubes;
 
 set<Event> active_events;
 
 vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
 
-void make_point_set()
+//******************comment out to try from file...
+/*void make_point_set()
 {
 	//Point p0(1, 1, 1);
 	Point p1(19, 9, 15);
@@ -34,11 +31,11 @@ void make_point_set()
 	active_points.insert(p2);
 	active_points.insert(p3);
 	active_points.insert(p4);
-}
+}*/
 
 void make_sweep_vector()
 {
-	slope_of_sweep.push_back(0.0); // horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
+	slope_of_sweep.push_back(0.0);// horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
 	slope_of_sweep.push_back(1.0); //45 degrees
 	slope_of_sweep.push_back(2.0);
 	slope_of_sweep.push_back(3.0);
@@ -74,6 +71,8 @@ set<Point> get_pts_from_file()
 
 int main()
 {
+	//insert header info to scad file
+	setup_scad();
 	/*//for bitmap debug
 	bitmap_image test_image(200, 200);
 	test_image.set_all_channels(255,255,255); //set background to white
@@ -83,100 +82,100 @@ int main()
 	set<Anchoring_Segment> segments_for_alg3;
 	vector<Sweep_line> sweep_line_vec;
 
-	set<Point> points_testing = get_pts_from_file();
-	cout << "NUMBER OF POINTS: " << points_testing.size() << endl;
+	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
+	set<Point> active_points = get_pts_from_file();
+	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;
+	//**********comment out make_pt_set()
+	//make_point_set();
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
-	int i = 4;
-	make_point_set();
+	int outer_loop_index = 0;
+
+	output_pts_to_support_to_scad(active_points, "Orchid");
 
 	make_sweep_vector();
-	create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, i);
+	//for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
+	//{
+		cout << "outer_loop_index: " << outer_loop_index << endl;
+		create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, outer_loop_index);
 
-	/*//for debug: print members of anchoring segments:
-	cout << "***********************ANCHORING SEGMENTS: **************************" << endl;
-	for(auto i = segments.begin(); i != segments.end(); i++)
-	{
-		i->print_coords(cout);
-	}*/
+		/*//for debug: print members of anchoring segments:
+		cout << "***********************ANCHORING SEGMENTS: **************************" << endl;
+		for(auto i = segments.begin(); i != segments.end(); i++)
+		{
+			i->print_coords(cout);
+		}*/
 
-	//cout << "Anchoring segments size: "  << segments.size() << endl;
-	//create events from anchoring segments
+		//cout << "Anchoring segments size: "  << segments.size() << endl;
+		//create events from anchoring segments
 
-	create_events(segments, active_events);
-	
-	//cout << "Events size: " << active_events.size() << endl;
+		create_events(segments, active_events);
+		
+		//cout << "Events size: " << active_events.size() << endl;
 
-	//find intersections between sweep plane and anchoring segments at each event(which is a point)
-	//these intersections are the points sent to select bridge
+		//find intersections between sweep plane and anchoring segments at each event(which is a point)
+		//these intersections are the points sent to select bridge
 
-	/*//for debug, print event info:
-	cout << "*******************************EVENT MEMBERS: ***************************" << endl;
-	for(auto i = active_events.begin(); i != active_events.end(); i++)
-	{
-		i->print_event_members(cout);
-	}*/
+		/*//for debug, print event info:
+		cout << "*******************************EVENT MEMBERS: ***************************" << endl;
+		for(auto i = active_events.begin(); i != active_events.end(); i++)
+		{
+			i->print_event_members(cout);
+		}*/
 
-	//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
+		//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
 
-	find_intersections(active_events, slope_of_sweep, i, sweep_line_vec);
+		find_intersections(active_events, slope_of_sweep, outer_loop_index, sweep_line_vec);
 
-	/*
-	cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
+		/*
+		cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
 
-	//for debug
-	cout << "points being sent to alg3: " << endl;
-	for(auto i = points_for_alg3.begin(); i != points_for_alg3.end(); i++)
-	{
-		i->print_coords(cout);
-	}*/
+		//for debug
+		cout << "points being sent to alg3: " << endl;
+		for(auto i = points_for_alg3.begin(); i != points_for_alg3.end(); i++)
+		{
+			i->print_coords(cout);
+		}*/
 
-	/*//for debug
-	cout << "*****************************SEGMENT MEMBERS: ******************************" << endl;
-	cout << "segments for al3 size: " << segments_for_alg3.size() << endl;
-	cout << "segments for alg3:" << endl;
-	for(auto i = segments_for_alg3.begin(); i != segments_for_alg3.end(); i++)
-	{
-		i->print_coords(cout);
-		cout << "Of size: " << i->intersected_points.size() << endl;
-		i->print_intersect_pts(cout);
-	}*/
+		/*//for debug
+		cout << "*****************************SEGMENT MEMBERS: ******************************" << endl;
+		cout << "segments for al3 size: " << segments_for_alg3.size() << endl;
+		cout << "segments for alg3:" << endl;
+		for(auto i = segments_for_alg3.begin(); i != segments_for_alg3.end(); i++)
+		{
+			i->print_coords(cout);
+			cout << "Of size: " << i->intersected_points.size() << endl;
+			i->print_intersect_pts(cout);
+		}*/
 
-	Bridge the_best_bridge;
-	//the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
-	//the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
-	the_best_bridge = select_bridge(sweep_line_vec, slope_of_sweep[i]);
+		Bridge the_best_bridge;
+		//the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
+		//the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
+		the_best_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
 
-	//for debug
-	cout << "*******************RESULTS*********************" <<endl;
-	cout << "Let's see what the segment set produced: " << endl;
-	the_best_bridge.print_bridge_members(cout);
-	cout << endl;
-	cout << "Point 1 with z: " << endl;
-	the_best_bridge.p1.print_coords_with_z(cout);
-	cout << endl;
-	cout << "Point 2 with z: " << endl;
-	the_best_bridge.p2.print_coords_with_z(cout);
-	cout << endl;
-	cout << "Supported points: " << endl;
-	for(auto i = the_best_bridge.supported_points.begin(); i != the_best_bridge.supported_points.end(); i++)
-	{
-		i->print_coords_with_z(cout);
-	}
+		//for debug
+		cout << "*******************RESULTS*********************" <<endl;
+		cout << "Let's see what the segment set produced: " << endl;
+		the_best_bridge.print_bridge_members(cout);
+		cout << endl;
+		cout << "Point 1 with z: " << endl;
+		the_best_bridge.p1.print_coords_with_z(cout);
+		cout << endl;
+		cout << "Point 2 with z: " << endl;
+		the_best_bridge.p2.print_coords_with_z(cout);
+		cout << endl;
+		cout << "Supported points: " << endl;
+		for(auto j = the_best_bridge.supported_points.begin(); j != the_best_bridge.supported_points.end(); j++)
+		{
+			j->print_coords_with_z(cout);
+		}
 
-	snap(the_best_bridge, active_points);
+		cout << "TIME TO SNAP..." << endl;
+		snap(the_best_bridge, active_points);
+		cout << "snapped..." << endl;
+	//}
 
-	//*******************************WHERE I AM NOW:
-	//algorithm3 takes set of anchoring segments, not set of points, so need to adjust
-	//find intersections function to return set of anchoring segments, not set of points
-	//HA! find_intersections returns void, but it does create a points_for_alg3 set of points
-	//let's also create a segments_for_alg3 set of anchoring_segments **************DONE WITH THIS
-	//algorithm 3 then returns a Bridge
-	//then that bridge's score is compared to the best bridge's score
-	//if it's better, then remove the anchoring segments from the set of active elements
-	//then take the set of elements supported by the best bridge
-	//and snap them to the bridge
-	//then union those elements with the set of active elements
-
+	//drop pillars from all remaining points that need support
+	send_remaining_points_to_scad(active_points);
 	return 0;
 }

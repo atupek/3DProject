@@ -9,6 +9,12 @@
 #include <utility>
 using std::pair;
 using std::make_pair;
+#include <fstream>
+using std::ofstream;
+#include <string>
+using std::string;
+
+ofstream out_file("scad_output.scad");
 
 //creates anchoring segment
 void draw_line(Point pt, double slope, set<Anchoring_Segment> &anchor_segments)
@@ -389,20 +395,6 @@ void difference_pt_sets(set<Point> & original_set, set<Point> & remove_set)
 		}
 	}
 }
-/*
-Pillar make_pillar(Point point1, double height)
-{
-	cout << "Making pillar..." << endl;
-	Pillar temp = Pillar(point1.x, point1.y, point1.z, point1.z+height); 
-	return temp;
-}
-
-Cube_Primitive make_cube_primitive(Point point1, Point point2)
-{
-	cout << "making cube..." << endl;
-	Cube_Primitive temp = Cube_Primitive(point1.x, point1.y, point2.x, point2.y, point1.z, point1.z+0.4);
-	return temp;
-}*/
 
 Point find_closest(Point bridge_p1, Point bridge_p2, Point p3)
 {
@@ -442,21 +434,26 @@ Point find_closest(Point bridge_p1, Point bridge_p2, Point p3)
 
 void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active_pts)
 {
+	cout << "********inner loop" << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
+		cout << "\tchecking ACTIVE point: ";
+		i->print_coords_with_z(cout);
 		if(i->x == supported_pt.x && i->y == supported_pt.y && i->z == supported_pt.z)
 		{
+			cout << "\tpoint found!" << endl;
 			active_pts.erase(i);
+			cout << "\tpoint erased." << endl;
+			break;
 		}
 	}
 }
 
 //TODO: snap should just take the bridge, because each bridge has a set of points supported by bridge called supported_points
 //maybe also need to send the active events, too.  Does that change with each sweep direction? Hmmm...
-//void snap(Bridge & best_bridge, set<Point> & points_supported_by_bridge)
-//void snap(Bridge &best_bridge, set<Point> &points_supported_by_bridge, vector<Pillar> &pillars, vector<Cube_Primitive> &cubes, double dist_to_obj_above)
 void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
+	cout << "*******************SNAPPING..." << endl;
 	//for debug:
 	cout << "*******Active points size before: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
@@ -464,22 +461,16 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		i->print_coords_with_z(cout);
 	}
 	
+	//cout << "removing supported points from set..." << endl;
 	//remove supported points from set of points that need support (active_pts)
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
-		/*cout << "supported point being checked: ";
+		cout << "START OUTER LOOP" << endl;
+		cout << "checking supported point:";
 		i->print_coords_with_z(cout);
-		std::set<Point>::iterator it;
-		it = active_pts.find(*i);
-		if(it != active_pts.end())
-		{
-			cout << "erasing point: ";
-			it->print_coords_with_z(cout);
-			active_pts.erase(it);
-			cout << "ERASED POINT" << endl;
-		}*/
 		remove_supported_pt_from_active_set(*i, active_pts);
 	}
+	cout << "DONE WITH POINTS" << endl;
 	
 	//for debug:
 	cout << "*******Active points size after erasure: " << active_pts.size() << endl;
@@ -488,10 +479,8 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		i->print_coords_with_z(cout);
 	}
 
-	
+	cout << "dropping slanted pillars" << endl;
 	//drop slanted pillar for each supported point
-	//add point at bottom of pillar to set of active points
-	//filename << "\tpillar(" << i->p2.x << ", " << i->p2.y << ", " << i->height << ", " << (i->p2.z - i->height) << ");" << endl;
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
 		if(i->z != best_bridge.p1.z) //if the supported point is *above* the bridge (not on the same level as bridge)
@@ -499,33 +488,33 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			//pillar(x, y, height of pillar base, vertical height of pillar)
 			//slanted_pillar(x1, y1, z1, x2, y2, z2) //where x1, y1, z1 are coords of pt that needs support
 			//and x2, y2, z2 are coords of closest point on bridge to pt that needs support
-			//TODO: call closest point here!
-			//NOTE: Also need to work epsilon in here...
+			//NOTE: Also need to work epsilon in here...?????
 			Point point_on_bridge = find_closest(best_bridge.p1, best_bridge.p2, *i);
-			cout << "\tslanted_pillar(" << i->x << ", " << i->y << ", " << i->z << ", " <<
-				point_on_bridge.x << ", " << point_on_bridge.y << ", " <<  best_bridge.height << ")" << endl;
+			out_file << "//slanted pillar" << endl;
+			out_file << "\tslanted_pillar(" << i->x << ", " << i->y << ", " << i->z << ", " <<
+				point_on_bridge.x << ", " << point_on_bridge.y << ", " <<  best_bridge.height << ");" << endl;
 		}
 	}
 
-	//for debug:
+	/*//for debug:
 	cout << "*********Active points size after dropped pillars: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}
+	}*/
 	
 	//lay bar from bridge endpt1 to endpt2
 	//and add pts to active_pts
 	//first check for horizontal
 	if(best_bridge.p1.y == best_bridge.p2.y)//if horizontal, use bridge1
 	{
-		cout << "//THE MAIN BRIDGE:" << endl;
-		cout << "\tbridge1(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
+		out_file << "//bridge:" << endl;
+		out_file << "\tbridge1(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
 	}
 	else //otherwise use bridge
 	{
-		cout << "//THE MAIN BRIDGE:" << endl;
-		cout << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
+		out_file << "//bridge:" << endl;
+		out_file << "\tbridge(" << best_bridge.p1.x << ", " << best_bridge.p1.y << ", " << best_bridge.p2.x << ", " << best_bridge.p2.y << ", " << best_bridge.height << ");" << endl;
 	}
 	
 	//cout << "Bridge endpt 1: ";
@@ -538,15 +527,85 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	
 	active_pts.insert(best_bridge.p2);
 
-	//WHERE I AM: NEED TO TEST THIS....
-	//dang it...I think I need to add a z-comparison into the < operator for points?
-	//but that's not why bridge endpt1 isn't being added to the set...
+	/*//for debug
 	cout << "Active points size after adding endpts: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}
+	}*/
+}
 
+void send_remaining_points_to_scad(set<Point> &active_pts)
+{
+	out_file << "//remaining active points, dropping pillars to surface" << endl;
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		out_file << "\tpillar(" << i->x << ", " << i->y << ", 0, " << i->z << ");" << endl;
+	}
+	//and output final closing brace for the union of all supports
+	out_file << "}" << endl;
+}
+
+void setup_scad()
+{
+	out_file << "//scad pillars and bars generated by code" << endl << endl;
+	out_file << "$fa = 50;" << endl;
+	out_file << "$fn = 50;" << endl;
+	out_file << "radius = 0.5;" << endl;
+	out_file << "delta = 0.5;" << endl;
+	out_file << "height = 0.4;" << endl << endl;
+	out_file << "module circle1(x_coord, y_coord, z_coord)" << endl;
+	out_file << "{" << endl;
+    out_file << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
+    out_file << "\tcylinder(.2, radius, radius);" << endl;
+	out_file << "}" << endl;
+	out_file << "module circle2(x_coord, y_coord, z_coord)" << endl;
+	out_file << "{" << endl;
+    out_file << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
+    out_file << "\tcylinder(.2, radius, radius);" << endl;
+	out_file << "}" << endl;
+	out_file << "module slanted_pillar(x_coord1, y_coord1, z_coord1, x_coord2, y_coord2, z_coord2)" << endl;
+	out_file << "{" << endl;
+    out_file << "\thull()" << endl;
+    out_file << "\t{" << endl;
+    out_file << "\t\tcircle1(x_coord1, y_coord1, z_coord1);" << endl;
+    out_file << "\t\tcircle2(x_coord2, y_coord2, z_coord2);" << endl;
+    out_file << "\t}" << endl;
+	out_file << "}" << endl;
+	out_file << "module pillar(x_coord, y_coord, z_coord, z_height)" << endl;
+	out_file << "{" << endl;
+    out_file << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
+    out_file << "\tlinear_extrude(z_height)" << endl;
+    out_file << "\tcircle(radius);" << endl;
+	out_file << "}" << endl << endl;
+	out_file << "//does not work for horizontal bridges, use bridge1" << endl;
+	out_file << "module bridge(x0, y0, x1, y1, z_height)" << endl;
+	out_file << "{" << endl;
+    out_file << "translate([0, 0, z_height])" << endl;
+    out_file << "linear_extrude(height)" << endl;
+    out_file << "polygon(points = [[x0+delta, y0], [x0-delta, y0], [x1-delta, y1], [x1+delta, y1]]);" << endl;
+	out_file << "}" << endl << endl;
+	out_file << "//does not work for vertical bridges, use bridge" << endl;
+	out_file << "module bridge1(x0, y0, x1, y1, z_height)" << endl;
+	out_file << "{" << endl;
+    out_file << "translate([0, 0, z_height])" << endl;
+    out_file << "linear_extrude(height)" << endl;
+    out_file << "polygon(points = [[x0, y0+delta], [x0, y0-delta], [x1, y1-delta], [x1, y1+delta]]);" << endl;
+	out_file << "}" << endl << endl;
+	out_file << "union()" << endl;
+	out_file << "{" << endl; //union opening brace
+}
+
+void output_pts_to_support_to_scad(set<Point> &active_pts, string color)
+{
+	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	{
+		out_file << "translate(["<< i->x << ", " <<  i->y << ", " << i->z << "])" << endl;
+		out_file << "{" << endl;
+    	out_file << "\tcolor(\"" << color << "\", 0.5)" << endl;
+    	out_file << "\tsphere(0.75, center = true);" << endl;
+		out_file << "}" << endl;
+	}
 }
 
 //input: set of points that need support from getPoints
