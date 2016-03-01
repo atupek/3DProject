@@ -40,6 +40,7 @@ all_layers model_layers;
 
 //all the points needing support
 all_layers all_points_needing_support;
+all_layers all_gridded_points;
 
 int layer_index = 0;
 
@@ -67,6 +68,8 @@ model_pixels compared_pix_model;
 
 //final pixel model, points needing support
 model_pixels final_pix_model;
+
+model_pixels pts_after_grid;
 
 //gets the file name
 void get_file_name()
@@ -185,6 +188,13 @@ void getPoints()
 	{
 		initialize_pixel_vector(final_pix_model, num_pixel_rows, num_pixel_columns);
 	}
+
+	cout << "initializing after grid pixel vector..." << endl;
+	for(int i = 0; i < layer_index; i++)
+	{
+		initialize_gridded_pixel_vector(pts_after_grid, num_pixel_rows, num_pixel_columns);
+	}
+
 	cout << "filling pixel vector..." << endl;
 	//takes x, y coords from Point vector (first argument) and sets those pixels in the pixel layer (second argument)
 	//loops through all Point vectors for the entire model
@@ -264,6 +274,17 @@ void getPoints()
 		check_neighbors(compared_pix_model[i+1], fattened_pix_model[i+1], final_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
+	for(auto i = 0; i < layer_index-1; i++)
+	{
+		drop_grid(final_pix_model[i], pts_after_grid[i], num_pixel_rows, num_pixel_columns);
+	}
+
+	for(auto i = 0; i < pts_after_grid.size(); i++)
+	{
+		this_layer gridded_pts;
+		list_gridded_points(pts_after_grid[i], gridded_pts, num_pixel_rows, num_pixel_columns, i);
+		all_gridded_points.push_back(gridded_pts);
+	}
 /*
 	//for debug...
 	//after checking neighbors, prints okay
@@ -308,6 +329,20 @@ void points_to_file()
 	}
 }
 
+void gridded_points_to_file()
+{
+	ofstream outFile("gridded_points_to_support.txt");
+	//outFile << "outfile" << endl;
+	for(auto i = all_gridded_points.begin(); i != all_gridded_points.end(); i++)
+	{
+		for(auto j = i->begin(); j!= i->end(); j++)
+		{
+			//blah
+			j->print_coords_with_z(outFile);
+		}
+	}
+}
+
 //for debug, print bmps of test data (from points shifted over)
 void print_bmps()
 {
@@ -326,6 +361,7 @@ int main()
 	getPoints();
 	//print_bmps();
 	points_to_file();
+	gridded_points_to_file();
 
 	return 0;
 }

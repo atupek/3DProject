@@ -46,7 +46,7 @@ void make_sweep_vector()
 set<Point> get_pts_from_file()
 {
 	set<Point> pts_to_run;
-	ifstream inFile("get_points/points_to_support.txt");
+	ifstream inFile("get_points/gridded_points_to_support.txt");
 	string line;
 	string delim = ", ";
 	while(!inFile.eof()) //important that pts_to_support doesn't end with an empty newline...
@@ -63,7 +63,7 @@ set<Point> get_pts_from_file()
 		string z_token = substr_no_x.substr(line.find(delim)+2, line.find("\n"));
 		//cout << "z_token: " << z_token << endl;
 		double z_value = stod(z_token);
-		Point new_pt(x_value, y_value, z_value);
+		Point new_pt(x_value/2, y_value/2, z_value); //div by 2 since we multiplied by 2 originally
 		pts_to_run.insert(new_pt);
 	}
 	return pts_to_run;

@@ -23,6 +23,31 @@ void initialize_pixel_vector(model_pixels & model, int num_rows, int num_columns
 	model.push_back(new_pix_layer);
 }
 
+void initialize_gridded_pixel_vector(model_pixels & model, int num_rows, int num_columns)
+{
+	pixel_layer new_pix_layer;
+
+	int decreased_num_rows = floor(num_rows/10)+1;
+	int decreased_num_columns = floor(num_columns/10)+1;
+
+	new_pix_layer.resize(decreased_num_rows);
+	for(int i = 0; i<decreased_num_rows; i++)
+	{
+		new_pix_layer[i].resize(decreased_num_columns);
+	}
+
+/*
+	for(int j = 0; j<num_rows; j++)
+	{
+		for(int k = 0; k<num_columns; k++)
+		{
+			new_pix_layer[j][k] = 0.0;
+		}
+	}*/
+
+	model.push_back(new_pix_layer);
+}
+
 //this_layer is vector of Points
 //pixel_layer is 2D vector of doubles
 //only sending one layer at a time
@@ -210,6 +235,46 @@ void list_points(pixel_layer &diff_pix, this_layer & pts_to_support, int num_row
 				//cout << "z_level: " << z_level << endl;
 				//cout << "this z: "  << this_z << endl;
 				Point new_point(i, j, this_z, 0.0, true);
+				//Point new_point(i, j);
+				pts_to_support.push_back(new_point);
+				//cout << "New point added: ";
+				//new_point.print_coords_with_z(cout);
+			}
+		}
+	}
+}
+
+
+void drop_grid(pixel_layer & old_pts_to_support, pixel_layer & new_pts_to_support, int num_rows, int num_columns)
+{
+	//double this_z = (double)z_level * .2;
+	for(int i = 1; i < num_rows -1; i++)
+	{
+		for(int j = 1; j < num_columns -1; j++)
+		{
+			if(old_pts_to_support[i][j] == 3.0) //if the point needs to be supported
+			{
+				new_pts_to_support[floor(i/10)][floor(j/10)]=3.0;
+			}
+		}
+	}
+}
+
+void list_gridded_points(pixel_layer &gridded_pix, this_layer & pts_to_support, int num_rows, int num_columns, int z_level)
+{
+	int decreased_num_rows = floor(num_rows/10)+1;
+	int decreased_num_columns = floor(num_columns/10)+1;
+
+	double this_z = (double)z_level * .2;
+	for(int i = 1; i < decreased_num_rows - 1; i++)
+	{
+		for (int j = 1; j < decreased_num_columns -1; j++)
+		{
+			if(gridded_pix[i][j] == 3.0)
+			{
+				//cout << "z_level: " << z_level << endl;
+				//cout << "this z: "  << this_z << endl;
+				Point new_point(i*10+5, j*10+5, this_z, 0.0, true);
 				//Point new_point(i, j);
 				pts_to_support.push_back(new_point);
 				//cout << "New point added: ";
