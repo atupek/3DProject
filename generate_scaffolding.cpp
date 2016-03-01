@@ -541,6 +541,10 @@ void send_remaining_points_to_scad(set<Point> &active_pts)
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		out_file << "\tpillar(" << i->x << ", " << i->y << ", 0, " << i->z << ");" << endl;
+		if(i->z > 3.0)
+		{
+			out_file << "\tfoot(" << i->x << ", " << i->y << ");" << endl;
+		}
 	}
 	//and output final closing brace for the union of all supports
 	out_file << "}" << endl;
@@ -553,7 +557,14 @@ void setup_scad()
 	out_file << "$fn = 5;" << endl;
 	out_file << "radius = 1.0;" << endl;
 	out_file << "delta = 0.5;" << endl;
-	out_file << "height = 0.4;" << endl << endl;
+	out_file << "height = 0.4;" << endl;
+	out_file << "foot_radius = 2.5;" << endl;
+	out_file << "foot_height = 2.5;" << endl << endl;
+	out_file << "module foot(x_coord, y_coord)" << endl;
+	out_file << "{" << endl;
+    out_file << "\ttranslate([x_coord, y_coord, 0])" << endl;
+    out_file << "\tcylinder(foot_height, foot_radius, radius);" << endl;
+	out_file << "}" << endl;
 	out_file << "module circle1(x_coord, y_coord, z_coord)" << endl;
 	out_file << "{" << endl;
     out_file << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
