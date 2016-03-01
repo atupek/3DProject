@@ -441,9 +441,9 @@ void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active
 		i->print_coords_with_z(cout);
 		if(i->x == supported_pt.x && i->y == supported_pt.y && i->z == supported_pt.z)
 		{
-			cout << "\tpoint found!" << endl;
+			//cout << "\tpoint found!" << endl;
 			active_pts.erase(i);
-			cout << "\tpoint erased." << endl;
+			//cout << "\tpoint erased." << endl;
 			break;
 		}
 	}
@@ -455,11 +455,11 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
 	cout << "*******************SNAPPING..." << endl;
 	//for debug:
-	cout << "*******Active points size before: " << active_pts.size() << endl;
+	/*cout << "*******Active points size before: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}
+	}*/
 	
 	//cout << "removing supported points from set..." << endl;
 	//remove supported points from set of points that need support (active_pts)
@@ -473,18 +473,25 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	cout << "DONE WITH POINTS" << endl;
 	
 	//for debug:
-	cout << "*******Active points size after erasure: " << active_pts.size() << endl;
+	/*cout << "*******Active points size after erasure: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}
+	}*/
+
+	//comment for outfile
+	out_file << "//STARTING NEW BRIDGE DATA" << endl;
+	out_file << "//bridge data:" << endl;
+	out_file << "/*" <<endl;
+	best_bridge.print_bridge_members(out_file);
+	out_file << "*/" <<endl;
 
 	cout << "dropping slanted pillars" << endl;
 	//drop slanted pillar for each supported point
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
-		if(i->z != best_bridge.p1.z) //if the supported point is *above* the bridge (not on the same level as bridge)
-		{
+		//if(i->z != best_bridge.p1.z) //if the supported point is *above* the bridge (not on the same level as bridge)
+		//{
 			//pillar(x, y, height of pillar base, vertical height of pillar)
 			//slanted_pillar(x1, y1, z1, x2, y2, z2) //where x1, y1, z1 are coords of pt that needs support
 			//and x2, y2, z2 are coords of closest point on bridge to pt that needs support
@@ -493,7 +500,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			out_file << "//slanted pillar" << endl;
 			out_file << "\tslanted_pillar(" << i->x << ", " << i->y << ", " << i->z << ", " <<
 				point_on_bridge.x << ", " << point_on_bridge.y << ", " <<  best_bridge.height << ");" << endl;
-		}
+		//}
 	}
 
 	/*//for debug:
@@ -519,13 +526,17 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	
 	//cout << "Bridge endpt 1: ";
 	//best_bridge.p1.print_coords_with_z(cout);
-	
-	active_pts.insert(best_bridge.p1);
+	if(best_bridge.p1.x != 0 && best_bridge.p1.y != 0 && best_bridge.p1.z != 0)
+	{
+			active_pts.insert(best_bridge.p1);
+	}
 	
 	//cout << "Bridge endpt 2: ";
 	//best_bridge.p2.print_coords_with_z(cout);
-	
-	active_pts.insert(best_bridge.p2);
+	if(best_bridge.p2.x != 0 && best_bridge.p2.y != 0 && best_bridge.p2.z != 0)
+	{
+			active_pts.insert(best_bridge.p2);
+	}
 
 	/*//for debug
 	cout << "Active points size after adding endpts: " << active_pts.size() << endl;

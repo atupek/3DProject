@@ -231,8 +231,8 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 {
 	Bridge best_bridge;
 	double max_distance = 30.0;
-	double max_horizontal = 15.0;//TODO:adjust these numbers!
-	double min_vertical_dist = 0.0;//TODO:adjust these numbers!
+	double max_horizontal = 5.0;//TODO:adjust these numbers! was 15
+	double min_vertical_dist = 2.0;//TODO:adjust these numbers! was 0
 	double neg_inf(-std::numeric_limits<double>::infinity());
 	double best_score = neg_inf;
 
@@ -283,7 +283,11 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					//temp_bridge.print_bridge_members(cout);
 					//cout << endl;
 					
-					if((temp_bridge.length < max_distance) && (temp_bridge.length != 0)) //!=0 because somehow pts are still being compared to selves
+					//this comparison of x, y didn't seem to change anything.
+					//if((temp_bridge.length < max_distance) && (temp_bridge.p1.x != temp_bridge.p2.x)
+						//&& (temp_bridge.p1.y != temp_bridge.p2.y)) //make sure endpoints aren't the same, as opposed to making sure length != 0
+					//the comparison of length >= 5 seems to work fine
+					if((temp_bridge.length < max_distance) && (temp_bridge.length >= 5)) //!=0 because somehow pts are still being compared to selves
 					{
 						//cout << "LESS THAN MAX_DIST" << endl;
 						//add m, n and any points between them to bridge's supported points vector
@@ -293,8 +297,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 							//first check constraints for angled pillar...
 							double temp_horiz_dist = calc_horiz_dist(temp_bridge.p1, temp_bridge.p2, i->intersected_points[k].second.endpt1);
 							double temp_vert_dist = calc_z_diff(i->intersected_points[k].second.endpt1, temp_bridge.height);
-							//so this broke it....why?
-							if((i->intersected_points[k].second.endpt1.z >= *j)
+							if((i->intersected_points[k].second.endpt1.z >= *j) //changing >= to > doesn't make a difference
 									&& (temp_horiz_dist <= max_horizontal)
 									&& (temp_vert_dist >= min_vertical_dist))
 									//if(i->intersected_points[k].second.endpt1.z >= *j)
