@@ -47,6 +47,7 @@ set<Point> get_pts_from_file()
 {
 	set<Point> pts_to_run;
 	ifstream inFile("get_points/gridded_points_to_support.txt");
+	//ifstream inFile("get_points/points_to_support.txt"); //for non-sparse pillars
 	string line;
 	string delim = ", ";
 	while(!inFile.eof()) //important that pts_to_support doesn't end with an empty newline...
@@ -94,8 +95,8 @@ int main()
 	output_pts_to_support_to_scad(active_points, "Orchid");
 
 	make_sweep_vector();
-	//for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
-	//{
+	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
+	{
 		cout << "outer_loop_index: " << outer_loop_index << endl;
 		create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, outer_loop_index);
 
@@ -173,7 +174,7 @@ int main()
 		cout << "TIME TO SNAP..." << endl;
 		snap(the_best_bridge, active_points);
 		cout << "snapped..." << endl;
-	//}
+	}
 
 	//drop pillars from all remaining points that need support
 	send_remaining_points_to_scad(active_points);
