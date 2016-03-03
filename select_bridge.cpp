@@ -331,11 +331,14 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 							double temp_lmax = calculate_lmax(temp_bridge.p1, temp_bridge.p2, temp_bridge.supported_points);
 							//cout << "temp lmax: " << temp_lmax << endl;
 							double temp_score = calculate_score(temp_gain, temp_bridge.supported_points.size(), temp_lmax);
-							//cout << "temp score: " << temp_score << endl <<endl;
+							//cout << "********************temp score: " << temp_score << endl <<endl;
+							temp_bridge.score = temp_score;
+							//cout << "Temp bridge score: " << temp_bridge.score << endl;
 							if(temp_score > best_score)
 							{
 								best_score = temp_score;
 								best_bridge = temp_bridge;
+								//cout << "New best bridge score: " << best_bridge.score << endl;
 							}
 						}
 					}

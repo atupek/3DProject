@@ -74,6 +74,7 @@ int main()
 {
 	//insert header info to scad file
 	setup_scad();
+	
 	/*//for bitmap debug
 	bitmap_image test_image(200, 200);
 	test_image.set_all_channels(255,255,255); //set background to white
@@ -90,9 +91,12 @@ int main()
 	//make_point_set();
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
-	int outer_loop_index = 0;
+	//int outer_loop_index = 0;
 
 	output_pts_to_support_to_scad(active_points, "Orchid");
+
+	//for just dropped pillars...
+	//send_remaining_points_to_scad(active_points);
 
 	make_sweep_vector();
 	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
@@ -149,10 +153,16 @@ int main()
 			i->print_intersect_pts(cout);
 		}*/
 
+		Bridge temp_bridge;
 		Bridge the_best_bridge;
 		//the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
 		//the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
-		the_best_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
+		//the_best_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
+		temp_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
+		if(temp_bridge.score > the_best_bridge.score)
+		{
+			the_best_bridge = temp_bridge;
+		}
 
 		//for debug
 		cout << "*******************RESULTS*********************" <<endl;
@@ -172,7 +182,7 @@ int main()
 		}
 
 		cout << "TIME TO SNAP..." << endl;
-		snap(the_best_bridge, active_points);
+		//snap(the_best_bridge, active_points);
 		cout << "snapped..." << endl;
 	}
 

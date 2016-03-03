@@ -5,6 +5,7 @@
 #include "get_points/point.h"
 #include <set>
 using std::set;
+#include <limits> //for inf
 
 //Bridges are represented as two endpoints & distance between them, as well as a height, and whether or not each endpoint is open or closed
 //They also have a set of points that they support
