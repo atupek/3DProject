@@ -8,7 +8,7 @@
 using std::ifstream;
 
 //****************comment out to try from file....
-set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
+//set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
 set<Bridge> active_bridges; //this will be added to when we have bridges returned from algorithm 3: SelectBridge
 
 set<Anchoring_Segment> segments;
@@ -19,7 +19,7 @@ vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
 
 //******************comment out to try from file...
-void make_point_set()
+/*void make_point_set()
 {
 	//Point p0(1, 1, 1);
 	Point p1(19, 9, 15);
@@ -31,7 +31,7 @@ void make_point_set()
 	active_points.insert(p2);
 	active_points.insert(p3);
 	active_points.insert(p4);
-}
+}*/
 
 void make_sweep_vector()
 {
@@ -85,10 +85,10 @@ int main()
 	vector<Sweep_line> sweep_line_vec;
 
 	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
-	//set<Point> active_points = get_pts_from_file();
+	set<Point> active_points = get_pts_from_file();
 	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;
 	//**********comment out make_pt_set()
-	make_point_set();
+	//make_point_set();
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
 	//int outer_loop_index = 0;
@@ -106,6 +106,7 @@ int main()
 	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
 	{
 		cout << "outer_loop_index: " << outer_loop_index << endl;
+		segments.clear(); //clear out anchoring segments...
 		create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, outer_loop_index);
 
 		/*//for debug: print members of anchoring segments:
@@ -117,9 +118,10 @@ int main()
 
 		//cout << "Anchoring segments size: "  << segments.size() << endl;
 		//create events from anchoring segments
-		active_events.clear();
+		active_events.clear(); //clear out previous active events
 		create_events(segments, active_events);
 		
+		//for debug
 		/*cout << "Events size: " << active_events.size() << endl;
 		for(auto i = active_events.begin(); i != active_events.end(); i++)
 		{
@@ -137,13 +139,16 @@ int main()
 		}*/
 
 		//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
-		sweep_line_vec.clear();
+		
+		sweep_line_vec.clear();  //clear out previous sweep line vector
 		find_intersections(active_events, slope_of_sweep, outer_loop_index, sweep_line_vec);
-		/*cout << "SWEEP LINE MEMBERS: " << endl;
+		
+		//for debug
+		cout << "SWEEP LINE MEMBERS: " << endl;
 		for(auto i = sweep_line_vec.begin(); i != sweep_line_vec.end(); i++)
 		{
 			i->print_sweep_line_members(cout);
-		}*/
+		}
 
 		//DO I DO THIS HERE OR INSIDE THE SELECT BRIDGE? WHICH IS BEST??????
 		sort_sweep_lines(sweep_line_vec, slope_of_sweep[outer_loop_index]);
@@ -219,7 +224,8 @@ int main()
 
 	if(the_best_bridge.p1.x == 0 && the_best_bridge.p1.y == 0 && the_best_bridge.p1.z == 0)
 	{
-		return 0;
+		//return 0;
+		break;
 	}
 	cout << "TIME TO SNAP..." << endl;
 	snap(the_best_bridge, active_points);
