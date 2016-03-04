@@ -9,8 +9,7 @@ using std::vector;
 #include <set>
 using std::set;
 
-//Bridges are represented as two endpoints & distance between them, as well as a height, and whether or not each endpoint is open or closed
-
+//Event is a point and its corresponding anchoring segments, of which there are two
 class Event
 {
 public:
@@ -21,7 +20,7 @@ public:
 	Event(Point _p1);
     Event(Point _p1, vector<Anchoring_Segment> _event_segments);
 
-    //function for sending bridge to ostream for printing
+    //function for sending event to ostream for printing
     void print_event_members(ostream &) const;
 
     friend ostream & operator<<(ostream &, const Event &);

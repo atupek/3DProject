@@ -237,7 +237,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	double best_score = neg_inf;
 
 	//sort intersection points on sweep lines
-	sort_sweep_lines(sweep_lines, sweep_slope);
+	//sort_sweep_lines(sweep_lines, sweep_slope); //COMMENTED OUT SO THAT IT DOESN"T SORT EVERY TIME...
 
 	//put z-coords into set
 	//sorted by increasing z

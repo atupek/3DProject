@@ -100,6 +100,7 @@ int main()
 
 	make_sweep_vector();
 	while(true)
+	//for(auto w=0; w < 1; w++)
 	{
 	Bridge the_best_bridge;
 	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
@@ -116,10 +117,14 @@ int main()
 
 		//cout << "Anchoring segments size: "  << segments.size() << endl;
 		//create events from anchoring segments
-
+		active_events.clear();
 		create_events(segments, active_events);
 		
-		//cout << "Events size: " << active_events.size() << endl;
+		/*cout << "Events size: " << active_events.size() << endl;
+		for(auto i = active_events.begin(); i != active_events.end(); i++)
+		{
+			i->print_event_members(cout);
+		}*/
 
 		//find intersections between sweep plane and anchoring segments at each event(which is a point)
 		//these intersections are the points sent to select bridge
@@ -132,9 +137,16 @@ int main()
 		}*/
 
 		//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
-
+		sweep_line_vec.clear();
 		find_intersections(active_events, slope_of_sweep, outer_loop_index, sweep_line_vec);
+		/*cout << "SWEEP LINE MEMBERS: " << endl;
+		for(auto i = sweep_line_vec.begin(); i != sweep_line_vec.end(); i++)
+		{
+			i->print_sweep_line_members(cout);
+		}*/
 
+		//DO I DO THIS HERE OR INSIDE THE SELECT BRIDGE? WHICH IS BEST??????
+		sort_sweep_lines(sweep_line_vec, slope_of_sweep[outer_loop_index]);
 		/*
 		cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
 

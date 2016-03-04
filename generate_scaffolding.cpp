@@ -479,11 +479,16 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 		i->print_coords_with_z(cout);
 	}*/
 
-	//comment for outfile
+	//bridge comments for scad outfile
 	out_file << "//STARTING NEW BRIDGE DATA" << endl;
 	out_file << "//bridge data:" << endl;
 	out_file << "/*" <<endl;
 	best_bridge.print_bridge_members(out_file);
+	out_file << "//supporting points:" << endl;
+	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
+	{
+		i->print_coords_with_z(out_file);
+	}
 	out_file << "*/" <<endl;
 
 	cout << "dropping slanted pillars" << endl;
