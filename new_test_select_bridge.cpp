@@ -13,6 +13,7 @@ using std::vector;
 #include <limits> //for infinity
 #include "sweep_line.h"
 using std::make_pair;
+#include "generate_scaffolding.h"
 
 //NOTE:
 //TEST NEEDS TO BE REWRITTEN TO TAKE VECTOR OF SWEEP LINES...
@@ -142,9 +143,20 @@ void make_point_set()
 	test_pts.insert(p3);
 }
 
+vector<double> test_slope_vec;
+void make_sweep_vector()
+{
+	test_slope_vec.push_back(0.0);// horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
+	test_slope_vec.push_back(1.0); //45 degrees
+	test_slope_vec.push_back(2.0);
+	test_slope_vec.push_back(3.0);
+	test_slope_vec.push_back(std::numeric_limits<double>::infinity()); // vertical...net a condition for this TODO
+	//think I've taken care of the two TODO's above...
+}
+
 int main()
 {
-	Bridge the_best_bridge;
+	Bridge test_bridge;
 
 	//make_sweep_lines();
 
@@ -157,17 +169,30 @@ int main()
 	
 	make_point_set();
 
-	
-	/*the_best_bridge = select_bridge(test_sweep_lines, test_sweep_slope);
+	set<Bridge> test_bridges;
+	set<Anchoring_Segment> test_segments;
+
+	make_sweep_vector();
+
+ 	create_anchoring_segments(test_pts, test_bridges, test_segments, test_slope_vec, 4);
+
+ 	set<Event> test_events;
+ 	create_events(test_segments, test_events);
+
+ 	vector<Sweep_line> test_sweep_lines;
+ 	find_intersections(test_events, test_slope_vec, 4, test_sweep_lines);
+
+ 	test_bridge = select_bridge(test_sweep_lines, test_slope_vec[4]);
+
 	cout << "Let's see what the toy set produces: " << endl;
-	the_best_bridge.print_bridge_members(cout);
+	test_bridge.print_bridge_members(cout);
 	cout << endl;
 	cout << "Point 1 with z: " << endl;
-	the_best_bridge.p1.print_coords_with_z(cout);
+	test_bridge.p1.print_coords_with_z(cout);
 	cout << endl;
 	cout << "Point 2 with z: " << endl;
-	the_best_bridge.p2.print_coords_with_z(cout);
-	cout << endl;*/
+	test_bridge.p2.print_coords_with_z(cout);
+	cout << endl;
 
 /*
 	for(auto i = the_best_bridge.supported_points.begin(); i != the_best_bridge.supported_points.end(); i++)
