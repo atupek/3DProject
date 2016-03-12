@@ -249,8 +249,9 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 			z_set.insert(j->first.z);
 		}
 	}
-	/*//for debug:
-	cout << "Size of z-set: " << z_set.size() << endl;*/
+	
+	//for debug:
+	//cout << "Size of z-set: " << z_set.size() << endl;
 
 	//iterate through each sweep line
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
@@ -279,9 +280,9 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					temp_bridge.p2.z = *j; //make sure bridge endpoints are at the proper z
 					
 					//for debug
-					//cout << endl;
-					//temp_bridge.print_bridge_members(cout);
-					//cout << endl;
+					/*cout << endl;
+					temp_bridge.print_bridge_members(cout);
+					cout << endl;*/
 					
 					//this comparison of x, y didn't seem to change anything.
 					//if((temp_bridge.length < max_distance) && (temp_bridge.p1.x != temp_bridge.p2.x)
@@ -308,6 +309,10 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 							}
 						}
 						
+						//for debug
+						//cout << "Number of supported points: " << endl;
+						//cout << temp_bridge.supported_points.size() << endl;
+
 						/*//for debug
 						cout << "Bridge point 1: " << temp_bridge.p1.x << ", " << temp_bridge.p1.y << " at z: " << temp_bridge.p1.z << endl;
 						cout << "Bridge point 2: " << temp_bridge.p2.x << ", " << temp_bridge.p2.y << " at z: " << temp_bridge.p2.z << endl;

@@ -8,7 +8,7 @@
 using std::ifstream;
 
 //****************comment out to try from file....
-//set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
+set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
 set<Bridge> active_bridges; //this will be added to when we have bridges returned from algorithm 3: SelectBridge
 
 set<Anchoring_Segment> segments;
@@ -19,7 +19,7 @@ vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
 
 //******************comment out to try from file...
-/*void make_point_set()
+void make_point_set()
 {
 	//Point p0(1, 1, 1);
 	Point p1(19, 9, 15);
@@ -31,7 +31,7 @@ double inf = std::numeric_limits<double>::infinity();
 	active_points.insert(p2);
 	active_points.insert(p3);
 	active_points.insert(p4);
-}*/
+}
 
 void make_sweep_vector()
 {
@@ -46,7 +46,7 @@ void make_sweep_vector()
 set<Point> get_pts_from_file()
 {
 	set<Point> pts_to_run;
-	ifstream inFile("get_points/gridded_points_to_support.txt");
+	ifstream inFile("get_points/fish_gridded_points_to_support.txt");
 	//ifstream inFile("get_points/points_to_support.txt"); //for non-sparse pillars
 	string line;
 	string delim = ", ";
@@ -85,10 +85,10 @@ int main()
 	vector<Sweep_line> sweep_line_vec;
 
 	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
-	set<Point> active_points = get_pts_from_file();
+	//set<Point> active_points = get_pts_from_file();
 	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;
 	//**********comment out make_pt_set()
-	//make_point_set();
+	make_point_set();
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
 	//int outer_loop_index = 0;
