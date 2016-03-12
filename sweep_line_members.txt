@@ -1,0 +1,67 @@
+printing sweep line members: 
+	number of intersected_points: 5
+	Point: 11, 15
+	Segment: 11, 15 to 41, 15 at z = 20
+	Point: 11, 15
+	Segment: 11, 15 to -19, 15 at z = 20
+	Point: 11, 24
+	Segment: 18, 24 to -12, 24 at z = 17
+	Point: 11, 9
+	Segment: 19, 9 to -11, 9 at z = 15
+	Point: 11, 20
+	Segment: 25, 20 to -5, 20 at z = 18
+printing sweep line members: 
+	number of intersected_points: 5
+	Point: 18, 15
+	Segment: 11, 15 to 41, 15 at z = 20
+	Point: 18, 24
+	Segment: 18, 24 to 48, 24 at z = 17
+	Point: 18, 24
+	Segment: 18, 24 to -12, 24 at z = 17
+	Point: 18, 9
+	Segment: 19, 9 to -11, 9 at z = 15
+	Point: 18, 20
+	Segment: 25, 20 to -5, 20 at z = 18
+printing sweep line members: 
+	number of intersected_points: 5
+	Point: 19, 15
+	Segment: 11, 15 to 41, 15 at z = 20
+	Point: 19, 24
+	Segment: 18, 24 to 48, 24 at z = 17
+	Point: 19, 9
+	Segment: 19, 9 to 49, 9 at z = 15
+	Point: 19, 9
+	Segment: 19, 9 to -11, 9 at z = 15
+	Point: 19, 20
+	Segment: 25, 20 to -5, 20 at z = 18
+printing sweep line members: 
+	number of intersected_points: 5
+	Point: 25, 15
+	Segment: 11, 15 to 41, 15 at z = 20
+	Point: 25, 24
+	Segment: 18, 24 to 48, 24 at z = 17
+	Point: 25, 9
+	Segment: 19, 9 to 49, 9 at z = 15
+	Point: 25, 20
+	Segment: 25, 20 to 55, 20 at z = 18
+	Point: 25, 20
+	Segment: 25, 20 to -5, 20 at z = 18
+*******************RESULTS*********************
+Let's see what the segment set produced: 
+Point1: 11, 20
+Point2: 25, 20
+Bridge length: 14
+Bridge height: 15
+P1 open: 1
+P2 open: 1
+
+Point 1 with z: 
+11, 20, 15
+
+Point 2 with z: 
+25, 20, 15
+
+Supported points: 
+25, 20, 18
+18, 24, 17
+11, 15, 20

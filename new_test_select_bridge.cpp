@@ -174,13 +174,21 @@ int main()
 
 	make_sweep_vector();
 
- 	create_anchoring_segments(test_pts, test_bridges, test_segments, test_slope_vec, 4);
+	int test_index = 0;
+
+ 	create_anchoring_segments(test_pts, test_bridges, test_segments, test_slope_vec, test_index);
 
  	set<Event> test_events;
  	create_events(test_segments, test_events);
 
  	vector<Sweep_line> test_sweep_lines;
- 	find_intersections(test_events, test_slope_vec, 4, test_sweep_lines);
+ 	find_intersections(test_events, test_slope_vec, test_index, test_sweep_lines);
+
+ 	cout << "Test Sweep Line Vector: " << endl;
+	for(auto i = test_sweep_lines.begin(); i != test_sweep_lines.end(); i++)
+	{
+		i->print_sweep_line_members(cout);
+	}
 
  	test_bridge = select_bridge(test_sweep_lines, test_slope_vec[4]);
 
@@ -194,22 +202,13 @@ int main()
 	test_bridge.p2.print_coords_with_z(cout);
 	cout << endl;
 
-/*
-	for(auto i = the_best_bridge.supported_points.begin(); i != the_best_bridge.supported_points.end(); i++)
+
+	for(auto i = test_bridge.supported_points.begin(); i != test_bridge.supported_points.end(); i++)
 	{
 		i->print_coords_with_z(cout);
-	}*/
+	}
 
-/*  //for debug
-	cout << "***************************Testing calc_dist************************" << endl;
-	double dist0 = calc_dist(0, 0, 0, 5);
-	cout << "dist 0: " << dist0 << " expected 5" << endl;
-	double dist1 = calc_dist(0, 0, 5, 0);
-	cout << "dist 1: " << dist1 << " expected 5" << endl;
-	double dist2 = calc_dist(0, 5, 0, 0);
-	cout << "dist 2: " << dist2 << " expected 5" << endl;
-	double dist3 = calc_dist(5, 0, 0, 0);
-	cout << "dist 3: " << dist3 << " expected 5" << endl;*/
+	snap(test_bridge, test_pts);
 
 	return 0;
 }
