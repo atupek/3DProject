@@ -70,7 +70,7 @@ void insert_header_info(ofstream &filename)
 	filename << "module circle1(x_coord, y_coord, z_coord)" << endl;
 	filename << "{" << endl;
     filename << "\ttranslate([x_coord, y_coord, z_coord])" << endl;
-    filename << "\tcylinder(.2, radius, radius);" << endl;
+    filename << "\tcylinder(.2, radius-.5, radius-.5);" << endl;
 	filename << "}" << endl;
 
 	filename << "module circle2(x_coord, y_coord, z_coord)" << endl;
