@@ -434,11 +434,11 @@ Point find_closest(Point bridge_p1, Point bridge_p2, Point p3)
 
 void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active_pts)
 {
-	cout << "********inner loop" << endl;
+	//cout << "********inner loop" << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
-		cout << "\tchecking ACTIVE point: ";
-		i->print_coords_with_z(cout);
+		//cout << "\tchecking ACTIVE point: ";
+		//i->print_coords_with_z(cout);
 		if(i->x == supported_pt.x && i->y == supported_pt.y && i->z == supported_pt.z)
 		{
 			//cout << "\tpoint found!" << endl;
@@ -453,7 +453,7 @@ void remove_supported_pt_from_active_set(Point supported_pt, set<Point> & active
 //maybe also need to send the active events, too.  Does that change with each sweep direction? Hmmm...
 void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
-	cout << "*******************SNAPPING..." << endl;
+	//cout << "*******************SNAPPING..." << endl;
 	//for debug:
 	/*cout << "*******Active points size before: " << active_pts.size() << endl;
 	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
@@ -465,12 +465,12 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	//remove supported points from set of points that need support (active_pts)
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
-		cout << "START OUTER LOOP" << endl;
+		/*cout << "START OUTER LOOP" << endl;
 		cout << "checking supported point:";
-		i->print_coords_with_z(cout);
+		i->print_coords_with_z(cout);*/
 		remove_supported_pt_from_active_set(*i, active_pts);
 	}
-	cout << "DONE WITH POINTS" << endl;
+	//cout << "DONE WITH POINTS" << endl;
 	
 	//for debug:
 	/*cout << "*******Active points size after erasure: " << active_pts.size() << endl;
@@ -491,7 +491,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	}
 	out_file << "*/" <<endl;
 
-	cout << "dropping slanted pillars" << endl;
+	//cout << "dropping slanted pillars" << endl;
 	//drop slanted pillar for each supported point
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{

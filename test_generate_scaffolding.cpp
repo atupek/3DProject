@@ -47,7 +47,7 @@ void make_sweep_vector()
 set<Point> get_pts_from_file()
 {
 	set<Point> pts_to_run;
-	ifstream inFile("get_points/fish_gridded_points_to_support.txt");
+	ifstream inFile("get_points/gridded_points_to_support.txt");
 	//ifstream inFile("get_points/points_to_support.txt"); //for non-sparse pillars
 	string line;
 	string delim = ", ";
@@ -108,7 +108,7 @@ int main()
 	Bridge the_best_bridge;
 	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
 	{
-		cout << "outer_loop_index: " << outer_loop_index << endl;
+		//cout << "outer_loop_index: " << outer_loop_index << endl;
 		segments.clear(); //clear out anchoring segments...
 		create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, outer_loop_index);
 
@@ -147,11 +147,11 @@ int main()
 		find_intersections(active_events, slope_of_sweep, outer_loop_index, sweep_line_vec);
 		
 		//for debug
-		cout << "SWEEP LINE MEMBERS: " << endl;
+		/*cout << "SWEEP LINE MEMBERS: " << endl;
 		for(auto i = sweep_line_vec.begin(); i != sweep_line_vec.end(); i++)
 		{
 			i->print_sweep_line_members(cout);
-		}
+		}*/
 
 		//DO I DO THIS HERE OR INSIDE THE SELECT BRIDGE? WHICH IS BEST??????
 		sort_sweep_lines(sweep_line_vec, slope_of_sweep[outer_loop_index]);
@@ -208,7 +208,7 @@ int main()
 		//snap(the_best_bridge, active_points);
 		cout << "snapped..." << endl;*/
 	}
-	//for debug
+	/*//for debug
 	cout << "*******************RESULTS*********************" <<endl;
 	cout << "Let's see what the segment set produced: " << endl;
 	the_best_bridge.print_bridge_members(cout);
@@ -223,18 +223,19 @@ int main()
 	for(auto j = the_best_bridge.supported_points.begin(); j != the_best_bridge.supported_points.end(); j++)
 	{
 		j->print_coords_with_z(cout);
-	}
+	}*/
 
 	if(the_best_bridge.p1.x == 0 && the_best_bridge.p1.y == 0 && the_best_bridge.p1.z == 0)
 	{
 		//return 0;
 		break;
 	}
-	cout << "TIME TO SNAP..." << endl;
+	//cout << "TIME TO SNAP..." << endl;
 	snap(the_best_bridge, active_points);
-	cout << "snapped..." << endl;
+	//cout << "snapped..." << endl;
 	}
 	//drop pillars from all remaining points that need support
 	send_remaining_points_to_scad(active_points);
+	cout << "Scaffolding generated." << endl;
 	return 0;
 }
