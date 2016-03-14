@@ -300,6 +300,9 @@ void getPoints()
 		all_points_needing_support.push_back(points_needing_support);
 	}
 
+	//fix offset
+	fix_offset(all_gridded_points);
+
 	/*
 	//for debug, print out the points needing support
 	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
