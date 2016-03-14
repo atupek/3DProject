@@ -66,6 +66,8 @@ set<Point> get_pts_from_file()
 		//cout << "z_token: " << z_token << endl;
 		double z_value = stod(z_token);
 		Point new_pt(x_value/2, y_value/2, z_value); //div by 2 since we multiplied by 2 originally
+		new_pt.x-=100;//for offset
+		new_pt.y-=100;//for offset
 		pts_to_run.insert(new_pt);
 	}
 	return pts_to_run;

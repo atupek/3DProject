@@ -27,6 +27,6 @@ void list_points(pixel_layer & diff_pix, this_layer & pts_to_support, int num_ro
 
 void drop_grid(pixel_layer & old_pts_to_support, pixel_layer & new_pts_to_support, int num_rows, int num_columns);
 void list_gridded_points(pixel_layer & diff_pix, this_layer & pts_to_support, int num_rows, int num_columns, int z_level);
-void fix_offset(all_layers & pts_to_support);
+//void fix_offset(all_layers & pts_to_support);
 
 #endif //Pixels_Included

@@ -284,6 +284,7 @@ void list_gridded_points(pixel_layer &gridded_pix, this_layer & pts_to_support, 
 	}
 }
 
+/*
 void fix_offset(all_layers & pts_to_support)
 {
 	for(auto i = pts_to_support.begin(); i != pts_to_support.end(); i++)
@@ -291,8 +292,8 @@ void fix_offset(all_layers & pts_to_support)
 		for(auto j = i->begin(); j!= i->end(); j++)
 		{
 			//fix offset
-			j->x -=100;
-			j->y -=100;
+			j->x -=200;
+			j->y -=200;
 		}
 	}
-}
+}*/

@@ -300,8 +300,8 @@ void getPoints()
 		all_points_needing_support.push_back(points_needing_support);
 	}
 
-	//fix offset
-	fix_offset(all_gridded_points);
+	//fix offset nope, going to fix offset in generate scaffolding.
+	//fix_offset(all_gridded_points);
 
 	/*
 	//for debug, print out the points needing support
