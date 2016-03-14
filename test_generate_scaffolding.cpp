@@ -8,7 +8,7 @@
 using std::ifstream;
 
 //****************comment out to try from file....
-set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
+//set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
 set<Bridge> active_bridges; //this will be added to when we have bridges returned from algorithm 3: SelectBridge
 
 set<Anchoring_Segment> segments;
@@ -19,7 +19,7 @@ vector<double> slope_of_sweep;
 double inf = std::numeric_limits<double>::infinity();
 
 //******************comment out to try from file...
-void make_point_set()
+/*void make_point_set()
 {
 	//Point p0(1, 1, 1);
 	Point p1(19, 9, 15);
@@ -31,16 +31,17 @@ void make_point_set()
 	active_points.insert(p2);
 	active_points.insert(p3);
 	active_points.insert(p4);
-}
+}*/
 
 void make_sweep_vector()
 {
-	slope_of_sweep.push_back(0.0);// horizontal gets nan as a result b/c divide by zero...need a condition for this TODO
+	slope_of_sweep.push_back(0.0);// 0 degrees, horizontal
+	slope_of_sweep.push_back(3.732); // 15 degrees
+	slope_of_sweep.push_back(1.732); //30 degrees
 	slope_of_sweep.push_back(1.0); //45 degrees
-	slope_of_sweep.push_back(2.0);
-	slope_of_sweep.push_back(3.0);
-	slope_of_sweep.push_back(inf); // vertical...net a condition for this TODO
-	//think I've taken care of the two TODO's above...
+	slope_of_sweep.push_back(0.5774); //60 degrees
+	slope_of_sweep.push_back(0.2679); //75 degrees
+	slope_of_sweep.push_back(inf); // 90 degrees, vertical
 }
 
 set<Point> get_pts_from_file()
@@ -85,10 +86,10 @@ int main()
 	vector<Sweep_line> sweep_line_vec;
 
 	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
-	//set<Point> active_points = get_pts_from_file();
+	set<Point> active_points = get_pts_from_file();
 	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;
 	//**********comment out make_pt_set()
-	make_point_set();
+	//make_point_set();
 
 	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
 	//int outer_loop_index = 0;
