@@ -229,6 +229,7 @@ void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope)
 
 Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 {
+	cout << "Selecting bridge" << endl;
 	Bridge best_bridge;
 	double max_distance = 30.0;
 	double max_horizontal = 5.0;//TODO:adjust these numbers! was 15
@@ -250,8 +251,34 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 		}
 	}
 	
-	//for debug:
-	//cout << "Size of z-set: " << z_set.size() << endl;
+	/*//for debug:
+	cout << "Size of z-set: " << z_set.size() << endl;
+	cout << "min of z-set: " << *(z_set.begin()) << endl;
+	cout << "max of z_set: " << *(--z_set.end()) << endl;
+	cout << "z_set members: " << endl;
+	for(auto i = z_set.begin(); i != z_set.end(); i++)
+	{
+		cout << *i << endl;
+	}*/
+
+	double z_min = *(z_set.begin());
+	double z_max = *(--z_set.end());
+
+	//for(auto i = z_min; i < z_max; i+=0.2)
+	for(auto i = 0.0; i < z_max; i += 0.2)
+	{
+		z_set.insert(i);
+	}
+
+	/*//for debug:
+	cout << "Size of z-set: " << z_set.size() << endl;
+	cout << "min of z-set: " << *(z_set.begin()) << endl;
+	cout << "max of z_set: " << *(--z_set.end()) << endl;
+	cout << "z_set members: " << endl;
+	for(auto i = z_set.begin(); i != z_set.end(); i++)
+	{
+		cout << *i << endl;
+	}*/
 
 	//iterate through each sweep line
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
@@ -288,6 +315,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 					//if((temp_bridge.length < max_distance) && (temp_bridge.p1.x != temp_bridge.p2.x)
 						//&& (temp_bridge.p1.y != temp_bridge.p2.y)) //make sure endpoints aren't the same, as opposed to making sure length != 0
 					//the comparison of length >= 5 seems to work fine
+					//cout << "temp bridge length: " << temp_bridge.length << endl;
 					if((temp_bridge.length < max_distance) && (temp_bridge.length >= 5)) //!=0 because somehow pts are still being compared to selves
 					{
 						//cout << "LESS THAN MAX_DIST" << endl;
@@ -297,6 +325,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 							//cout << "adding point" << endl;
 							//first check constraints for angled pillar...
 							double temp_horiz_dist = calc_horiz_dist(temp_bridge.p1, temp_bridge.p2, i->intersected_points[k].second.endpt1);
+							//cout << "temp horizontal distance: " << temp_horiz_dist << endl;
 							double temp_vert_dist = calc_z_diff(i->intersected_points[k].second.endpt1, temp_bridge.height);
 							if((i->intersected_points[k].second.endpt1.z >= *j) //changing >= to > doesn't make a difference
 									&& (temp_horiz_dist <= max_horizontal)
@@ -313,8 +342,8 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 						//cout << "Number of supported points: " << endl;
 						//cout << temp_bridge.supported_points.size() << endl;
 
-						/*//for debug
-						cout << "Bridge point 1: " << temp_bridge.p1.x << ", " << temp_bridge.p1.y << " at z: " << temp_bridge.p1.z << endl;
+						//for debug
+						/*cout << "Bridge point 1: " << temp_bridge.p1.x << ", " << temp_bridge.p1.y << " at z: " << temp_bridge.p1.z << endl;
 						cout << "Bridge point 2: " << temp_bridge.p2.x << ", " << temp_bridge.p2.y << " at z: " << temp_bridge.p2.z << endl;
 						cout << "Bridge supported points size: " << temp_bridge.supported_points.size() << endl;
 						cout << "\tSupported Points: " << endl;
@@ -331,6 +360,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 						//cout << "temp gain: " << temp_gain << endl << endl;
 						if(temp_gain > 0)
 						{
+							cout << "Positive temp gain!" << endl;
 							//temp_bridge.print_bridge_members(cout);
 							//cout << "temp gain: " << temp_gain << endl;
 							double temp_lmax = calculate_lmax(temp_bridge.p1, temp_bridge.p2, temp_bridge.supported_points);
