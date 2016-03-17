@@ -137,8 +137,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 	{
 		Sweep_line sweep_line;
 		//for debug
-		//cout << "**************** I EVENT INFO:*********************" << endl;
-		//i->print_event_members(cout);
+		/*cout << "**************** I EVENT INFO:*********************" << endl;
+		i->print_event_members(cout);*/
 
 		//line 0
 		double point_x = i->p1.x;
@@ -282,14 +282,69 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 						}
 					}
 				}
-				//other cases
-				else
+				else if(segment_slope > 0.0) //check for positive segment slope, negative sweep slope
 				{
 					x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 					
-					/*//for debug
-					cout << "Intersection at: " << x_int << ", " << y_int << endl;*/
+					//for debug
+					cout << "Intersection at: " << x_int << ", " << y_int << endl;
+
+					//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
+					//check that it is within the endpoints of the anchoring segment
+					//first need to check if endpt1 < endpt2
+					//for debug:
+					cout << "CHECKING ENDPOINTS: " << endl;
+					cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
+					cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
+
+					//in others, endpt1 < endpt2 if endpt1.x < endpt2.x (neither will be equal...)
+					if(k->endpt1.x < k->endpt2.x)
+					{
+						//and check that the intersection point is between the endpoints
+						if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int >= k->endpt1.y) && (y_int <= k->endpt2.y))
+						{
+							//make a new point from the intersection between the segment and sweep line
+							//create a new pair from the two
+							//and add it to the vector of intersected points for the sweep line
+							Point intersect_point(x_int, y_int, k->endpt1.z);
+
+							point_seg_pair intersect_pair = make_pair(intersect_point, *k);//don't need to make a new segment
+							sweep_line.intersected_points.push_back(intersect_pair); //add the pair to the vector of pairs
+							cout << "point pair added" << endl;
+						}
+					}
+					else
+					{
+						//if it is, we swap endpoints 1 and 2...
+						//since I don't want to write swap for the Point class
+						//we'll do it using temps...
+						Point temp_1(k->endpt2.x, k->endpt2.y, k->endpt2.z);
+						Point temp_2(k->endpt1.x, k->endpt1.y, k->endpt1.z);
+
+						//and check that the intersection point is between the endpoints
+						if((x_int >= temp_1.x) && (x_int <= temp_2.x) && (y_int >= temp_1.y) && (y_int <= temp_2.y))
+						{
+							//make a new point from the intersection between the segment and sweep line
+							//create a new pair from the two
+							//and add it to the vector of intersected points for the sweep line
+							Point intersect_point(x_int, y_int, k->endpt1.z);
+
+							point_seg_pair intersect_pair = make_pair(intersect_point, *k);//don't need to make a new segment
+							sweep_line.intersected_points.push_back(intersect_pair); //add the pair to the vector of pairs
+							cout << "point pair added" << endl;
+						}
+					}
+				}
+				//other cases
+				else
+				{
+					cout << "YO" << endl;
+					x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
+					
+					//for debug
+					//cout << "Intersection at: " << x_int << ", " << y_int << endl;
 
 					//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 					//check that it is within the endpoints of the anchoring segment
@@ -302,7 +357,8 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					//in others, endpt1 < endpt2 if endpt1.x < endpt2.x (neither will be equal...)
 					if(k->endpt1.x < k->endpt2.x)
 					{
-					//and check that the intersection point is between the endpoints
+						//cout << "endpt1 < endpt2" << endl;
+						//and check that the intersection point is between the endpoints
 						if((x_int >= k->endpt1.x) && (x_int <= k->endpt2.x) && (y_int <= k->endpt1.y) && (y_int >= k->endpt2.y))
 						{
 							//make a new point from the intersection between the segment and sweep line
@@ -312,10 +368,12 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 
 							point_seg_pair intersect_pair = make_pair(intersect_point, *k);//don't need to make a new segment
 							sweep_line.intersected_points.push_back(intersect_pair); //add the pair to the vector of pairs
+							//cout << "point pair added" << endl;
 						}
 					}
 					else
 					{
+						//cout << "endpt1 > endpt2" << endl;
 						//if it is, we swap endpoints 1 and 2...
 						//since I don't want to write swap for the Point class
 						//we'll do it using temps...
@@ -332,11 +390,13 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 
 							point_seg_pair intersect_pair = make_pair(intersect_point, *k);//don't need to make a new segment
 							sweep_line.intersected_points.push_back(intersect_pair); //add the pair to the vector of pairs
+							//cout << "point pair added" << endl;
 						}
 					}
 				}
 			}
 		}
+		cout << "number of intersected points on sweep line: " << sweep_line.intersected_points.size() << endl;
 		sweep_line_vec.push_back(sweep_line);
 	}
 	/*//for debug
@@ -455,26 +515,35 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
 	//cout << "*******************SNAPPING..." << endl;
 	//for debug:
-	/*cout << "*******Active points size before: " << active_pts.size() << endl;
-	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	cout << "*******Active points size before: " << active_pts.size() << endl;
+	/*for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
 	}*/
+
+	//for debug:
+	cout << "Bridge data:" << endl;
+	best_bridge.print_bridge_members(cout);
+	cout << "Supported points: " << endl;
+	for(auto j = best_bridge.supported_points.begin(); j != best_bridge.supported_points.end(); j++)
+	{
+		j->print_coords_with_z(cout);
+	}
 	
 	//cout << "removing supported points from set..." << endl;
 	//remove supported points from set of points that need support (active_pts)
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
-		/*cout << "START OUTER LOOP" << endl;
+		cout << "START OUTER LOOP" << endl;
 		cout << "checking supported point:";
-		i->print_coords_with_z(cout);*/
+		i->print_coords_with_z(cout);
 		remove_supported_pt_from_active_set(*i, active_pts);
 	}
 	//cout << "DONE WITH POINTS" << endl;
 	
 	//for debug:
-	/*cout << "*******Active points size after erasure: " << active_pts.size() << endl;
-	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	cout << "*******Active points size after erasure: " << active_pts.size() << endl;
+	/*for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
 	}*/
@@ -543,9 +612,9 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 			active_pts.insert(best_bridge.p2);
 	}
 
-	/*//for debug
+	//for debug
 	cout << "Active points size after adding endpts: " << active_pts.size() << endl;
-	for(auto i = active_pts.begin(); i != active_pts.end(); i++)
+	/*for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
 	}*/

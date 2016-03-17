@@ -21,12 +21,11 @@ double inf = std::numeric_limits<double>::infinity();
 //******************comment out to try from file...
 /*void make_point_set()
 {
-	//Point p0(1, 1, 1);
 	Point p1(19, 9, 15);
 	Point p2(11, 15, 20);
 	Point p3(25, 20, 18);
 	Point p4(18, 24, 17);
-	//active_points.insert(p0);
+
 	active_points.insert(p1);
 	active_points.insert(p2);
 	active_points.insert(p3);
@@ -36,17 +35,24 @@ double inf = std::numeric_limits<double>::infinity();
 void make_sweep_vector()
 {
 	slope_of_sweep.push_back(0.0);// 0 degrees, horizontal
-	slope_of_sweep.push_back(3.732); // 15 degrees
-	slope_of_sweep.push_back(1.732); //30 degrees
+	//slope_of_sweep.push_back(3.732); // 15 degrees
+	//slope_of_sweep.push_back(1.732); //30 degrees
+	slope_of_sweep.push_back(2.416); //22.5 degrees
 	slope_of_sweep.push_back(1.0); //45 degrees
-	slope_of_sweep.push_back(0.5774); //60 degrees
-	slope_of_sweep.push_back(0.2679); //75 degrees
+	//slope_of_sweep.push_back(0.5774); //60 degrees
+	//slope_of_sweep.push_back(0.2679); //75 degrees
+	slope_of_sweep.push_back(.4143); //67.5 degrees
 	slope_of_sweep.push_back(inf); // 90 degrees, vertical
+	slope_of_sweep.push_back(-0.4143); //112.5 degrees
+	slope_of_sweep.push_back(-1.0); //135 degrees
+	slope_of_sweep.push_back(-2.416); //157.5 degrees
 }
 
 set<Point> get_pts_from_file()
 {
 	set<Point> pts_to_run;
+	//ifstream inFile("test_grid.txt");
+	//ifstream inFile("adj_mod_test_pts.txt");
 	ifstream inFile("get_points/gridded_points_to_support.txt");
 	//ifstream inFile("get_points/points_to_support.txt"); //for non-sparse pillars
 	string line;
@@ -70,6 +76,7 @@ set<Point> get_pts_from_file()
 		new_pt.y-=100;//for offset
 		pts_to_run.insert(new_pt);
 	}
+	//cout << "Number of points: " << pts_to_run.size() << endl;
 	return pts_to_run;
 }
 
@@ -89,6 +96,7 @@ int main()
 
 	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
 	set<Point> active_points = get_pts_from_file();
+	cout << "got points from file" << endl;
 	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;
 	//**********comment out make_pt_set()
 	//make_point_set();
@@ -102,16 +110,18 @@ int main()
 	//send_remaining_points_to_scad(active_points);
 
 	make_sweep_vector();
+	cout << "sweep vector made" << endl;
 	while(true)
 	//for(auto w=0; w < 1; w++)
 	{
 	Bridge the_best_bridge;
 	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
 	{
-		//cout << "outer_loop_index: " << outer_loop_index << endl;
+		cout << "outer_loop_index: " << outer_loop_index << endl;
 		segments.clear(); //clear out anchoring segments...
 		create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, outer_loop_index);
-
+		cout << "anchoring segments created" << endl;
+		cout << "number of anchoring segments: " << segments.size() << endl;
 		/*//for debug: print members of anchoring segments:
 		cout << "***********************ANCHORING SEGMENTS: **************************" << endl;
 		for(auto i = segments.begin(); i != segments.end(); i++)
@@ -123,7 +133,8 @@ int main()
 		//create events from anchoring segments
 		active_events.clear(); //clear out previous active events
 		create_events(segments, active_events);
-		
+		cout << "events created" << endl;
+		cout << "number of events: " << active_events.size() << endl;
 		//for debug
 		/*cout << "Events size: " << active_events.size() << endl;
 		for(auto i = active_events.begin(); i != active_events.end(); i++)
@@ -145,7 +156,8 @@ int main()
 		
 		sweep_line_vec.clear();  //clear out previous sweep line vector
 		find_intersections(active_events, slope_of_sweep, outer_loop_index, sweep_line_vec);
-		
+		cout << "intersections found" << endl;
+		cout << "number of intersections: " << sweep_line_vec.size() << endl;
 		//for debug
 		/*cout << "SWEEP LINE MEMBERS: " << endl;
 		for(auto i = sweep_line_vec.begin(); i != sweep_line_vec.end(); i++)
@@ -155,6 +167,7 @@ int main()
 
 		//DO I DO THIS HERE OR INSIDE THE SELECT BRIDGE? WHICH IS BEST??????
 		sort_sweep_lines(sweep_line_vec, slope_of_sweep[outer_loop_index]);
+		cout << "sweep lines sorted" << endl;
 		/*
 		cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
 
@@ -182,6 +195,7 @@ int main()
 		//the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
 		//the_best_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
 		temp_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
+		cout << "bridge selected" << endl;
 		if(temp_bridge.score > the_best_bridge.score)
 		{
 			the_best_bridge = temp_bridge;
