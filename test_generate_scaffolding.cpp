@@ -96,13 +96,11 @@ int main()
 
 	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
 	set<Point> active_points = get_pts_from_file();
-	cout << "got points from file" << endl;
-	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;
+	/*//for debug:
+	//cout << "got points from file" << endl;
+	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;*/
 	//**********comment out make_pt_set()
 	//make_point_set();
-
-	//note: find_intersections gets 5 points for sweep_slope = inf, 2, 1, but not for 0 or 3...
-	//int outer_loop_index = 0;
 
 	output_pts_to_support_to_scad(active_points, "Orchid");
 
@@ -110,20 +108,19 @@ int main()
 	//send_remaining_points_to_scad(active_points);
 
 	make_sweep_vector();
-	cout << "sweep vector made" << endl;
+	//cout << "sweep vector made" << endl;
 	while(true)
-	//for(auto w=0; w < 1; w++)
 	{
 	Bridge the_best_bridge;
 	for(auto outer_loop_index = 0; outer_loop_index < slope_of_sweep.size(); outer_loop_index++)
 	{
-		cout << "outer_loop_index: " << outer_loop_index << endl;
+		//cout << "outer_loop_index: " << outer_loop_index << endl;
 		segments.clear(); //clear out anchoring segments...
 		create_anchoring_segments(active_points, active_bridges, segments, slope_of_sweep, outer_loop_index);
-		cout << "anchoring segments created" << endl;
-		cout << "number of anchoring segments: " << segments.size() << endl;
 		/*//for debug: print members of anchoring segments:
 		cout << "***********************ANCHORING SEGMENTS: **************************" << endl;
+		cout << "anchoring segments created" << endl;
+		cout << "number of anchoring segments: " << segments.size() << endl;
 		for(auto i = segments.begin(); i != segments.end(); i++)
 		{
 			i->print_coords(cout);
@@ -133,33 +130,22 @@ int main()
 		//create events from anchoring segments
 		active_events.clear(); //clear out previous active events
 		create_events(segments, active_events);
-		cout << "events created" << endl;
-		cout << "number of events: " << active_events.size() << endl;
 		//for debug
-		/*cout << "Events size: " << active_events.size() << endl;
+		/*cout << "events created" << endl;
+		cout << "Events size: " << active_events.size() << endl;
 		for(auto i = active_events.begin(); i != active_events.end(); i++)
 		{
 			i->print_event_members(cout);
 		}*/
 
 		//find intersections between sweep plane and anchoring segments at each event(which is a point)
-		//these intersections are the points sent to select bridge
-
-		/*//for debug, print event info:
-		cout << "*******************************EVENT MEMBERS: ***************************" << endl;
-		for(auto i = active_events.begin(); i != active_events.end(); i++)
-		{
-			i->print_event_members(cout);
-		}*/
-
-		//cout << "points for alg3 size: " << points_for_alg3.size() << endl;
-		
+		//these intersections are the points sent to select bridge		
 		sweep_line_vec.clear();  //clear out previous sweep line vector
 		find_intersections(active_events, slope_of_sweep, outer_loop_index, sweep_line_vec);
+		/*//for debug
 		cout << "intersections found" << endl;
 		cout << "number of intersections: " << sweep_line_vec.size() << endl;
-		//for debug
-		/*cout << "SWEEP LINE MEMBERS: " << endl;
+		cout << "SWEEP LINE MEMBERS: " << endl;
 		for(auto i = sweep_line_vec.begin(); i != sweep_line_vec.end(); i++)
 		{
 			i->print_sweep_line_members(cout);
@@ -167,16 +153,7 @@ int main()
 
 		//DO I DO THIS HERE OR INSIDE THE SELECT BRIDGE? WHICH IS BEST??????
 		sort_sweep_lines(sweep_line_vec, slope_of_sweep[outer_loop_index]);
-		cout << "sweep lines sorted" << endl;
-		/*
-		cout << "points for alg3 after intersections size: " << points_for_alg3.size() << endl;
-
-		//for debug
-		cout << "points being sent to alg3: " << endl;
-		for(auto i = points_for_alg3.begin(); i != points_for_alg3.end(); i++)
-		{
-			i->print_coords(cout);
-		}*/
+		//cout << "sweep lines sorted" << endl;
 
 		/*//for debug
 		cout << "*****************************SEGMENT MEMBERS: ******************************" << endl;
@@ -190,12 +167,8 @@ int main()
 		}*/
 
 		Bridge temp_bridge;
-		//Bridge the_best_bridge;
-		//the_best_bridge = select_bridge(segments_for_alg3, slope_of_sweep[i]);
-		//the_best_bridge = select_bridge_sweep_line(sweep_line_vec, slope_of_sweep[i]);
-		//the_best_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
 		temp_bridge = select_bridge(sweep_line_vec, slope_of_sweep[outer_loop_index]);
-		cout << "bridge selected" << endl;
+		//cout << "bridge selected" << endl;
 		if(temp_bridge.score > the_best_bridge.score)
 		{
 			the_best_bridge = temp_bridge;
@@ -216,32 +189,11 @@ int main()
 		for(auto j = the_best_bridge.supported_points.begin(); j != the_best_bridge.supported_points.end(); j++)
 		{
 			j->print_coords_with_z(cout);
-		}
-
-		cout << "TIME TO SNAP..." << endl;
-		//snap(the_best_bridge, active_points);
-		cout << "snapped..." << endl;*/
+		}*/
 	}
-	/*//for debug
-	cout << "*******************RESULTS*********************" <<endl;
-	cout << "Let's see what the segment set produced: " << endl;
-	the_best_bridge.print_bridge_members(cout);
-	cout << endl;
-	cout << "Point 1 with z: " << endl;
-	the_best_bridge.p1.print_coords_with_z(cout);
-	cout << endl;
-	cout << "Point 2 with z: " << endl;
-	the_best_bridge.p2.print_coords_with_z(cout);
-	cout << endl;
-	cout << "Supported points: " << endl;
-	for(auto j = the_best_bridge.supported_points.begin(); j != the_best_bridge.supported_points.end(); j++)
-	{
-		j->print_coords_with_z(cout);
-	}*/
 
 	if(the_best_bridge.p1.x == 0 && the_best_bridge.p1.y == 0 && the_best_bridge.p1.z == 0)
 	{
-		//return 0;
 		break;
 	}
 	//cout << "TIME TO SNAP..." << endl;

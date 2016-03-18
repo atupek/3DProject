@@ -263,7 +263,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 		cout << *i << endl;
 	}*/
 	
-	//experiment....
+	//check for bridges at more than the z_heights where points need support
 	cout << "no z_max yet..." << endl;
 	double z_max;
 	cout << "z_set.size: " << z_set.size() << endl;
