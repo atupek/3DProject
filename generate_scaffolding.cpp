@@ -630,7 +630,7 @@ void send_remaining_points_to_scad(set<Point> &active_pts)
 		{
 			out_file << "\tfoot(" << i->x << ", " << i->y << ");" << endl;
 		}
-		out_file "\traft(" << i->x << ", " << i->y << ");" << endl;
+		out_file << "\traft(" << i->x << ", " << i->y << ");" << endl;
 	}
 	//and output final closing brace for the union of all supports
 	out_file << "}" << endl;
@@ -652,7 +652,7 @@ void setup_scad()
 	out_file << "epsilon = 0.01;" << endl << endl;
 	out_file << "module raft(x_coord, y_coord)" << endl;
 	out_file << "{" << endl;
-	out_file << "\ttranslate([x_coord, y_coord, 0])" << endl
+	out_file << "\ttranslate([x_coord, y_coord, 0])" << endl;
 	out_file << "\tcube([raft_width, raft_width, raft_height], center = true);" << endl;
 	out_file << "}" << endl;
 	out_file << "module foot(x_coord, y_coord)" << endl;

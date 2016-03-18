@@ -32,8 +32,6 @@ using std::istringstream;
 using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
 
-//ofstream outFile("points_to_support.txt");
-
 char gcodeFile[256];
 //all the points from the original model
 all_layers model_layers;
@@ -92,7 +90,6 @@ void shiftPoints(this_layer &pt_layer)
 
 void getPoints()
 {
-	//obvious.
 	get_file_name();
 
 	cout << "Got file name...matching regex next..." << endl;
@@ -102,7 +99,7 @@ void getPoints()
 	cout << "matched regexes...erasing first three layers next..." << endl;
 	//first three layers of model have no points because of way gcode is sliced
 	this_model.erase(this_model.begin(), this_model.begin()+2);
-	//last layer must also be removed for some reason...
+	//last layer must also be removed...
 	layer_index--;
 
 	cout << "erased first three layers...making new model..." << endl;
@@ -117,24 +114,8 @@ void getPoints()
 	{
 		multiply_by_two(*i);
 	}
-
-/*
-	//testing z_height
-	//points constructed okay
-	for(auto i = converted_model.begin(); i != converted_model.end(); i++)
-	{
-		cout << "NEW LAYER: " << endl;
-		for(auto j = i->begin(); j != i->end(); j++)
-		{
-			//j->print_coords(cout);
-			j->print_coords_with_z(cout);
-		}
-	}*/
-
-	//************************for testing only************************************** 
-	//shiftPoints(converted_model[4]);
-
 	cout << "new resolution done...initializing pixel vector..." << endl;
+	
 	//model
 	//create vector of pixel layers, these are empty to begin with
 	//and will be populated with fill_pixel_vector
@@ -203,8 +184,7 @@ void getPoints()
 		fill_pixel_vector(converted_model[i], model[i]);
 	}
 
-/*
-	//for debug...
+	/*//for debug...
 	//before drawing lines...both should just be sets of points.
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
 	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);*/
@@ -227,8 +207,8 @@ void getPoints()
 
 	cout << "assigning procesed_pix_model to fattened_pix_model..." << endl;
 	fattened_pix_model = processed_pix_model;
-	/*
-	//for debug...
+
+	/*//for debug...
 	//after drawing lines, both should have lines.
 	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
 	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);*/
@@ -241,8 +221,7 @@ void getPoints()
 		fatten_lines(processed_pix_model[i], fattened_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
-/*
-	//for debug...
+	/*//for debug...
 	//after fattening lines...	4, 5 should have thin lines.
 	//							6, 7 should have fat lines
 	print_bitmap(fattened_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
@@ -259,8 +238,7 @@ void getPoints()
 
 	final_pix_model = compared_pix_model;
 
-/*
-	//for debug...
+	/*//for debug...
 	//after comparing layers, they print okay
 	print_bitmap(model[4], 6, num_pixel_rows, num_pixel_columns);
 	print_bitmap(fattened_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
@@ -285,8 +263,8 @@ void getPoints()
 		list_gridded_points(pts_after_grid[i], gridded_pts, num_pixel_rows, num_pixel_columns, i);
 		all_gridded_points.push_back(gridded_pts);
 	}
-/*
-	//for debug...
+
+	/*//for debug...
 	//after checking neighbors, prints okay
 	print_bitmap(final_pix_model[3], 9, num_pixel_rows, num_pixel_columns);*/
 
@@ -299,9 +277,6 @@ void getPoints()
 		list_points(final_pix_model[i], points_needing_support, num_pixel_rows, num_pixel_columns, i);
 		all_points_needing_support.push_back(points_needing_support);
 	}
-
-	//fix offset nope, going to fix offset in generate scaffolding.
-	//fix_offset(all_gridded_points);
 
 	/*
 	//for debug, print out the points needing support
@@ -318,15 +293,11 @@ void getPoints()
 
 void points_to_file()
 {
-	//FILE * outFile;
-   	//outFile = fopen ("outfile.txt","w");
    	ofstream outFile("points_to_support.txt");
-	//outFile << "outfile" << endl;
 	for(auto i = all_points_needing_support.begin(); i != all_points_needing_support.end(); i++)
 	{
 		for(auto j = i->begin(); j!= i->end(); j++)
 		{
-			//blah
 			j->print_coords_with_z(outFile);
 		}
 	}
@@ -335,34 +306,18 @@ void points_to_file()
 void gridded_points_to_file()
 {
 	ofstream outFile("gridded_points_to_support.txt");
-	//outFile << "outfile" << endl;
 	for(auto i = all_gridded_points.begin(); i != all_gridded_points.end(); i++)
 	{
 		for(auto j = i->begin(); j!= i->end(); j++)
 		{
-			//blah
 			j->print_coords_with_z(outFile);
 		}
 	}
 }
 
-//for debug, print bmps of test data (from points shifted over)
-void print_bmps()
-{
-	print_bitmap(model[3], 1, num_pixel_rows, num_pixel_columns);
-	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
-	print_bitmap(fattened_pix_model[3], 3, num_pixel_rows, num_pixel_columns);
-	print_bitmap(model[4], 4, num_pixel_rows, num_pixel_columns);
-	print_bitmap(compared_pix_model[3], 5, num_pixel_rows, num_pixel_columns);
-	print_bitmap(fattened_pix_model[4], 6, num_pixel_rows, num_pixel_columns);
-	print_bitmap(final_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
-	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);
-}
-
 int main()
 {
 	getPoints();
-	//print_bmps();
 	points_to_file();
 	gridded_points_to_file();
 
