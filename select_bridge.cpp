@@ -229,7 +229,7 @@ void sort_sweep_lines(vector<Sweep_line> & sweep_lines, double sweep_slope)
 
 Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 {
-	cout << "Selecting bridge" << endl;
+	//cout << "Selecting bridge" << endl;
 	Bridge best_bridge;
 	double max_distance = 30.0;
 	double max_horizontal = 5.0;//TODO:adjust these numbers! was 15
@@ -243,16 +243,16 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	//put z-coords into set
 	//sorted by increasing z
 	set<double> z_set;
-	cout << "number sweep lines:" << sweep_lines.size() << endl;
+	//cout << "number sweep lines:" << sweep_lines.size() << endl;
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 	{
-		cout << "intersected points size: " << i->intersected_points.size() << endl;
+		//cout << "intersected points size: " << i->intersected_points.size() << endl;
 		for(auto j = i->intersected_points.begin(); j != i->intersected_points.end(); j++)
 		{
 			z_set.insert(j->first.z);
 		}
 	}
-	cout << "z_set made" << endl;
+	//cout << "z_set made" << endl;
 	/*//for debug:
 	cout << "Size of z-set: " << z_set.size() << endl;
 	cout << "min of z-set: " << *(z_set.begin()) << endl;
@@ -264,26 +264,25 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	}*/
 	
 	//check for bridges at more than the z_heights where points need support
-	cout << "no z_max yet..." << endl;
+	//cout << "no z_max yet..." << endl;
 	double z_max;
-	cout << "z_set.size: " << z_set.size() << endl;
+	//cout << "z_set.size: " << z_set.size() << endl;
 	if(z_set.size() == 1) //in case there's only one z-height
 	{
 		z_max = *(z_set.begin());
-		cout << "z_max set1" << endl;
+		//cout << "z_max set1" << endl;
 	}
 	else
 	{
 		z_max = *(--z_set.end());
-		cout << "z_max set2" << endl;
+		//cout << "z_max set2" << endl;
 	}
-	cout << "GOT HERE" << endl;
+
 	//for(auto i = z_min; i < z_max; i+=0.2)
 	for(auto i = 0.0; i < z_max; i += 1.0)
 	{
 		z_set.insert(i);
 	}
-	cout << "got here" << endl;
 	
 	/*//for debug:
 	cout << "Size of z-set: " << z_set.size() << endl;
@@ -298,7 +297,7 @@ Bridge select_bridge(vector<Sweep_line> & sweep_lines, double sweep_slope)
 	//iterate through each sweep line
 	for(auto i = sweep_lines.begin(); i != sweep_lines.end(); i++)
 	{
-		cout << "*****************NEW SWEEP LINE**************************" << endl;
+		//cout << "*****************NEW SWEEP LINE**************************" << endl;
 		//do this for each z-level in the z-set
 		for(auto j = z_set.begin(); j != z_set.end(); j++)
 		{
