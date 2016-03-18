@@ -648,7 +648,7 @@ void setup_scad()
 	out_file << "foot_radius = 2.5;" << endl;
 	out_file << "foot_height = 2.5;" << endl;
 	out_file << "raft_width = 7;" << endl;
-	out_file << "raft_height = 0.5;" << endl;
+	out_file << "raft_height = 0.4;" << endl;
 	out_file << "epsilon = 0.01;" << endl << endl;
 	out_file << "module raft(x_coord, y_coord)" << endl;
 	out_file << "{" << endl;
