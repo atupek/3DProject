@@ -288,15 +288,15 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 					
 					//for debug
-					cout << "Intersection at: " << x_int << ", " << y_int << endl;
+					//cout << "Intersection at: " << x_int << ", " << y_int << endl;
 
 					//(x_int, y_int) is the intersection between the sweep slope at that point and the anchoring segments
 					//check that it is within the endpoints of the anchoring segment
 					//first need to check if endpt1 < endpt2
-					//for debug:
+					/*//for debug:
 					cout << "CHECKING ENDPOINTS: " << endl;
 					cout << "endpt 1: " << k->endpt1.x << ", " << k->endpt1.y << endl;
-					cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;
+					cout << "endpt 2: " << k->endpt2.x << ", " << k->endpt2.y << endl;*/
 
 					//in others, endpt1 < endpt2 if endpt1.x < endpt2.x (neither will be equal...)
 					if(k->endpt1.x < k->endpt2.x)
@@ -311,7 +311,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 
 							point_seg_pair intersect_pair = make_pair(intersect_point, *k);//don't need to make a new segment
 							sweep_line.intersected_points.push_back(intersect_pair); //add the pair to the vector of pairs
-							cout << "point pair added" << endl;
+							//cout << "point pair added" << endl;
 						}
 					}
 					else
@@ -332,14 +332,13 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 
 							point_seg_pair intersect_pair = make_pair(intersect_point, *k);//don't need to make a new segment
 							sweep_line.intersected_points.push_back(intersect_pair); //add the pair to the vector of pairs
-							cout << "point pair added" << endl;
+							//cout << "point pair added" << endl;
 						}
 					}
 				}
 				//other cases
 				else
 				{
-					cout << "YO" << endl;
 					x_int = calculate_x_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 					y_int = calculate_y_intersection(y_intercept, segment_y_intercept, sweep_slope, segment_slope);
 					
@@ -396,7 +395,7 @@ void find_intersections(set<Event> & events, vector<double> sweep_directions, in
 				}
 			}
 		}
-		cout << "number of intersected points on sweep line: " << sweep_line.intersected_points.size() << endl;
+		//cout << "number of intersected points on sweep line: " << sweep_line.intersected_points.size() << endl;
 		sweep_line_vec.push_back(sweep_line);
 	}
 	/*//for debug
@@ -515,34 +514,35 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 {
 	//cout << "*******************SNAPPING..." << endl;
 	//for debug:
-	cout << "*******Active points size before: " << active_pts.size() << endl;
+	//cout << "*******Active points size before: " << active_pts.size() << endl;
 	/*for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
 	}*/
 
 	//for debug:
-	cout << "Bridge data:" << endl;
+	/*cout << "Bridge data:" << endl;
 	best_bridge.print_bridge_members(cout);
 	cout << "Supported points: " << endl;
 	for(auto j = best_bridge.supported_points.begin(); j != best_bridge.supported_points.end(); j++)
 	{
 		j->print_coords_with_z(cout);
-	}
+	}*/
 	
 	//cout << "removing supported points from set..." << endl;
 	//remove supported points from set of points that need support (active_pts)
 	for(auto i = best_bridge.supported_points.begin(); i != best_bridge.supported_points.end(); i++)
 	{
+		/*//for debug
 		cout << "START OUTER LOOP" << endl;
 		cout << "checking supported point:";
-		i->print_coords_with_z(cout);
+		i->print_coords_with_z(cout);*/
 		remove_supported_pt_from_active_set(*i, active_pts);
 	}
 	//cout << "DONE WITH POINTS" << endl;
 	
 	//for debug:
-	cout << "*******Active points size after erasure: " << active_pts.size() << endl;
+	//cout << "*******Active points size after erasure: " << active_pts.size() << endl;
 	/*for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
@@ -613,7 +613,7 @@ void snap(Bridge & best_bridge, set<Point> & active_pts)
 	}
 
 	//for debug
-	cout << "Active points size after adding endpts: " << active_pts.size() << endl;
+	//cout << "Active points size after adding endpts: " << active_pts.size() << endl;
 	/*for(auto i = active_pts.begin(); i != active_pts.end(); i++)
 	{
 		i->print_coords_with_z(cout);
