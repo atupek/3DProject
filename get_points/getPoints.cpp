@@ -32,6 +32,12 @@ using std::istringstream;
 using std::istream_iterator;
 #include <math.h> //for sqrt & lrint (round & cast to long int)
 
+//for timing
+#include <chrono>
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::duration;
+
 char gcodeFile[256];
 //all the points from the original model
 all_layers model_layers;
@@ -91,22 +97,28 @@ void shiftPoints(this_layer &pt_layer)
 void getPoints()
 {
 	get_file_name();
+	//cout << "Got file name...matching regex next..." << endl;
 
-	cout << "Got file name...matching regex next..." << endl;
+	//for timing:
+	high_resolution_clock::time_point start_of_program = high_resolution_clock::now();
+
 	//match regex & create points, load them into layers, specified by the layer index
 	all_layers this_model = match_regex(gcodeFile, model_layers, layer_index);
 
-	cout << "matched regexes...erasing first three layers next..." << endl;
+	//for timing:
+	high_resolution_clock::time_point finished_regex = high_resolution_clock::now();
+
+	//cout << "matched regexes...erasing first three layers next..." << endl;
 	//first three layers of model have no points because of way gcode is sliced
 	this_model.erase(this_model.begin(), this_model.begin()+2);
 	//last layer must also be removed...
 	layer_index--;
 
-	cout << "erased first three layers...making new model..." << endl;
+	//cout << "erased first three layers...making new model..." << endl;
 	//make a new model for the converted model
 	all_layers converted_model = this_model;
 
-	cout << "new model made...multiplying for resolution..." << endl;
+	//cout << "new model made...multiplying for resolution..." << endl;
 	//multiply x, y, & e by 10 for the highest resolution (.1mm)
 	//mulitply x, y, & e by 2 for the middle resolution (.5mm)
 	//multiply by nothing for the lowest resolution (1mm)
@@ -114,7 +126,7 @@ void getPoints()
 	{
 		multiply_by_two(*i);
 	}
-	cout << "new resolution done...initializing pixel vector..." << endl;
+	//cout << "new resolution done...initializing pixel vector..." << endl;
 	
 	//model
 	//create vector of pixel layers, these are empty to begin with
@@ -125,7 +137,7 @@ void getPoints()
 		initialize_pixel_vector(model, num_pixel_rows, num_pixel_columns);
 	}
 
-	cout << "initializing second pixel vector..." << endl;
+	//cout << "initializing second pixel vector..." << endl;
 	//processed_pix_model
 	//create vector of pixel layers, empty to begin with
 	//POPULATED BY DRAW LINES FUNCTION (Bresenham)
@@ -136,7 +148,7 @@ void getPoints()
 		initialize_pixel_vector(processed_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
-	cout << "initializing third pixel vector..." << endl;
+	//cout << "initializing third pixel vector..." << endl;
 	//fattened_pix_model
 	//create vector of pixel layers, empty to begin with
 	//POPULATED BY FATTEN LINES FUNCTION
@@ -148,7 +160,7 @@ void getPoints()
 		initialize_pixel_vector(fattened_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
-	cout << "initializing fourth pixel vector..." << endl;
+	//cout << "initializing fourth pixel vector..." << endl;
 	//compared_pix_model
 	//create vector of pixel layers, these are empty to begin with
 	//POPULATED BY COMPARE_PIXEL_LAYERS FUNCTION
@@ -159,7 +171,7 @@ void getPoints()
 		initialize_pixel_vector(compared_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
-	cout << "initializng final pixel vector..." << endl;
+	//cout << "initializng final pixel vector..." << endl;
 	//final_pix_model
 	//create vector of pixel layers, these are empty to begin with
 	//POPULATED BY CHECK_NEIGHBORS FUNCTION
@@ -170,13 +182,16 @@ void getPoints()
 		initialize_pixel_vector(final_pix_model, num_pixel_rows, num_pixel_columns);
 	}
 
-	cout << "initializing after grid pixel vector..." << endl;
+	//cout << "initializing after grid pixel vector..." << endl;
 	for(int i = 0; i < layer_index; i++)
 	{
 		initialize_gridded_pixel_vector(pts_after_grid, num_pixel_rows, num_pixel_columns);
 	}
 
-	cout << "filling pixel vector..." << endl;
+	//for timing:
+	high_resolution_clock::time_point grids_initialized = high_resolution_clock::now();
+
+	//cout << "filling pixel vector..." << endl;
 	//takes x, y coords from Point vector (first argument) and sets those pixels in the pixel layer (second argument)
 	//loops through all Point vectors for the entire model
 	for(auto i = 0; i < layer_index; i++)
@@ -184,28 +199,32 @@ void getPoints()
 		fill_pixel_vector(converted_model[i], model[i]);
 	}
 
+	//for timing:
+	high_resolution_clock::time_point pixels_set = high_resolution_clock::now();
+
 	/*//for debug...
 	//before drawing lines...both should just be sets of points.
 	print_bitmap(model[3], 0, num_pixel_rows, num_pixel_columns);
 	print_bitmap(model[4], 1, num_pixel_rows, num_pixel_columns);*/
 
-	cout << "drawing lines..." << endl;
-	cout << "layer index: " << layer_index << endl;
 	//draw lines between the points using bresenham algorithm
 	//takes in a point_layer and draws a line from point n to n+1 in the corresponding pixel_layer in processed_pix_model
 	for(auto i = 0; i < (layer_index-1); i++)
 	{
-		cout << "Processing layer: " << i << endl;
+		//cout << "Processing layer: " << i << endl;
 		//cout << "converted_model[i].size(): " << converted_model[i].size() << endl;
 		for(auto j = 0; j < converted_model[i].size()-1; j++)
 		{
 			bresenham(converted_model[i][j].x, converted_model[i][j+1].x,
 						converted_model[i][j].y, converted_model[i][j+1].y, processed_pix_model[i]);
 		}
-		cout << "layer processed..." << endl;
+		//cout << "layer processed..." << endl;
 	}
 
-	cout << "assigning procesed_pix_model to fattened_pix_model..." << endl;
+	//for timing:
+	high_resolution_clock::time_point lines_drawn = high_resolution_clock::now();
+
+	//cout << "assigning procesed_pix_model to fattened_pix_model..." << endl;
 	fattened_pix_model = processed_pix_model;
 
 	/*//for debug...
@@ -213,7 +232,7 @@ void getPoints()
 	print_bitmap(processed_pix_model[3], 2, num_pixel_rows, num_pixel_columns);
 	print_bitmap(processed_pix_model[4], 3, num_pixel_rows, num_pixel_columns);*/
 
-	cout << "fattening the lines...." << endl;
+	//cout << "fattening the lines...." << endl;
 	//fatten up the lines
 	//takes pixel layer from processed_pix_model and fattens lines into corresponding layer of fattened_pix_model
 	for(auto i = 0; i < layer_index; i++)
@@ -221,13 +240,16 @@ void getPoints()
 		fatten_lines(processed_pix_model[i], fattened_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
+	//for timing:
+	high_resolution_clock::time_point lines_fattened = high_resolution_clock::now();
+
 	/*//for debug...
 	//after fattening lines...	4, 5 should have thin lines.
 	//							6, 7 should have fat lines
 	print_bitmap(fattened_pix_model[3], 4, num_pixel_rows, num_pixel_columns);
 	print_bitmap(fattened_pix_model[4], 5, num_pixel_rows, num_pixel_columns);*/
 
-	cout << "comparing pixel layers..." << endl;
+	//cout << "comparing pixel layers..." << endl;
 	//compare pixel layers & load difference into a third layer
 	//compare pixel layers n (fattened_pix_model), n+1 (initial model)
 	//and load difference into compared_pix_model
@@ -235,6 +257,9 @@ void getPoints()
 	{
 		compare_pixel_layers(fattened_pix_model[i], model[i+1], compared_pix_model[i]);
 	}
+
+	//for timing:
+	high_resolution_clock::time_point layers_compared = high_resolution_clock::now();
 
 	final_pix_model = compared_pix_model;
 
@@ -244,7 +269,7 @@ void getPoints()
 	print_bitmap(fattened_pix_model[3], 7, num_pixel_rows, num_pixel_columns);
 	print_bitmap(compared_pix_model[3], 8, num_pixel_rows, num_pixel_columns);*/
 
-	cout << "checking neighbors..." << endl;
+	//cout << "checking neighbors..." << endl;
 	//check neighbors between model[i+1] and fattened_pix_model[i+1]
 	//if neighbors exist in layer, then point in final_pix_model doesn't need support
 	for(auto i = 0; i < layer_index-1; i++)
@@ -252,11 +277,18 @@ void getPoints()
 		check_neighbors(compared_pix_model[i+1], fattened_pix_model[i+1], final_pix_model[i], num_pixel_rows, num_pixel_columns);
 	}
 
+	//for timing:
+	high_resolution_clock::time_point neighbors_checked = high_resolution_clock::now();
+
 	for(auto i = 0; i < layer_index-1; i++)
 	{
 		drop_grid(final_pix_model[i], pts_after_grid[i], num_pixel_rows, num_pixel_columns);
 	}
 
+	//for timing:
+	high_resolution_clock::time_point grid_dropped = high_resolution_clock::now();
+
+	//put gridded points into vector
 	for(auto i = 0; i < pts_after_grid.size(); i++)
 	{
 		this_layer gridded_pts;
@@ -264,11 +296,9 @@ void getPoints()
 		all_gridded_points.push_back(gridded_pts);
 	}
 
-	/*//for debug...
-	//after checking neighbors, prints okay
-	print_bitmap(final_pix_model[3], 9, num_pixel_rows, num_pixel_columns);*/
+	//for timing:
+	high_resolution_clock::time_point vector_filled = high_resolution_clock::now();
 
-	cout << "putting all points into vector..." << endl;
 	//fill point vector with points that need support
 	//all_points_needing_support is a vector of this_layer (vector<Point>)
 	for(auto i = 0; i < final_pix_model.size(); i++)
@@ -277,6 +307,35 @@ void getPoints()
 		list_points(final_pix_model[i], points_needing_support, num_pixel_rows, num_pixel_columns, i);
 		all_points_needing_support.push_back(points_needing_support);
 	}
+
+	//number of points to support:
+	int num_points = 0;
+	for(auto i = all_gridded_points.begin(); i != all_gridded_points.end(); i++)
+	{
+		for(auto j = i->begin(); j!= i->end(); j++)
+		{
+			num_points++;
+		}
+	}
+
+
+	//for timing:
+	duration<double> total_time_span = duration_cast<duration<double>>(vector_filled - start_of_program);
+	auto total_nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(total_time_span).count();
+	cout << "Program took: " << total_nanos << " ns to run for " << layer_index << " layers, resulting in "
+							<< num_points << " points to support" << endl;
+	
+	duration<double> compare_time_span = duration_cast<duration<double>>(neighbors_checked - lines_fattened);
+	auto compare_nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(compare_time_span).count();
+	cout << "Program took: " << compare_nanos << " ns to check neighbors and compare layers." << endl;
+
+	duration<double> initialize_time_span = duration_cast<duration<double>>(grids_initialized - finished_regex);
+	auto initialize_nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(initialize_time_span).count();
+	cout << "Program took: " << initialize_nanos << " ns to initialize pixel vectors." << endl;
+
+	duration<double> parse_time_span = duration_cast<duration<double>>(finished_regex - start_of_program);
+	auto parse_nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(parse_time_span).count();
+	cout << "Program took: " << parse_nanos << " ns to parse through the gcode." << endl;
 
 	/*
 	//for debug, print out the points needing support
