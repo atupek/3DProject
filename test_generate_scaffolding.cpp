@@ -6,6 +6,11 @@
 #include "event.h"
 #include <fstream>
 using std::ifstream;
+//for timing
+#include <chrono>
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::duration;
 
 //****************comment out to try from file....
 //set<Point> active_points; //this is what is sent from algorithm 1: GetPoints
@@ -109,6 +114,10 @@ int main()
 
 	make_sweep_vector();
 	//cout << "sweep vector made" << endl;
+
+	//for timing:
+	high_resolution_clock::time_point starting_scaffolding = high_resolution_clock::now();
+
 	while(true)
 	{
 	Bridge the_best_bridge;
@@ -200,8 +209,17 @@ int main()
 	snap(the_best_bridge, active_points);
 	//cout << "snapped..." << endl;
 	}
+
+	//for timing:
+	high_resolution_clock::time_point ending_scaffolding = high_resolution_clock::now();
+
 	//drop pillars from all remaining points that need support
 	send_remaining_points_to_scad(active_points);
 	cout << "Scaffolding generated." << endl;
+
+	duration<double> generate_scaffolding_time_span = duration_cast<duration<double>>(ending_scaffolding - starting_scaffolding);
+	auto generate_nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(generate_scaffolding_time_span).count();
+	cout << "Program took: " << generate_nanos << " ns to generate scaffolding." << endl;
+
 	return 0;
 }
