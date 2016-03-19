@@ -101,6 +101,7 @@ int main()
 
 	//******************SWAP TO GET FROM FILE INSTEAD OF TEST SET...
 	set<Point> active_points = get_pts_from_file();
+	int num_points = active_points.size();
 	/*//for debug:
 	//cout << "got points from file" << endl;
 	//cout << "NUMBER OF POINTS: " << active_points.size() << endl;*/
@@ -219,7 +220,7 @@ int main()
 
 	duration<double> generate_scaffolding_time_span = duration_cast<duration<double>>(ending_scaffolding - starting_scaffolding);
 	auto generate_nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(generate_scaffolding_time_span).count();
-	cout << "Program took: " << generate_nanos << " ns to generate scaffolding." << endl;
+	cout << "Program took: " << generate_nanos << " ns to generate scaffolding for " << num_points << " points." << endl;
 
 	return 0;
 }
